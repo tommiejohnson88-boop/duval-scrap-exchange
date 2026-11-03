@@ -169,12 +169,12 @@
     </div>
 
     <!-- Live Cloud Sync Status Banner Indicator (Subtle, professional) -->
-    <div id="liveSyncStatusPill" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-[11px] font-mono text-emerald-400 border-t border-gray-800/40">
+    <div id="liveSyncStatusPill" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-[11px] font-mono text-emerald-400 border-t border-gray-800/40">
       <span class="flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="liveSyncStatusMsg">Connected to Duval Realtime WebSocket Feed</span>
+        <span id="liveSyncPillDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="liveSyncStatusMsg">Connecting to Duval Realtime Feed...</span>
       </span>
-      <span class="text-gray-500 text-[10px]">Latency: &lt;200ms</span>
+      <span id="liveSyncLatencyLabel" class="text-gray-500 text-[10px]">Latency: &lt;180ms</span>
     </div>
 
     <!-- Live Marquee Ticker -->
@@ -645,6 +645,19 @@
     let activeUnit = 'lb';
     let authenticatedYardId = null;
     let swRegistration = null;
+    let localBus = null;
+
+    // Listen on native BroadcastChannel for immediate cross-tab & multi-window updates
+    try {
+      if ('BroadcastChannel' in window) {
+        localBus = new BroadcastChannel('duval_sync_bus');
+        localBus.onmessage = (event) => {
+          handleIncomingSyncPacket(event.data);
+        };
+      }
+    } catch (e) {
+      console.warn('BroadcastChannel not supported:', e);
+    }
 
     // Service Worker Registration for Push & Background Notifications
     if ('serviceWorker' in navigator) {
@@ -1268,9 +1281,44 @@
       if (!sbClient) return;
 
       const pill = document.getElementById('liveSyncStatusPill');
+      const dot = document.getElementById('liveSyncPillDot');
+      const msg = document.getElementById('liveSyncStatusMsg');
       if (pill) pill.classList.remove('hidden');
 
-      // 1. Subscribe to Live Metals Table Changes (under 200ms)
+      // 1. Direct Edge Broadcast Channel matching the Yard Terminal
+      const broadcastChannel = sbClient.channel('duval_live_channel', {
+        config: { 
+          broadcast: { ack: false, self: false }
+        }
+      });
+
+      broadcastChannel
+        .on('broadcast', { event: 'price_update' }, (response) => {
+          if (response.payload) {
+            handleIncomingSyncPacket(response.payload);
+          }
+        })
+        .on('broadcast', { event: 'status_update' }, (response) => {
+          if (response.payload) {
+            handleIncomingSyncPacket(response.payload);
+          }
+        })
+        .on('broadcast', { event: 'flash_update' }, (response) => {
+          if (response.payload) {
+            handleIncomingSyncPacket(response.payload);
+          }
+        })
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+            if (msg) msg.textContent = "Connected: Live Weighmaster Cloud Sync (<180ms)";
+          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+            if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
+            if (msg) msg.textContent = "Local Sync Bus Active (Cloud Standby)";
+          }
+        });
+
+      // 2. Subscribe to Live Metals Table Changes (database persistence fallback)
       sbClient
         .channel('public:metals')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'metals' }, (payload) => {
@@ -1278,25 +1326,7 @@
         })
         .subscribe();
 
-      // 2. Subscribe to Direct Realtime Broadcast Channel (zero-latency edge sync)
-      const broadcastChannel = sbClient.channel('duval_live_channel');
-      broadcastChannel
-        .on('broadcast', { event: 'price_update' }, (response) => {
-          if (response.payload && response.payload.rates) {
-            const yardId = response.payload.yard;
-            response.payload.rates.forEach(r => {
-              const localM = metalsCatalog.find(m => m.id === r.id);
-              if (localM && localM[yardId] !== undefined) {
-                localM[yardId] = r.rate;
-              }
-            });
-            playNotificationAudio();
-            renderApp();
-          }
-        })
-        .subscribe();
-
-      // 3. Subscribe to Yard Status Changes (Scales Open / Heavy Line / Break)
+      // 3. Subscribe to Yard Status Changes
       sbClient
         .channel('public:yards')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'yards' }, (payload) => {
@@ -1311,6 +1341,34 @@
           handleIncomingFlashSpecial(payload.new);
         })
         .subscribe();
+    }
+
+    // Unified Packet Handler across BroadcastChannel, WebSockets, and LocalStorage
+    function handleIncomingSyncPacket(pkt) {
+      if (!pkt) return;
+
+      if (pkt.type === 'price_batch' && pkt.rates && pkt.yard) {
+        pkt.rates.forEach(r => {
+          const localM = metalsCatalog.find(m => m.id === r.id);
+          if (localM && localM[pkt.yard] !== undefined) {
+            localM[pkt.yard] = parseFloat(r.rate);
+          }
+        });
+        playNotificationAudio();
+        renderApp();
+      } else if (pkt.type === 'status' && pkt.yard && pkt.status) {
+        if (scrapyards[pkt.yard]) {
+          scrapyards[pkt.yard].status = pkt.status;
+          renderApp();
+          playNotificationAudio();
+        }
+      } else if (pkt.type === 'flash_special') {
+        handleIncomingFlashSpecial({
+          yard_name: pkt.yardName,
+          metal_name: pkt.metalName,
+          price: pkt.price
+        });
+      }
     }
 
     function handleIncomingMetalChange(record) {
@@ -1364,32 +1422,12 @@
       );
     }
 
-    // LocalStorage Cross-Tab Listener (Simulates WebSocket in split-screen browsers without internet)
+    // LocalStorage Cross-Tab Listener Fallback
     window.addEventListener('storage', (e) => {
       if (e.key === 'duval_ws_event' && e.newValue) {
         try {
           const evt = JSON.parse(e.newValue);
-          if (evt.type === 'price_batch' && evt.rates) {
-            evt.rates.forEach(r => {
-              const localM = metalsCatalog.find(m => m.id === r.id);
-              if (localM && localM[evt.yard] !== undefined) {
-                localM[evt.yard] = r.rate;
-              }
-            });
-            playNotificationAudio();
-            renderApp();
-          } else if (evt.type === 'status' && evt.yard && evt.status) {
-            if (scrapyards[evt.yard]) {
-              scrapyards[evt.yard].status = evt.status;
-              renderApp();
-            }
-          } else if (evt.type === 'flash_special') {
-            handleIncomingFlashSpecial({
-              yard_name: evt.yardName,
-              metal_name: evt.metalName,
-              price: evt.price
-            });
-          }
+          handleIncomingSyncPacket(evt);
         } catch (err) {}
       }
     });
