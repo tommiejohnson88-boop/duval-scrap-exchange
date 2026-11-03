@@ -14,6 +14,8 @@
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -34,14 +36,13 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Base Inactive Scale Operational Status Button Surface */
+    /* Scale Operational Status Pill Buttons */
     .status-btn {
       border: 1px solid #1E2530;
       background-color: #141923;
       user-select: none;
     }
 
-    /* Inactive State Text Accents */
     .inactive-open {
       color: #10B981;
       background-color: #141923;
@@ -58,37 +59,38 @@
       border-color: #1E2530;
     }
 
-    /* Active Solid Fills */
     .active-open {
-      background-color: #00875A !important; /* Solid Emerald Green */
+      background-color: #00875A !important;
       border-color: #00A86B !important;
       color: #FFFFFF !important;
       box-shadow: 0 0 12px rgba(0, 168, 107, 0.35);
     }
     .active-line {
-      background-color: #D97706 !important; /* Solid Amber */
+      background-color: #D97706 !important;
       border-color: #F59E0B !important;
       color: #FFFFFF !important;
       box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
     }
     .active-break {
-      background-color: #DC2626 !important; /* Solid Crimson Red */
+      background-color: #DC2626 !important;
       border-color: #EF4444 !important;
       color: #FFFFFF !important;
       box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
     }
 
-    /* Custom inline input focus */
-    .rate-input:focus {
-      outline: none;
-      border-color: #F59E0B;
-      background-color: #000000;
+    /* Flash Special Pulsing Animation */
+    .flash-pulse {
+      animation: flashGlow 2s infinite ease-in-out;
+    }
+    @keyframes flashGlow {
+      0%, 100% { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 10px rgba(245, 158, 11, 0.15); }
+      50% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
     }
   </style>
 </head>
 <body class="h-screen w-screen overflow-hidden flex flex-col bg-[#07080A]">
 
-  <!-- TOP HEADER BAR -->
+  <!-- TOP HEADER -->
   <header class="h-14 border-b border-neutral-800/80 px-4 flex items-center justify-between bg-[#0C0E12] shrink-0">
     <div class="flex items-center gap-3">
       <div class="flex items-center gap-2">
@@ -106,16 +108,16 @@
 
       <div class="h-6 w-px bg-neutral-800 mx-2"></div>
 
-      <!-- Realtime Database Status Badge -->
-      <div id="supabase-status" class="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-emerald-400 flex items-center gap-2">
+      <!-- Sync Status Pill -->
+      <div id="sync-status" class="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-emerald-400 flex items-center gap-2">
         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span id="status-text">Supabase Realtime: Connected</span>
+        <span id="sync-text">Live Sync Bus: Connected</span>
       </div>
     </div>
 
-    <!-- Right Controls -->
+    <!-- Right Quick Controls -->
     <div class="flex items-center gap-2">
-      <button onclick="alert('Scale Desk Controls Online: Com 1 Active')" class="px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+      <button onclick="triggerSoundNotification(); alert('Scale Desk Audio & COM1 Ready.')" class="px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
         <i data-lucide="sliders" class="w-4 h-4"></i>
         <span>Scale Desk Controls</span>
       </button>
@@ -136,144 +138,179 @@
     </div>
   </header>
 
-  <!-- MAIN TERMINAL SPLIT LAYOUT -->
+  <!-- FLASH SPECIAL COUNTDOWN BANNER -->
+  <div id="live-flash-banner" class="hidden bg-gradient-to-r from-amber-950/90 via-black to-neutral-950 border-b border-amber-500/50 px-4 py-2 flex items-center justify-between flash-pulse shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-lg bg-amber-500 text-black flex items-center justify-center font-bold">
+        <i data-lucide="zap" class="w-4 h-4 fill-black"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] font-black uppercase tracking-wider text-amber-400">1-HOUR FLASH SPECIAL ACTIVE</span>
+          <span id="flash-countdown" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">59:59 REMAINING</span>
+        </div>
+        <p id="flash-details" class="text-xs font-bold text-white">#1 Bare Bright Copper: $3.65/lb</p>
+      </div>
+    </div>
+    <button onclick="clearFlashSpecial()" class="px-2.5 py-1 rounded bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white text-[11px] font-bold">
+      Cancel
+    </button>
+  </div>
+
+  <!-- MAIN TERMINAL SPLIT -->
   <main class="flex-1 flex overflow-hidden">
     
-    <!-- LEFT SIDEBAR: GATE & 1-TAP SPOT SHIFTS (320px) -->
-    <aside class="w-80 border-r border-neutral-800/80 p-4 flex flex-col gap-4 overflow-y-auto shrink-0 bg-[#0A0C0F]">
+    <!-- LEFT SIDEBAR: GATE & SPOT SHIFTS (330px) -->
+    <aside class="w-[330px] border-r border-neutral-800/80 p-3.5 flex flex-col gap-3.5 overflow-y-auto shrink-0 bg-[#0A0C0F]">
       
-      <!-- SCALE OPERATIONAL STATUS CARD (Matches Screenshot Exactly) -->
-      <div class="p-4 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
+      <!-- SCALE OPERATIONAL STATUS[cite: 2] -->
+      <div class="p-3.5 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
         <h3 class="text-xs font-black tracking-wider text-white uppercase mb-1">
           SCALE OPERATIONAL STATUS
         </h3>
-        <p class="text-[11px] leading-relaxed text-neutral-400 mb-3.5">
+        <p class="text-[11px] leading-relaxed text-neutral-400 mb-3">
           Keep drivers informed to manage queue times and avoid congestion along the scale corridor.
         </p>
 
-        <!-- 3 Button Pill Layout -->
         <div class="grid grid-cols-3 gap-2">
-          <!-- Scales Open (Active by default) -->
           <button 
             id="status-btn-open"
             onclick="setOperationalStatus('open')"
-            class="status-btn active-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+            class="status-btn active-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
           >
             Scales Open
           </button>
 
-          <!-- Heavy Line -->
           <button 
             id="status-btn-line"
             onclick="setOperationalStatus('line')"
-            class="status-btn inactive-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+            class="status-btn inactive-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
           >
             Heavy Line
           </button>
 
-          <!-- Scale Break -->
           <button 
             id="status-btn-break"
             onclick="setOperationalStatus('break')"
-            class="status-btn inactive-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+            class="status-btn inactive-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
           >
             Scale Break
           </button>
         </div>
       </div>
 
-      <!-- COMEX SPOT SHIFTS (1-Tap Real-Time Step Adjusters) -->
-      <div>
+      <!-- COMEX SPOT SHIFTS -->
+      <div class="p-3 rounded-2xl bg-[#0D1117]/80 border border-[#1E2530]">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
-            COMEX Spot Shifts
+          <span class="text-[11px] font-black text-neutral-300 uppercase tracking-wider flex items-center gap-1">
+            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-500"></i>
+            COMEX SPOT SHIFTS
           </span>
-          <span class="text-[10px] font-mono text-neutral-500">1-Tap Adjust</span>
+          <span class="text-[10px] font-mono text-neutral-500 font-bold">1-Tap Adjust</span>
         </div>
 
-        <div class="space-y-2.5">
-          <!-- Copper Grades -->
-          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+        <div class="space-y-2">
+          <!-- Copper -->
+          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
             <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-300">Copper Grades</span>
+              <span class="font-bold text-neutral-200">Copper Grades</span>
               <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/30">$0.05 step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <button onclick="adjustCategory('Copper', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05 Copper
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
               </button>
               <button onclick="adjustCategory('Copper', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05 Copper
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
               </button>
             </div>
           </div>
 
-          <!-- Yellow & Red Brass -->
-          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <!-- Brass -->
+          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
             <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-300">Yellow &amp; Red Brass</span>
+              <span class="font-bold text-neutral-200">Yellow &amp; Red Brass</span>
               <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-500/30">$0.05 step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <button onclick="adjustCategory('Brass', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05 Brass
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
               </button>
               <button onclick="adjustCategory('Brass', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05 Brass
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
               </button>
             </div>
           </div>
 
-          <!-- Aluminum (UBC & Extrusions) -->
-          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <!-- Aluminum -->
+          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
             <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-300">Aluminum (UBC &amp; Extrusions)</span>
+              <span class="font-bold text-neutral-200">Aluminum (UBC &amp; Extrusions)</span>
               <span class="text-[10px] font-mono font-bold text-sky-400 bg-sky-950/40 px-1.5 py-0.5 rounded border border-sky-500/30">$0.02 step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <button onclick="adjustCategory('Aluminum', 0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02 Alum
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02
               </button>
               <button onclick="adjustCategory('Aluminum', -0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02 Alum
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02
               </button>
             </div>
           </div>
 
-          <!-- Ferrous / Steel -->
-          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+          <!-- Ferrous -->
+          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
             <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-300">Ferrous / Steel</span>
+              <span class="font-bold text-neutral-200">Ferrous / Steel</span>
               <span class="text-[10px] font-mono font-bold text-indigo-400 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-500/30">$0.50/cwt step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <button onclick="adjustCategory('Ferrous', 0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.50/cwt
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.50
               </button>
               <button onclick="adjustCategory('Ferrous', -0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.50/cwt
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.50
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- BROADCAST FLASH SPECIAL -->
-      <div class="mt-auto p-3.5 rounded-xl bg-neutral-900/80 border border-neutral-800">
+      <!-- BROADCAST FLASH SPECIAL[cite: 1] -->
+      <div class="mt-auto p-3.5 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wide flex items-center gap-1.5">
-            <i data-lucide="radio" class="w-3.5 h-3.5"></i>
-            Broadcast Flash Special
+          <span class="text-xs font-black text-amber-500 uppercase tracking-wide flex items-center gap-1.5">
+            <i data-lucide="radio" class="w-4 h-4"></i>
+            BROADCAST FLASH SPECIAL
           </span>
-          <span class="text-[10px] text-neutral-500 font-mono">60 Min Push</span>
+          <span class="text-[10px] text-neutral-400 font-mono font-bold">60 Min Push</span>
         </div>
+
+        <div class="mb-2">
+          <select id="flash-commodity-select" class="w-full bg-black border border-neutral-700 rounded-lg px-2.5 py-2 text-xs font-medium text-white focus:border-amber-500 focus:outline-none">
+            <option value="#1 Bare Bright Copper">#1 Bare Bright Copper</option>
+            <option value="#1 Copper Tubing">#1 Copper Tubing</option>
+            <option value="Clean Yellow Brass">Clean Yellow Brass</option>
+            <option value="Aluminum UBC Cans">Aluminum UBC (Cans)</option>
+            <option value="#1 Prepared Steel">#1 Prepared Steel</option>
+          </select>
+        </div>
+
         <div class="flex gap-2">
           <div class="relative flex-1">
-            <span class="absolute left-2.5 top-2 text-neutral-500 text-xs font-mono">$</span>
-            <input id="flash-special-price" type="number" step="0.05" value="3.65" class="w-full bg-black border border-neutral-700 rounded-lg pl-6 pr-2 py-1.5 text-xs font-mono text-white focus:border-amber-500 focus:outline-none" />
+            <span class="absolute left-3 top-2 text-neutral-500 text-xs font-mono font-bold">$</span>
+            <input 
+              id="flash-price-input" 
+              type="number" 
+              step="0.05" 
+              value="3.65" 
+              class="w-full bg-black border border-neutral-700 rounded-lg pl-7 pr-2.5 py-2 text-xs font-mono font-bold text-white focus:border-amber-500 focus:outline-none" 
+            />
           </div>
-          <button onclick="broadcastSpecial()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs rounded-lg flex items-center gap-1 cursor-pointer shadow-sm">
+          <button 
+            onclick="broadcastFlashSpecial()" 
+            class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs uppercase tracking-wider rounded-lg flex items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
+          >
             <i data-lucide="radio" class="w-3.5 h-3.5"></i>
             <span>Broadcast</span>
           </button>
@@ -282,7 +319,7 @@
 
     </aside>
 
-    <!-- RIGHT MAIN PANEL: TODAY'S LIVE SCALE BUY RATES -->
+    <!-- RIGHT MAIN PANEL: LIVE RATES -->
     <section class="flex-1 flex flex-col p-6 overflow-hidden bg-[#07080A]">
       <div class="flex items-center justify-between pb-4 border-b border-neutral-800/80 shrink-0">
         <div>
@@ -299,7 +336,6 @@
         </button>
       </div>
 
-      <!-- RATES TABLE CONTAINER (Populated automatically on load) -->
       <div class="flex-1 overflow-y-auto mt-4 pr-1">
         <table class="w-full text-left text-xs font-mono">
           <thead>
@@ -312,7 +348,7 @@
             </tr>
           </thead>
           <tbody id="rates-table-body" class="divide-y divide-neutral-900">
-            <!-- JavaScript will render the live rows immediately -->
+            <!-- Drawn automatically -->
           </tbody>
         </table>
       </div>
@@ -320,7 +356,7 @@
 
   </main>
 
-  <!-- STATION SETTINGS & PIN DRAWER -->
+  <!-- PIN & SETTINGS DRAWER -->
   <div id="settings-drawer" class="hidden fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-xs">
     <div class="w-full max-w-sm h-full bg-[#0C0E12] border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl">
       <div>
@@ -345,14 +381,12 @@
           </div>
         </div>
 
-        <!-- PIN Pad -->
         <div id="drawer-locked-view" class="p-4 bg-neutral-900/60 border border-neutral-800 rounded-xl mt-4">
           <span class="text-xs font-bold text-neutral-300 block mb-2">Manager PIN Authorization</span>
           <input id="drawer-pin-input" type="password" maxlength="6" placeholder="Enter PIN" class="w-full px-3 py-2 text-center text-xl tracking-widest font-mono bg-black border border-neutral-700 rounded-lg text-white mb-3" />
           <button onclick="verifyDrawerPin()" class="w-full py-2 bg-[#006272] hover:bg-teal-700 text-white text-xs font-bold uppercase rounded-lg cursor-pointer">Authorize Station</button>
         </div>
 
-        <!-- Unlocked Install Mode -->
         <div id="drawer-unlocked-view" class="hidden space-y-4 mt-4">
           <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs flex items-center justify-between">
             <span class="font-bold">Manager Mode Unlocked</span>
@@ -372,15 +406,44 @@
 
       <div class="pt-4 border-t border-neutral-800 flex justify-between text-[11px] text-neutral-500 font-mono">
         <span>Protocol: RS-232</span>
-        <span>Build: v2.4.1-standalone</span>
+        <span>Build: v2.7.0-connected</span>
       </div>
     </div>
   </div>
 
-  <!-- INLINE JAVASCRIPT: GUARANTEED LIVE RENDERING -->
+  <!-- AUDIO NOTIFICATION ENGINE -->
   <script>
-    // 1. DATA SOURCE (Renders synchronously on DOMContentLoaded so screen is NEVER blank)
-    let scrapRates = [
+    function triggerSoundNotification() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.45);
+      } catch (e) {}
+    }
+  </script>
+
+  <!-- CORE TERMINAL LOGIC & HARDCODED SUPABASE SYNC -->
+  <script>
+    // 1. HARDCODED SUPABASE CREDENTIALS (Live from Project Settings)
+    const SUPABASE_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
+
+    let supabaseClient = null;
+    if (window.supabase) {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
+    // 2. HARDCODED RATES (Guarantees zero blank screen)
+    let currentRates = [
       { id: 1, category: 'Copper', grade: '#1 Bare Bright Copper', price: 3.45, unit: 'lb' },
       { id: 2, category: 'Copper', grade: '#1 Copper Tubing / Bus Bar', price: 3.25, unit: 'lb' },
       { id: 3, category: 'Copper', grade: '#2 Copper Wire & Tubing', price: 3.05, unit: 'lb' },
@@ -394,12 +457,42 @@
       { id: 11, category: 'Ferrous', grade: 'Unprepared Shredder Feed / Sheet', price: 8.50, unit: 'cwt' }
     ];
 
-    // 2. RENDER FUNCTION
+    let activeFlashSpecial = null;
+    let flashCountdownTimer = null;
+
+    // 3. BROADCAST SYNC ENGINE (Both Local Bus & Supabase Channel)
+    const broadcastBus = window.BroadcastChannel ? new BroadcastChannel('duval_scrap_bus') : null;
+
+    function dispatchSync(eventType, payload) {
+      const envelope = {
+        type: eventType,
+        yard: 'Quick Stop Recycling',
+        timestamp: Date.now(),
+        payload: payload
+      };
+
+      // A. Local Broadcast
+      if (broadcastBus) broadcastBus.postMessage(envelope);
+      try {
+        localStorage.setItem('duval_scrap_sync_state', JSON.stringify(envelope));
+      } catch (e) {}
+
+      // B. Cloud Supabase Channel
+      if (supabaseClient) {
+        supabaseClient.channel('duval_scrap_live').send({
+          type: 'broadcast',
+          event: eventType,
+          payload: envelope
+        });
+      }
+    }
+
+    // 4. TABLE RENDER
     function renderTable() {
       const tbody = document.getElementById('rates-table-body');
       if (!tbody) return;
 
-      tbody.innerHTML = scrapRates.map(item => {
+      tbody.innerHTML = currentRates.map(item => {
         let catColor = 'text-neutral-400';
         if (item.category === 'Copper') catColor = 'text-amber-500 font-bold';
         if (item.category === 'Brass') catColor = 'text-yellow-400 font-bold';
@@ -413,8 +506,8 @@
             <td class="py-3 px-3 text-right">
               <span class="text-neutral-500 font-mono mr-0.5">$</span>
               <input type="number" step="0.01" value="${item.price.toFixed(2)}" 
-                onchange="updatePrice(${item.id}, this.value)"
-                class="rate-input w-20 text-right bg-black border border-neutral-800 rounded px-1.5 py-1 text-emerald-400 font-mono font-bold text-sm" />
+                onchange="updateSinglePrice(${item.id}, this.value)"
+                class="w-20 text-right bg-black border border-neutral-800 rounded px-1.5 py-1 text-emerald-400 font-mono font-bold text-sm focus:border-amber-500 focus:outline-none" />
             </td>
             <td class="py-3 px-3 text-right text-neutral-400 font-mono">/${item.unit}</td>
             <td class="py-3 px-3 text-center">
@@ -429,59 +522,107 @@
       if (window.lucide) lucide.createIcons();
     }
 
-    // Immediately draw table to DOM
     renderTable();
 
-    // 3. EDIT INDIVIDUAL COMMODITY PRICE
-    function updatePrice(id, val) {
+    // 5. SPOT ADJUSTMENTS
+    function updateSinglePrice(id, val) {
       const num = parseFloat(val);
       if (isNaN(num)) return;
-      scrapRates = scrapRates.map(r => r.id === id ? { ...r, price: num } : r);
+      currentRates = currentRates.map(r => r.id === id ? { ...r, price: num } : r);
+      dispatchSync('RATE_UPDATED', { rates: currentRates });
     }
 
-    // 4. CATEGORY SPOT ADJUSTERS (+/- buttons with real-time recalculation)
     function adjustCategory(cat, delta) {
-      scrapRates = scrapRates.map(r => {
+      currentRates = currentRates.map(r => {
         if (r.category === cat) {
           return { ...r, price: Math.max(0.01, +(r.price + delta).toFixed(2)) };
         }
         return r;
       });
       renderTable();
+      triggerSoundNotification();
+      dispatchSync('SPOT_SHIFT', { category: cat, delta: delta, rates: currentRates });
     }
 
-    // 5. SCALE OPERATIONAL STATUS HANDLER (Active Fills vs Inactive Outlines)
+    // 6. OPERATIONAL STATUS[cite: 2]
     function setOperationalStatus(state) {
       const btnOpen = document.getElementById('status-btn-open');
       const btnLine = document.getElementById('status-btn-line');
       const btnBreak = document.getElementById('status-btn-break');
 
-      // Reset all buttons to default inactive styling
-      btnOpen.className = 'status-btn inactive-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      btnLine.className = 'status-btn inactive-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      btnBreak.className = 'status-btn inactive-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      btnOpen.className = 'status-btn inactive-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      btnLine.className = 'status-btn inactive-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      btnBreak.className = 'status-btn inactive-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
 
-      // Apply chosen solid fill
       if (state === 'open') {
-        btnOpen.className = 'status-btn active-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+        btnOpen.className = 'status-btn active-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
       } else if (state === 'line') {
-        btnLine.className = 'status-btn active-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+        btnLine.className = 'status-btn active-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
       } else if (state === 'break') {
-        btnBreak.className = 'status-btn active-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+        btnBreak.className = 'status-btn active-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
       }
+
+      triggerSoundNotification();
+      dispatchSync('GATE_STATUS_CHANGED', { status: state });
     }
 
-    // 6. FLASH BROADCAST & LIVE PUBLISH
-    function broadcastSpecial() {
-      const price = document.getElementById('flash-special-price').value;
-      alert("🚨 Flash Broadcast Pushed to Local Duval Haulers: Bare Bright Copper @ $" + price + "/lb for 60 Minutes!");
+    // 7. FLASH BROADCAST[cite: 1]
+    function broadcastFlashSpecial() {
+      const commodity = document.getElementById('flash-commodity-select').value;
+      const price = parseFloat(document.getElementById('flash-price-input').value) || 3.65;
+      const expiresAt = Date.now() + (60 * 60 * 1000);
+
+      const payload = {
+        commodity: commodity,
+        price: price.toFixed(2),
+        expiresAt: expiresAt
+      };
+
+      renderFlashBanner(payload);
+      triggerSoundNotification();
+      dispatchSync('FLASH_SPECIAL_BROADCAST', payload);
+    }
+
+    function renderFlashBanner(data) {
+      activeFlashSpecial = data;
+      const banner = document.getElementById('live-flash-banner');
+      const details = document.getElementById('flash-details');
+      banner.classList.remove('hidden');
+      details.innerText = `${data.commodity}: $${data.price}/lb (Flash Special Active)`;
+
+      if (flashCountdownTimer) clearInterval(flashCountdownTimer);
+      updateCountdown();
+      flashCountdownTimer = setInterval(updateCountdown, 1000);
+      lucide.createIcons();
+    }
+
+    function updateCountdown() {
+      if (!activeFlashSpecial) return;
+      const remainingMs = activeFlashSpecial.expiresAt - Date.now();
+      const badge = document.getElementById('flash-countdown');
+      if (remainingMs <= 0) {
+        clearFlashSpecial();
+        return;
+      }
+      const m = Math.floor(remainingMs / 60000);
+      const s = Math.floor((remainingMs % 60000) / 1000);
+      badge.innerText = `${m}:${s < 10 ? '0' : ''}${s} REMAINING`;
+    }
+
+    function clearFlashSpecial() {
+      if (flashCountdownTimer) clearInterval(flashCountdownTimer);
+      activeFlashSpecial = null;
+      document.getElementById('live-flash-banner').classList.add('hidden');
+      dispatchSync('FLASH_SPECIAL_CLEARED', {});
     }
 
     function publishLiveSheet() {
-      alert("✅ Scale sheet successfully published. All 11 commodity rates updated across Duval County network.");
+      triggerSoundNotification();
+      dispatchSync('RATES_PUBLISHED', { rates: currentRates });
+      alert("✅ Scale sheet published! All driver phones synced.");
     }
 
-    // 7. PIN & SETTINGS DRAWER
+    // 8. DRAWER & FULLSCREEN
     function toggleSettingsDrawer(show) {
       document.getElementById('settings-drawer').classList.toggle('hidden', !show);
     }
@@ -492,7 +633,7 @@
         document.getElementById('drawer-locked-view').classList.add('hidden');
         document.getElementById('drawer-unlocked-view').classList.remove('hidden');
       } else {
-        alert('Please enter a 4-digit manager PIN.');
+        alert('Enter a valid 4-digit PIN.');
       }
     }
 
@@ -510,7 +651,7 @@
       }
     }
 
-    // 8. PWA INSTALL HANDLER
+    // 9. PWA INSTALL
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -522,18 +663,27 @@
         deferredPrompt.prompt();
         deferredPrompt = null;
       } else {
-        alert("To install directly on your tablet:\n1. Tap the browser Menu (⋮ or Share icon)\n2. Select 'Install app' or 'Add to Home Screen'");
+        alert("To install on your tablet:\n1. Open browser menu (⋮ or Share)\n2. Tap 'Add to Home Screen'");
       }
     }
 
-    // Clear and force update on active service workers
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        for (let registration of registrations) {
-          registration.update();
-        }
-      });
+    // Realtime Supabase Channel Connection
+    if (supabaseClient) {
+      supabaseClient.channel('duval_scrap_live')
+        .on('broadcast', { event: '*' }, (payload) => {
+          if (payload.payload && payload.payload.type === 'FLASH_SPECIAL_BROADCAST') {
+            renderFlashBanner(payload.payload.payload);
+          }
+        })
+        .subscribe((status) => {
+          const syncPill = document.getElementById('sync-status');
+          if (status === 'SUBSCRIBED' && syncPill) {
+            syncPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Supabase Realtime: Connected</span>';
+          }
+        });
     }
+
+    if (window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>
