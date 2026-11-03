@@ -1,42 +1,234 @@
-// 1. Fetch initial snapshot immediately via REST
-async function loadLiveRates() {
-  try {
-    const { data, error } = await supabaseClient
-      .from('scale_buy_rates') // or your specific table name
-      .select('*')
-      .eq('yard_name', 'Quick Stop Recycling')
-      .order('category', { ascending: true });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Duval Scrap & Metals Exchange | Jacksonville, FL - Weighmaster Terminal</title>
+  
+  <!-- PWA Settings -->
+  <meta name="theme-color" content="#006272" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    if (error) throw error;
-    if (data && data.length > 0) {
-      renderRatesTable(data);
-    } else {
-      renderDefaultRatesFallback();
+  <!-- Tailwind CSS & Lucide Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800;900&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0A0A0A;
+      color: #E5E5E5;
+      user-select: none;
+      -webkit-user-select: none;
     }
-  } catch (err) {
-    console.warn('Initial rates fetch failed, loading cached/default rates:', err);
-    renderDefaultRatesFallback();
-  }
-}
-
-// 2. Set up realtime with automatic fallback state
-loadLiveRates();
-
-const ratesChannel = supabaseClient
-  .channel('realtime:scale_rates')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'scale_buy_rates' }, (payload) => {
-    loadLiveRates(); // refresh on publish
-  })
-  .subscribe((status) => {
-    const statusPill = document.querySelector('#supabase-status');
-    if (statusPill) {
-      if (status === 'SUBSCRIBED') {
-        statusPill.innerHTML = '● Supabase Realtime: Connected';
-        statusPill.className = 'status-connected';
-      } else if (status === 'CHANNEL_ERROR') {
-        statusPill.innerHTML = '● Realtime: Offline (Using Cached Rates)';
-        statusPill.className = 'status-offline';
-        renderDefaultRatesFallback();
-      }
+    .font-mono {
+      font-family: 'JetBrains+Mono', monospace;
     }
-  });
+    /* Mandatory Landscape Reminder for Mobile/Tablets */
+    @media screen and (orientation: portrait) {
+      #landscape-guard { display: flex !important; }
+    }
+  </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#0A0A0A]">
+
+  <!-- MANDATORY LANDSCAPE OVERLAY (for tablets/phones) -->
+  <div id="landscape-guard" class="hidden fixed inset-0 z-50 bg-black flex-col items-center justify-center p-6 text-center">
+    <i data-lucide="rotate-cw" class="w-16 h-16 text-[#006272] animate-spin mb-4"></i>
+    <h2 class="text-xl font-bold text-white tracking-wider uppercase mb-2">Rotate Station to Landscape</h2>
+    <p class="text-xs text-neutral-400 max-w-sm">WeighMaster Terminal layout requires landscape orientation for dual scale indicators and the live buy rate sheet.</p>
+  </div>
+
+  <!-- TOP APP BAR -->
+  <header class="h-14 border-b border-neutral-800 px-4 flex items-center justify-between bg-neutral-950 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <i data-lucide="scale" class="w-6 h-6 text-[#006272]"></i>
+        <div>
+          <h1 class="text-sm font-black tracking-wide text-white uppercase flex items-center gap-2">
+            Quick Stop Recycling
+            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">STATION ACTIVE</span>
+          </h1>
+          <p class="text-[10px] text-neutral-400">603 E 8th St, Jacksonville, FL • Duval County</p>
+        </div>
+      </div>
+
+      <div class="h-6 w-px bg-neutral-800 mx-2"></div>
+
+      <!-- Realtime Database Status Badge -->
+      <div id="supabase-status" class="px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-neutral-400 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span>Supabase Realtime: Connecting...</span>
+      </div>
+    </div>
+
+    <!-- Right Quick Controls -->
+    <div class="flex items-center gap-2">
+      <button onclick="alert('Scale Desk Controls Activated')" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+        <i data-lucide="sliders" class="w-4 h-4"></i>
+        <span>Scale Desk Controls</span>
+      </button>
+
+      <button onclick="window.open('./index.html', '_blank')" class="px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-xs border border-neutral-700 flex items-center gap-1.5">
+        <i data-lucide="eye" class="w-4 h-4"></i>
+        <span>Live Driver View</span>
+      </button>
+
+      <button id="pwa-install-btn" onclick="triggerPwaInstall()" class="hidden px-2.5 py-1.5 rounded-lg bg-[#006272] text-white text-xs font-bold flex items-center gap-1">
+        <i data-lucide="download" class="w-4 h-4"></i>
+        <span>Install App</span>
+      </button>
+
+      <button onclick="toggleSettingsDrawer(true)" class="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white" title="Settings & Terminal Lock">
+        <i data-lucide="lock" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN TERMINAL SPLIT LAYOUT -->
+  <main class="flex-1 flex overflow-hidden">
+    
+    <!-- LEFT SIDEBAR: GATE & SPOT SHIFTS (320px) -->
+    <aside class="w-80 border-r border-neutral-800 p-4 flex flex-col gap-5 overflow-y-auto shrink-0 bg-neutral-950/40">
+      
+      <!-- Scale Gate Status -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Scale Gate Status</span>
+          <span id="gate-label" class="text-xs font-mono text-emerald-400 font-bold">Scales Open</span>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setGateStatus('open')" class="py-2.5 rounded-lg border border-emerald-500/50 bg-emerald-950/40 text-emerald-400 text-xs font-bold flex flex-col items-center gap-1">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+            <span>Open</span>
+          </button>
+          <button onclick="setGateStatus('line')" class="py-2.5 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-400 text-xs font-bold flex flex-col items-center gap-1 hover:text-amber-400">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            <span>Line (15m+)</span>
+          </button>
+          <button onclick="setGateStatus('break')" class="py-2.5 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-400 text-xs font-bold flex flex-col items-center gap-1 hover:text-red-400">
+            <i data-lucide="pause-circle" class="w-4 h-4"></i>
+            <span>Break</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- COMEX Spot Quick Adjustments (1-Tap Shift) -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">COMEX Spot Shifts</span>
+          <span class="text-[10px] font-mono text-neutral-500">1-Tap Adjust</span>
+        </div>
+        <div class="space-y-3">
+          <!-- Copper -->
+          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="font-bold text-amber-500">Copper Grades</span>
+              <span class="text-[11px] font-mono text-neutral-400">$0.05 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="adjustCategoryPrice('Copper', 0.05)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
+              </button>
+              <button onclick="adjustCategoryPrice('Copper', -0.05)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
+              </button>
+            </div>
+          </div>
+
+          <!-- Aluminum -->
+          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="font-bold text-sky-400">Aluminum (UBC &amp; Extrusions)</span>
+              <span class="text-[11px] font-mono text-neutral-400">$0.02 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="adjustCategoryPrice('Aluminum', 0.02)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02
+              </button>
+              <button onclick="adjustCategoryPrice('Aluminum', -0.02)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02
+              </button>
+            </div>
+          </div>
+
+          <!-- Ferrous/Steel -->
+          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
+            <div class="flex justify-between text-xs mb-1.5">
+              <span class="font-bold text-neutral-300">Ferrous / Steel</span>
+              <span class="text-[11px] font-mono text-neutral-400">$0.50/cwt step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="adjustCategoryPrice('Ferrous', 0.50)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.50/cwt
+              </button>
+              <button onclick="adjustCategoryPrice('Ferrous', -0.50)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.50/cwt
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Broadcast Flash Special -->
+      <div class="mt-auto p-3 rounded-xl bg-neutral-900 border border-neutral-800">
+        <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wide block mb-1">Broadcast Flash Special</span>
+        <div class="flex gap-2">
+          <input id="flash-special-input" type="text" placeholder="e.g. Bare Bright $3.60/lb" class="flex-1 bg-black border border-neutral-700 rounded px-2.5 py-1.5 text-xs font-mono text-white focus:border-[#006272] focus:outline-none" />
+          <button onclick="broadcastSpecial()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded">Push</button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT MAIN PANEL: TODAY'S LIVE SCALE BUY RATES -->
+    <section class="flex-1 flex flex-col p-6 overflow-hidden">
+      <div class="flex items-center justify-between pb-4 border-b border-neutral-800 shrink-0">
+        <div>
+          <h2 class="text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
+            <i data-lucide="edit-3" class="w-5 h-5 text-amber-500"></i>
+            Today's Live Scale Buy Rates
+          </h2>
+          <p class="text-xs text-neutral-400">Touch any price to edit. Auto-syncs to driver phones upon publishing.</p>
+        </div>
+
+        <button onclick="publishLiveSheet()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span>Publish Live Sheet</span>
+        </button>
+      </div>
+
+      <!-- Live Buy Rates Table Container -->
+      <div class="flex-1 overflow-y-auto mt-4 pr-1">
+        <div id="rates-table-container" class="w-full">
+          <!-- Populated by JavaScript immediately via REST snapshot or default fallback -->
+          <div class="p-8 text-center text-neutral-500 font-mono text-xs">
+            Loading rate card...
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STATION SETTINGS & TERMINAL PIN DRAWER -->
+  <div id="settings-drawer" class="hidden fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-xs">
+    <div class="w-full max-w-sm h-full bg-[#0A0A0A] border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-neutral-800">
+          <div class="flex items-center gap-2">
+            <i data-lucide="settings-2" class="w-5 h-5 text-[#006272]"></i>
+            <h3 class="text-sm font-bold tracking-wider text-white uppercase">Terminal Configuration</h3>
+          </div>
+          <button onclick="toggleSettingsDrawer(false)" class="p-1 rounded text-neutral-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Terminal Identifier Badges -->
+        <div class="grid grid-cols-2 gap-2 my-4">
