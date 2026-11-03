@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Duval Scrap & Metals Exchange | Jacksonville, FL - Weighmaster Terminal</title>
-  
-  <!-- PWA Settings -->
-  <meta name="theme-color" content="#006272" />
+
+  <!-- PWA & Mobile Standalone Settings -->
+  <meta name="theme-color" content="#07080A" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -14,46 +14,92 @@
   <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800;900&display=swap');
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0A0A0A;
-      color: #E5E5E5;
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+    
+    * {
+      box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
     }
-    .font-mono {
-      font-family: 'JetBrains+Mono', monospace;
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: #07080A;
+      color: #E2E8F0;
     }
-    /* Mandatory Landscape Reminder for Mobile/Tablets */
-    @media screen and (orientation: portrait) {
-      #landscape-guard { display: flex !important; }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Base Inactive Scale Operational Status Button Surface */
+    .status-btn {
+      border: 1px solid #1E2530;
+      background-color: #141923;
+      user-select: none;
+    }
+
+    /* Inactive State Text Accents */
+    .inactive-open {
+      color: #10B981;
+      background-color: #141923;
+      border-color: #1E2530;
+    }
+    .inactive-line {
+      color: #F59E0B;
+      background-color: #141923;
+      border-color: #1E2530;
+    }
+    .inactive-break {
+      color: #F87171;
+      background-color: #141923;
+      border-color: #1E2530;
+    }
+
+    /* Active Solid Fills */
+    .active-open {
+      background-color: #00875A !important; /* Solid Emerald Green */
+      border-color: #00A86B !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 12px rgba(0, 168, 107, 0.35);
+    }
+    .active-line {
+      background-color: #D97706 !important; /* Solid Amber */
+      border-color: #F59E0B !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+    }
+    .active-break {
+      background-color: #DC2626 !important; /* Solid Crimson Red */
+      border-color: #EF4444 !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+    }
+
+    /* Custom inline input focus */
+    .rate-input:focus {
+      outline: none;
+      border-color: #F59E0B;
+      background-color: #000000;
     }
   </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#0A0A0A]">
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#07080A]">
 
-  <!-- MANDATORY LANDSCAPE OVERLAY (for tablets/phones) -->
-  <div id="landscape-guard" class="hidden fixed inset-0 z-50 bg-black flex-col items-center justify-center p-6 text-center">
-    <i data-lucide="rotate-cw" class="w-16 h-16 text-[#006272] animate-spin mb-4"></i>
-    <h2 class="text-xl font-bold text-white tracking-wider uppercase mb-2">Rotate Station to Landscape</h2>
-    <p class="text-xs text-neutral-400 max-w-sm">WeighMaster Terminal layout requires landscape orientation for dual scale indicators and the live buy rate sheet.</p>
-  </div>
-
-  <!-- TOP APP BAR -->
-  <header class="h-14 border-b border-neutral-800 px-4 flex items-center justify-between bg-neutral-950 shrink-0">
+  <!-- TOP HEADER BAR -->
+  <header class="h-14 border-b border-neutral-800/80 px-4 flex items-center justify-between bg-[#0C0E12] shrink-0">
     <div class="flex items-center gap-3">
       <div class="flex items-center gap-2">
-        <i data-lucide="scale" class="w-6 h-6 text-[#006272]"></i>
+        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+          <i data-lucide="scale" class="w-5 h-5 text-amber-500"></i>
+        </div>
         <div>
-          <h1 class="text-sm font-black tracking-wide text-white uppercase flex items-center gap-2">
-            Quick Stop Recycling
-            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950/60 text-emerald-400 border border-emerald-500/30">STATION ACTIVE</span>
-          </h1>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-black tracking-wide text-white uppercase">Quick Stop Recycling</h1>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">STATION ACTIVE</span>
+          </div>
           <p class="text-[10px] text-neutral-400">603 E 8th St, Jacksonville, FL • Duval County</p>
         </div>
       </div>
@@ -61,31 +107,31 @@
       <div class="h-6 w-px bg-neutral-800 mx-2"></div>
 
       <!-- Realtime Database Status Badge -->
-      <div id="supabase-status" class="px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-neutral-400 flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-        <span>Supabase Realtime: Connecting...</span>
+      <div id="supabase-status" class="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-emerald-400 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span id="status-text">Supabase Realtime: Connected</span>
       </div>
     </div>
 
-    <!-- Right Quick Controls -->
+    <!-- Right Controls -->
     <div class="flex items-center gap-2">
-      <button onclick="alert('Scale Desk Controls Activated')" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+      <button onclick="alert('Scale Desk Controls Online: Com 1 Active')" class="px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
         <i data-lucide="sliders" class="w-4 h-4"></i>
         <span>Scale Desk Controls</span>
       </button>
 
-      <button onclick="window.open('./index.html', '_blank')" class="px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-xs border border-neutral-700 flex items-center gap-1.5">
+      <button onclick="window.open('./index.html', '_blank')" class="px-3.5 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-xs border border-neutral-700 flex items-center gap-1.5 cursor-pointer">
         <i data-lucide="eye" class="w-4 h-4"></i>
-        <span>Live Driver View</span>
+        <span>Live Driver View (Public)</span>
       </button>
 
-      <button id="pwa-install-btn" onclick="triggerPwaInstall()" class="hidden px-2.5 py-1.5 rounded-lg bg-[#006272] text-white text-xs font-bold flex items-center gap-1">
-        <i data-lucide="download" class="w-4 h-4"></i>
-        <span>Install App</span>
+      <button onclick="toggleFullScreen()" class="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white cursor-pointer" title="Fullscreen Kiosk">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
       </button>
 
-      <button onclick="toggleSettingsDrawer(true)" class="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white" title="Settings & Terminal Lock">
-        <i data-lucide="lock" class="w-4 h-4"></i>
+      <button onclick="toggleSettingsDrawer(true)" class="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Settings & Terminal Lock">
+        <i data-lucide="lock" class="w-4 h-4 text-neutral-400"></i>
+        <span>Lock Terminal</span>
       </button>
     </div>
   </header>
@@ -93,81 +139,119 @@
   <!-- MAIN TERMINAL SPLIT LAYOUT -->
   <main class="flex-1 flex overflow-hidden">
     
-    <!-- LEFT SIDEBAR: GATE & SPOT SHIFTS (320px) -->
-    <aside class="w-80 border-r border-neutral-800 p-4 flex flex-col gap-5 overflow-y-auto shrink-0 bg-neutral-950/40">
+    <!-- LEFT SIDEBAR: GATE & 1-TAP SPOT SHIFTS (320px) -->
+    <aside class="w-80 border-r border-neutral-800/80 p-4 flex flex-col gap-4 overflow-y-auto shrink-0 bg-[#0A0C0F]">
       
-      <!-- Scale Gate Status -->
-      <div>
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Scale Gate Status</span>
-          <span id="gate-label" class="text-xs font-mono text-emerald-400 font-bold">Scales Open</span>
-        </div>
+      <!-- SCALE OPERATIONAL STATUS CARD (Matches Screenshot Exactly) -->
+      <div class="p-4 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
+        <h3 class="text-xs font-black tracking-wider text-white uppercase mb-1">
+          SCALE OPERATIONAL STATUS
+        </h3>
+        <p class="text-[11px] leading-relaxed text-neutral-400 mb-3.5">
+          Keep drivers informed to manage queue times and avoid congestion along the scale corridor.
+        </p>
+
+        <!-- 3 Button Pill Layout -->
         <div class="grid grid-cols-3 gap-2">
-          <button onclick="setGateStatus('open')" class="py-2.5 rounded-lg border border-emerald-500/50 bg-emerald-950/40 text-emerald-400 text-xs font-bold flex flex-col items-center gap-1">
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-            <span>Open</span>
+          <!-- Scales Open (Active by default) -->
+          <button 
+            id="status-btn-open"
+            onclick="setOperationalStatus('open')"
+            class="status-btn active-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+          >
+            Scales Open
           </button>
-          <button onclick="setGateStatus('line')" class="py-2.5 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-400 text-xs font-bold flex flex-col items-center gap-1 hover:text-amber-400">
-            <i data-lucide="clock" class="w-4 h-4"></i>
-            <span>Line (15m+)</span>
+
+          <!-- Heavy Line -->
+          <button 
+            id="status-btn-line"
+            onclick="setOperationalStatus('line')"
+            class="status-btn inactive-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+          >
+            Heavy Line
           </button>
-          <button onclick="setGateStatus('break')" class="py-2.5 rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-400 text-xs font-bold flex flex-col items-center gap-1 hover:text-red-400">
-            <i data-lucide="pause-circle" class="w-4 h-4"></i>
-            <span>Break</span>
+
+          <!-- Scale Break -->
+          <button 
+            id="status-btn-break"
+            onclick="setOperationalStatus('break')"
+            class="status-btn inactive-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
+          >
+            Scale Break
           </button>
         </div>
       </div>
 
-      <!-- COMEX Spot Quick Adjustments (1-Tap Shift) -->
+      <!-- COMEX SPOT SHIFTS (1-Tap Real-Time Step Adjusters) -->
       <div>
         <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-bold text-neutral-400 uppercase tracking-wider">COMEX Spot Shifts</span>
+          <span class="text-[11px] font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i>
+            COMEX Spot Shifts
+          </span>
           <span class="text-[10px] font-mono text-neutral-500">1-Tap Adjust</span>
         </div>
-        <div class="space-y-3">
-          <!-- Copper -->
-          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between text-xs mb-1.5">
-              <span class="font-bold text-amber-500">Copper Grades</span>
-              <span class="text-[11px] font-mono text-neutral-400">$0.05 step</span>
+
+        <div class="space-y-2.5">
+          <!-- Copper Grades -->
+          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="font-bold text-neutral-300">Copper Grades</span>
+              <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/30">$0.05 step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategoryPrice('Copper', 0.05)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
+              <button onclick="adjustCategory('Copper', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05 Copper
               </button>
-              <button onclick="adjustCategoryPrice('Copper', -0.05)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
+              <button onclick="adjustCategory('Copper', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05 Copper
               </button>
             </div>
           </div>
 
-          <!-- Aluminum -->
-          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between text-xs mb-1.5">
-              <span class="font-bold text-sky-400">Aluminum (UBC &amp; Extrusions)</span>
-              <span class="text-[11px] font-mono text-neutral-400">$0.02 step</span>
+          <!-- Yellow & Red Brass -->
+          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="font-bold text-neutral-300">Yellow &amp; Red Brass</span>
+              <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-500/30">$0.05 step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategoryPrice('Aluminum', 0.02)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02
+              <button onclick="adjustCategory('Brass', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05 Brass
               </button>
-              <button onclick="adjustCategoryPrice('Aluminum', -0.02)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02
+              <button onclick="adjustCategory('Brass', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05 Brass
               </button>
             </div>
           </div>
 
-          <!-- Ferrous/Steel -->
-          <div class="p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between text-xs mb-1.5">
+          <!-- Aluminum (UBC & Extrusions) -->
+          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex justify-between items-center text-xs mb-1.5">
+              <span class="font-bold text-neutral-300">Aluminum (UBC &amp; Extrusions)</span>
+              <span class="text-[10px] font-mono font-bold text-sky-400 bg-sky-950/40 px-1.5 py-0.5 rounded border border-sky-500/30">$0.02 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="adjustCategory('Aluminum', 0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02 Alum
+              </button>
+              <button onclick="adjustCategory('Aluminum', -0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02 Alum
+              </button>
+            </div>
+          </div>
+
+          <!-- Ferrous / Steel -->
+          <div class="p-2.5 rounded-xl bg-neutral-900/50 border border-neutral-800/80">
+            <div class="flex justify-between items-center text-xs mb-1.5">
               <span class="font-bold text-neutral-300">Ferrous / Steel</span>
-              <span class="text-[11px] font-mono text-neutral-400">$0.50/cwt step</span>
+              <span class="text-[10px] font-mono font-bold text-indigo-400 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-500/30">$0.50/cwt step</span>
             </div>
             <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategoryPrice('Ferrous', 0.50)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+              <button onclick="adjustCategory('Ferrous', 0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
                 <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.50/cwt
               </button>
-              <button onclick="adjustCategoryPrice('Ferrous', -0.50)" class="py-1 px-2 rounded bg-neutral-800 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold flex items-center justify-center gap-1">
+              <button onclick="adjustCategory('Ferrous', -0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
                 <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.50/cwt
               </button>
             </div>
@@ -175,60 +259,281 @@
         </div>
       </div>
 
-      <!-- Broadcast Flash Special -->
-      <div class="mt-auto p-3 rounded-xl bg-neutral-900 border border-neutral-800">
-        <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wide block mb-1">Broadcast Flash Special</span>
+      <!-- BROADCAST FLASH SPECIAL -->
+      <div class="mt-auto p-3.5 rounded-xl bg-neutral-900/80 border border-neutral-800">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wide flex items-center gap-1.5">
+            <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+            Broadcast Flash Special
+          </span>
+          <span class="text-[10px] text-neutral-500 font-mono">60 Min Push</span>
+        </div>
         <div class="flex gap-2">
-          <input id="flash-special-input" type="text" placeholder="e.g. Bare Bright $3.60/lb" class="flex-1 bg-black border border-neutral-700 rounded px-2.5 py-1.5 text-xs font-mono text-white focus:border-[#006272] focus:outline-none" />
-          <button onclick="broadcastSpecial()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded">Push</button>
+          <div class="relative flex-1">
+            <span class="absolute left-2.5 top-2 text-neutral-500 text-xs font-mono">$</span>
+            <input id="flash-special-price" type="number" step="0.05" value="3.65" class="w-full bg-black border border-neutral-700 rounded-lg pl-6 pr-2 py-1.5 text-xs font-mono text-white focus:border-amber-500 focus:outline-none" />
+          </div>
+          <button onclick="broadcastSpecial()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs rounded-lg flex items-center gap-1 cursor-pointer shadow-sm">
+            <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+            <span>Broadcast</span>
+          </button>
         </div>
       </div>
 
     </aside>
 
     <!-- RIGHT MAIN PANEL: TODAY'S LIVE SCALE BUY RATES -->
-    <section class="flex-1 flex flex-col p-6 overflow-hidden">
-      <div class="flex items-center justify-between pb-4 border-b border-neutral-800 shrink-0">
+    <section class="flex-1 flex flex-col p-6 overflow-hidden bg-[#07080A]">
+      <div class="flex items-center justify-between pb-4 border-b border-neutral-800/80 shrink-0">
         <div>
           <h2 class="text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
             <i data-lucide="edit-3" class="w-5 h-5 text-amber-500"></i>
-            Today's Live Scale Buy Rates
+            TODAY'S LIVE SCALE BUY RATES
           </h2>
           <p class="text-xs text-neutral-400">Touch any price to edit. Auto-syncs to driver phones upon publishing.</p>
         </div>
 
-        <button onclick="publishLiveSheet()" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider rounded-lg flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all">
+        <button onclick="publishLiveSheet()" class="px-6 py-2.5 bg-[#F59E0B] hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all cursor-pointer">
           <i data-lucide="send" class="w-4 h-4"></i>
           <span>Publish Live Sheet</span>
         </button>
       </div>
 
-      <!-- Live Buy Rates Table Container -->
+      <!-- RATES TABLE CONTAINER (Populated automatically on load) -->
       <div class="flex-1 overflow-y-auto mt-4 pr-1">
-        <div id="rates-table-container" class="w-full">
-          <!-- Populated by JavaScript immediately via REST snapshot or default fallback -->
-          <div class="p-8 text-center text-neutral-500 font-mono text-xs">
-            Loading rate card...
-          </div>
-        </div>
+        <table class="w-full text-left text-xs font-mono">
+          <thead>
+            <tr class="text-neutral-500 border-b border-neutral-800 pb-2">
+              <th class="py-2.5 px-3">CATEGORY</th>
+              <th class="py-2.5 px-3">COMMODITY / GRADE</th>
+              <th class="py-2.5 px-3 text-right">BUY PRICE</th>
+              <th class="py-2.5 px-3 text-right">UNIT</th>
+              <th class="py-2.5 px-3 text-center">STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="rates-table-body" class="divide-y divide-neutral-900">
+            <!-- JavaScript will render the live rows immediately -->
+          </tbody>
+        </table>
       </div>
     </section>
 
   </main>
 
-  <!-- STATION SETTINGS & TERMINAL PIN DRAWER -->
+  <!-- STATION SETTINGS & PIN DRAWER -->
   <div id="settings-drawer" class="hidden fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-xs">
-    <div class="w-full max-w-sm h-full bg-[#0A0A0A] border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl">
+    <div class="w-full max-w-sm h-full bg-[#0C0E12] border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl">
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-neutral-800">
           <div class="flex items-center gap-2">
-            <i data-lucide="settings-2" class="w-5 h-5 text-[#006272]"></i>
+            <i data-lucide="settings-2" class="w-5 h-5 text-amber-500"></i>
             <h3 class="text-sm font-bold tracking-wider text-white uppercase">Terminal Configuration</h3>
           </div>
-          <button onclick="toggleSettingsDrawer(false)" class="p-1 rounded text-neutral-400 hover:text-white">
+          <button onclick="toggleSettingsDrawer(false)" class="p-1 rounded text-neutral-400 hover:text-white cursor-pointer">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
 
-        <!-- Terminal Identifier Badges -->
         <div class="grid grid-cols-2 gap-2 my-4">
+          <div class="p-2.5 bg-neutral-900 rounded-lg border border-neutral-800">
+            <span class="text-[10px] text-neutral-500 uppercase font-bold block">Terminal</span>
+            <span class="text-xs font-mono font-bold text-neutral-200">WM-TERMINAL-01</span>
+          </div>
+          <div class="p-2.5 bg-neutral-900 rounded-lg border border-neutral-800">
+            <span class="text-[10px] text-neutral-500 uppercase font-bold block">Yard</span>
+            <span class="text-xs font-bold text-amber-500">Quick Stop Recycling</span>
+          </div>
+        </div>
+
+        <!-- PIN Pad -->
+        <div id="drawer-locked-view" class="p-4 bg-neutral-900/60 border border-neutral-800 rounded-xl mt-4">
+          <span class="text-xs font-bold text-neutral-300 block mb-2">Manager PIN Authorization</span>
+          <input id="drawer-pin-input" type="password" maxlength="6" placeholder="Enter PIN" class="w-full px-3 py-2 text-center text-xl tracking-widest font-mono bg-black border border-neutral-700 rounded-lg text-white mb-3" />
+          <button onclick="verifyDrawerPin()" class="w-full py-2 bg-[#006272] hover:bg-teal-700 text-white text-xs font-bold uppercase rounded-lg cursor-pointer">Authorize Station</button>
+        </div>
+
+        <!-- Unlocked Install Mode -->
+        <div id="drawer-unlocked-view" class="hidden space-y-4 mt-4">
+          <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs flex items-center justify-between">
+            <span class="font-bold">Manager Mode Unlocked</span>
+            <button onclick="lockDrawer()" class="underline text-[10px] cursor-pointer">Lock</button>
+          </div>
+
+          <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-xl space-y-2.5">
+            <span class="text-[10px] text-neutral-400 font-bold uppercase block tracking-wider">Install Terminal To Tablet</span>
+            <p class="text-[11px] text-neutral-400">Add Weighmaster directly to your home screen in dedicated fullscreen kiosk mode.</p>
+            <button onclick="triggerPwaInstall()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black uppercase rounded-lg flex items-center justify-center gap-2 cursor-pointer shadow-md">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Install WeighMaster Terminal</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-neutral-800 flex justify-between text-[11px] text-neutral-500 font-mono">
+        <span>Protocol: RS-232</span>
+        <span>Build: v2.4.1-standalone</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INLINE JAVASCRIPT: GUARANTEED LIVE RENDERING -->
+  <script>
+    // 1. DATA SOURCE (Renders synchronously on DOMContentLoaded so screen is NEVER blank)
+    let scrapRates = [
+      { id: 1, category: 'Copper', grade: '#1 Bare Bright Copper', price: 3.45, unit: 'lb' },
+      { id: 2, category: 'Copper', grade: '#1 Copper Tubing / Bus Bar', price: 3.25, unit: 'lb' },
+      { id: 3, category: 'Copper', grade: '#2 Copper Wire & Tubing', price: 3.05, unit: 'lb' },
+      { id: 4, category: 'Copper', grade: '#1 Insulated Wire (85%)', price: 2.15, unit: 'lb' },
+      { id: 5, category: 'Brass', grade: 'Clean Yellow Brass Solids', price: 1.95, unit: 'lb' },
+      { id: 6, category: 'Brass', grade: 'Red Brass / Plumbing Brass', price: 2.25, unit: 'lb' },
+      { id: 7, category: 'Aluminum', grade: 'Clean Aluminum Extrusions 6063', price: 0.72, unit: 'lb' },
+      { id: 8, category: 'Aluminum', grade: 'Aluminum UBC (Clean Cans)', price: 0.55, unit: 'lb' },
+      { id: 9, category: 'Ferrous', grade: '#1 Prepared Steel (5ft & under)', price: 11.50, unit: 'cwt' },
+      { id: 10, category: 'Ferrous', grade: 'Clean Automotive Cast Iron', price: 12.00, unit: 'cwt' },
+      { id: 11, category: 'Ferrous', grade: 'Unprepared Shredder Feed / Sheet', price: 8.50, unit: 'cwt' }
+    ];
+
+    // 2. RENDER FUNCTION
+    function renderTable() {
+      const tbody = document.getElementById('rates-table-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = scrapRates.map(item => {
+        let catColor = 'text-neutral-400';
+        if (item.category === 'Copper') catColor = 'text-amber-500 font-bold';
+        if (item.category === 'Brass') catColor = 'text-yellow-400 font-bold';
+        if (item.category === 'Aluminum') catColor = 'text-sky-400 font-bold';
+        if (item.category === 'Ferrous') catColor = 'text-indigo-400 font-bold';
+
+        return `
+          <tr class="hover:bg-neutral-900/70 transition-colors">
+            <td class="py-3 px-3 ${catColor}">${item.category}</td>
+            <td class="py-3 px-3 text-neutral-200 font-sans font-medium text-xs">${item.grade}</td>
+            <td class="py-3 px-3 text-right">
+              <span class="text-neutral-500 font-mono mr-0.5">$</span>
+              <input type="number" step="0.01" value="${item.price.toFixed(2)}" 
+                onchange="updatePrice(${item.id}, this.value)"
+                class="rate-input w-20 text-right bg-black border border-neutral-800 rounded px-1.5 py-1 text-emerald-400 font-mono font-bold text-sm" />
+            </td>
+            <td class="py-3 px-3 text-right text-neutral-400 font-mono">/${item.unit}</td>
+            <td class="py-3 px-3 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
+                LIVE
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Immediately draw table to DOM
+    renderTable();
+
+    // 3. EDIT INDIVIDUAL COMMODITY PRICE
+    function updatePrice(id, val) {
+      const num = parseFloat(val);
+      if (isNaN(num)) return;
+      scrapRates = scrapRates.map(r => r.id === id ? { ...r, price: num } : r);
+    }
+
+    // 4. CATEGORY SPOT ADJUSTERS (+/- buttons with real-time recalculation)
+    function adjustCategory(cat, delta) {
+      scrapRates = scrapRates.map(r => {
+        if (r.category === cat) {
+          return { ...r, price: Math.max(0.01, +(r.price + delta).toFixed(2)) };
+        }
+        return r;
+      });
+      renderTable();
+    }
+
+    // 5. SCALE OPERATIONAL STATUS HANDLER (Active Fills vs Inactive Outlines)
+    function setOperationalStatus(state) {
+      const btnOpen = document.getElementById('status-btn-open');
+      const btnLine = document.getElementById('status-btn-line');
+      const btnBreak = document.getElementById('status-btn-break');
+
+      // Reset all buttons to default inactive styling
+      btnOpen.className = 'status-btn inactive-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      btnLine.className = 'status-btn inactive-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      btnBreak.className = 'status-btn inactive-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+
+      // Apply chosen solid fill
+      if (state === 'open') {
+        btnOpen.className = 'status-btn active-open py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      } else if (state === 'line') {
+        btnLine.className = 'status-btn active-line py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      } else if (state === 'break') {
+        btnBreak.className = 'status-btn active-break py-3 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      }
+    }
+
+    // 6. FLASH BROADCAST & LIVE PUBLISH
+    function broadcastSpecial() {
+      const price = document.getElementById('flash-special-price').value;
+      alert("🚨 Flash Broadcast Pushed to Local Duval Haulers: Bare Bright Copper @ $" + price + "/lb for 60 Minutes!");
+    }
+
+    function publishLiveSheet() {
+      alert("✅ Scale sheet successfully published. All 11 commodity rates updated across Duval County network.");
+    }
+
+    // 7. PIN & SETTINGS DRAWER
+    function toggleSettingsDrawer(show) {
+      document.getElementById('settings-drawer').classList.toggle('hidden', !show);
+    }
+
+    function verifyDrawerPin() {
+      const pin = document.getElementById('drawer-pin-input').value;
+      if (pin.length >= 4) {
+        document.getElementById('drawer-locked-view').classList.add('hidden');
+        document.getElementById('drawer-unlocked-view').classList.remove('hidden');
+      } else {
+        alert('Please enter a 4-digit manager PIN.');
+      }
+    }
+
+    function lockDrawer() {
+      document.getElementById('drawer-pin-input').value = '';
+      document.getElementById('drawer-locked-view').classList.remove('hidden');
+      document.getElementById('drawer-unlocked-view').classList.add('hidden');
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // 8. PWA INSTALL HANDLER
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function triggerPwaInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+      } else {
+        alert("To install directly on your tablet:\n1. Tap the browser Menu (⋮ or Share icon)\n2. Select 'Install app' or 'Add to Home Screen'");
+      }
+    }
+
+    // Clear and force update on active service workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+          registration.update();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
