@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Duval Scrap & Metals Exchange | Jacksonville, FL</title>
   
-  <!-- Classic Gold Balance Scale Favicon & Apple Touch Icon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2307090e' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='24' height='24' rx='4' fill='%2307090e'/%3E%3Cpath d='m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='M7 21h10'/%3E%3Cpath d='M12 3v18'/%3E%3Cpath d='M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2'/%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2307090e' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='24' height='24' rx='4' fill='%2307090e'/%3E%3Cpath d='m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='M7 21h10'/%3E%3Cpath d='M12 3v18'/%3E%3Cpath d='M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2'/%3E%3C/svg%3E">
+  <!-- Classic Gold Balance Scale Favicon & Mobile Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v1">
+  <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v1">
 
-  <!-- Manifest Link -->
-  <link rel="manifest" href="./manifest.json">
-
+  <link rel="manifest" href="./manifest.json?v=scale_gold_v1">
   <meta name="theme-color" content="#07090e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -115,13 +113,6 @@
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap justify-start sm:justify-end">
-        
-        <!-- Dedicated One-Touch Install Button -->
-        <button id="installAppBtn" onclick="handleInstallAction()" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 text-black hover:bg-amber-400 border border-amber-400 text-xs sm:text-sm font-black shadow-md transition min-h-[42px] cursor-pointer" title="Install or Pin Duval Scrap Exchange">
-          <i data-lucide="download" id="installBtnIcon" class="w-4 h-4 shrink-0"></i>
-          <span id="installAppText">Install App</span>
-        </button>
-
         <button onclick="alert('Duval Scrap Tracker: Live rate sheets, drop calculators, and scale status for Jacksonville scrap facilities.')" class="p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-amber-400 hover:text-white border border-gray-700/70 transition flex items-center justify-center min-w-[42px] min-h-[42px]" title="Help Info">
           <i data-lucide="help-circle" class="w-5 h-5"></i>
         </button>
@@ -179,54 +170,6 @@
       <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#080b10] to-transparent z-10 pointer-events-none"></div>
     </div>
   </header>
-
-  <!-- INSTALLATION GUIDANCE POPUP -->
-  <div id="installGuideModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-[#0d121a] border border-amber-500/50 rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl relative">
-      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-        <div class="flex items-center gap-2.5 text-white font-extrabold text-base">
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400">
-            <i data-lucide="download" class="w-4 h-4"></i>
-          </div>
-          <span>Add to Taskbar / Home Screen</span>
-        </div>
-        <button onclick="closeModal('installGuideModal')" class="text-gray-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3 text-xs sm:text-sm text-gray-300">
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 space-y-1.5">
-          <div class="font-black text-amber-400 flex items-center gap-2">
-            <i data-lucide="monitor" class="w-4 h-4"></i> On Desktop (Chrome / Edge):
-          </div>
-          <p class="text-gray-300">Click the install badge on the right side of the address bar, or click the browser's <strong>3 dots (⋮)</strong> top-right ➔ click <strong>"Install Duval Scrap &amp; Metals Exchange"</strong>.</p>
-        </div>
-
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 space-y-1.5">
-          <div class="font-black text-emerald-400 flex items-center gap-2">
-            <i data-lucide="smartphone" class="w-4 h-4"></i> On iPhone / iPad (Safari):
-          </div>
-          <p class="text-gray-300">1. Tap the <strong>Share</strong> button (box with up arrow at bottom of screen).</p>
-          <p class="text-gray-300">2. Scroll down and tap <strong>"Add to Home Screen"</strong>.</p>
-          <p class="text-gray-300">3. Tap <strong>Add</strong> in the top right corner.</p>
-        </div>
-
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 space-y-1.5">
-          <div class="font-black text-sky-400 flex items-center gap-2">
-            <i data-lucide="tablet" class="w-4 h-4"></i> On Android (Chrome):
-          </div>
-          <p class="text-gray-300">Tap the three vertical dots <strong>(⋮)</strong> top-right ➔ tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.</p>
-        </div>
-      </div>
-
-      <div class="pt-2">
-        <button onclick="closeModal('installGuideModal')" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-sm transition shadow-md">
-          Got It
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- NOTIFICATIONS DRAWER -->
   <div id="notifDrawer" class="hidden fixed inset-y-0 right-0 z-50 w-full max-w-sm sm:max-w-md bg-[#0d121a] border-l border-gray-800 shadow-2xl flex flex-col">
@@ -583,7 +526,6 @@
     const DEFAULT_SB_KEY = 'sb_publishable_jKwgStk_B5zrIiAuZlFazA_1bSB4414';
 
     let sbClient = null;
-    let deferredPrompt = null;
     let activeUnit = 'lb';
     let authenticatedYardId = null;
 
@@ -654,51 +596,6 @@
       { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', berman: 0.10, quickstop: 0.095, jmr: 0.09, cmc: 0.088, tmr: 0.085 },
       { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
     ];
-
-    function checkInstalledState() {
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-      const btn = document.getElementById('installAppBtn');
-      const btnText = document.getElementById('installAppText');
-      const btnIcon = document.getElementById('installBtnIcon');
-      if (isStandalone && btn) {
-        btn.classList.remove('bg-amber-500', 'hover:bg-amber-400', 'text-black');
-        btn.classList.add('bg-emerald-600/30', 'text-emerald-400', 'border-emerald-500/40', 'pointer-events-none');
-        if (btnText) btnText.textContent = "App Installed ✓";
-        if (btnIcon) btnIcon.setAttribute('data-lucide', 'check-circle');
-        if (window.lucide) window.lucide.createIcons();
-      }
-    }
-
-    // Unified PWA Install Listener
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const installBtn = document.getElementById('installAppBtn');
-      const installText = document.getElementById('installAppText');
-      if (installBtn) {
-        installBtn.classList.add('ring-2', 'ring-amber-300');
-        if (installText) installText.textContent = "Install App";
-      }
-    });
-
-    window.addEventListener('appinstalled', () => {
-      deferredPrompt = null;
-      checkInstalledState();
-    });
-
-    function handleInstallAction() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            checkInstalledState();
-          }
-          deferredPrompt = null;
-        });
-      } else {
-        openModal('installGuideModal');
-      }
-    }
 
     function openModal(id) {
       const el = document.getElementById(id);
@@ -1054,26 +951,11 @@
       closeModal('supabaseModal');
     }
 
-    // Register Service Worker with relative scope for GitHub Pages
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-          .then((reg) => {
-            console.log('SW scope registered:', reg.scope);
-            checkInstalledState();
-          })
-          .catch((err) => {
-            console.warn('SW register error:', err);
-          });
-      });
-    }
-
     // Initialize DOM
     document.addEventListener('DOMContentLoaded', () => {
       populateMetalDropdowns();
       renderApp();
       initSupabase();
-      checkInstalledState();
       if (window.lucide) window.lucide.createIcons();
     });
   </script>
