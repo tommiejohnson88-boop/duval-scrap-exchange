@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2307090e' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='24' height='24' rx='4' fill='%2307090e'/%3E%3Cpath d='m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z'/%3E%3Cpath d='M7 21h10'/%3E%3Cpath d='M12 3v18'/%3E%3Cpath d='M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2'/%3E%3C/svg%3E">
 
   <!-- Manifest Link -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="./manifest.json">
 
   <meta name="theme-color" content="#07090e">
   <meta name="mobile-web-app-capable" content="yes">
@@ -118,7 +118,7 @@
         
         <!-- Dedicated One-Touch Install Button -->
         <button id="installAppBtn" onclick="handleInstallAction()" class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-amber-500 text-black hover:bg-amber-400 border border-amber-400 text-xs sm:text-sm font-black shadow-md transition min-h-[42px] cursor-pointer" title="Install or Pin Duval Scrap Exchange">
-          <i data-lucide="download" id="installBtnIcon" class="w-4 h-4"></i>
+          <i data-lucide="download" id="installBtnIcon" class="w-4 h-4 shrink-0"></i>
           <span id="installAppText">Install App</span>
         </button>
 
@@ -200,7 +200,7 @@
           <div class="font-black text-amber-400 flex items-center gap-2">
             <i data-lucide="monitor" class="w-4 h-4"></i> On Desktop (Chrome / Edge):
           </div>
-          <p class="text-gray-300">Look at the right side of your browser address bar for the <strong>Install</strong> or <strong>Computer screen icon</strong>, or click the <strong>3 vertical dots (⋮)</strong> top-right ➔ click <strong>"Install Duval Scrap &amp; Metals Exchange"</strong>.</p>
+          <p class="text-gray-300">Click the install badge on the right side of the address bar, or click the browser's <strong>3 dots (⋮)</strong> top-right ➔ click <strong>"Install Duval Scrap &amp; Metals Exchange"</strong>.</p>
         </div>
 
         <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 space-y-1.5">
@@ -579,7 +579,6 @@
 
   <!-- APPLICATION SCRIPT LOGIC -->
   <script>
-    // HARDCODED SUPABASE CONNECTION CREDENTIALS
     const DEFAULT_SB_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co';
     const DEFAULT_SB_KEY = 'sb_publishable_jKwgStk_B5zrIiAuZlFazA_1bSB4414';
 
@@ -588,7 +587,6 @@
     let activeUnit = 'lb';
     let authenticatedYardId = null;
 
-    // Certified Duval County Scrapyards Baseline
     const scrapyards = {
       quickstop: {
         id: 'quickstop',
@@ -637,7 +635,6 @@
       }
     };
 
-    // 17 Duval Metal Commodity Grades
     let metalsCatalog = [
       { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', berman: 5.25, quickstop: 5.20, jmr: 5.05, cmc: 4.95, tmr: 4.90 },
       { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', berman: 5.05, quickstop: 5.00, jmr: 4.90, cmc: 4.80, tmr: 4.75 },
@@ -658,7 +655,6 @@
       { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
     ];
 
-    // Check if running in standalone/installed mode
     function checkInstalledState() {
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       const btn = document.getElementById('installAppBtn');
@@ -673,15 +669,15 @@
       }
     }
 
-    // Unified BeforeInstallPrompt Listener
+    // Unified PWA Install Listener
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       const installBtn = document.getElementById('installAppBtn');
       const installText = document.getElementById('installAppText');
       if (installBtn) {
-        installBtn.classList.add('ring-4', 'ring-amber-400', 'animate-pulse');
-        if (installText) installText.textContent = "Install Now";
+        installBtn.classList.add('ring-2', 'ring-amber-300');
+        if (installText) installText.textContent = "Install App";
       }
     });
 
@@ -690,7 +686,6 @@
       checkInstalledState();
     });
 
-    // Single unified installation action
     function handleInstallAction() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
@@ -705,7 +700,6 @@
       }
     }
 
-    // Modal Helpers
     function openModal(id) {
       const el = document.getElementById(id);
       if (el) el.classList.remove('hidden');
@@ -771,7 +765,6 @@
       const selectedMetalId = document.getElementById('calcMetal')?.value || 'bare_bright';
       const selectedMetal = metalsCatalog.find(m => m.id === selectedMetalId) || metalsCatalog[0];
 
-      // 1. Calculator Highlight Cards
       if (highlight) {
         highlight.innerHTML = '';
         const yardsList = [
@@ -808,7 +801,6 @@
         });
       }
 
-      // 2. Comparison Table Rows
       if (tbody) {
         tbody.innerHTML = '';
         metalsCatalog.forEach(metal => {
@@ -838,7 +830,6 @@
         });
       }
 
-      // 3. Jacksonville Yard Cards
       if (cardsGrid) {
         cardsGrid.innerHTML = '';
         Object.entries(scrapyards).forEach(([key, yard]) => {
@@ -873,7 +864,6 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
-    // Operator Authentication Gate
     function openOwnerModal() {
       openModal('ownerModal');
       if (authenticatedYardId) {
@@ -1035,7 +1025,6 @@
       if (badge) badge.classList.add('hidden');
     }
 
-    // Initialize Supabase if configured
     function initSupabase() {
       try {
         const url = localStorage.getItem('duval_sb_url') || DEFAULT_SB_URL;
@@ -1052,7 +1041,7 @@
           if (syncText) syncText.textContent = "Supabase Live";
         }
       } catch (err) {
-        console.warn("Supabase initialization bypassed, running local state:", err);
+        console.warn("Supabase running local fallback:", err);
       }
     }
 
@@ -1065,16 +1054,21 @@
       closeModal('supabaseModal');
     }
 
-    // Service Worker Registration for PWA
+    // Register Service Worker with relative scope for GitHub Pages
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then(() => checkInstalledState())
-          .catch(() => {});
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then((reg) => {
+            console.log('SW scope registered:', reg.scope);
+            checkInstalledState();
+          })
+          .catch((err) => {
+            console.warn('SW register error:', err);
+          });
       });
     }
 
-    // App Initialization
+    // Initialize DOM
     document.addEventListener('DOMContentLoaded', () => {
       populateMetalDropdowns();
       renderApp();
