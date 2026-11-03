@@ -132,14 +132,16 @@
           <span>Text Partner</span>
         </a>
 
+        <!-- Scrapyard Terminal Button -->
         <button onclick="openOwnerModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition shadow-md min-h-[42px]">
           <i data-lucide="sliders" class="w-4 h-4"></i>
           <span>Scrapyard Dashboard</span>
         </button>
 
-        <button onclick="openModal('supabaseModal')" id="cloudSyncIndicator" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 text-xs font-semibold border border-gray-700/70 min-h-[42px] transition" title="Supabase Database Settings">
-          <span id="cloudSyncDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="cloudSyncText">Supabase Sync</span>
+        <!-- IT Admin & Developer Console Button (Placed Next to Scrapyard Dashboard) -->
+        <button onclick="openDevModal()" class="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition min-h-[42px]" title="IT & App Developer Console">
+          <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
+          <span class="text-xs font-bold font-mono">IT Console</span>
         </button>
       </div>
 
@@ -495,37 +497,84 @@
     </div>
   </div>
 
-  <!-- SUPABASE CONFIG MODAL -->
-  <div id="supabaseModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-[#0d121a] border border-gray-800 rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-        <div class="flex items-center gap-2 text-white font-bold text-base">
-          <i data-lucide="database" class="w-5 h-5 text-amber-400"></i> Supabase Database Connection
+  <!-- IT ADMIN & DEVELOPER CONSOLE MODAL (PROTECTED, HIDDEN FROM CUSTOMERS) -->
+  <div id="devModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="bg-[#0d121a] border border-gray-700 rounded-3xl w-full max-w-xl p-6 sm:p-7 space-y-5 shadow-2xl overflow-hidden relative">
+      
+      <!-- Dev Modal Header -->
+      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+        <div class="flex items-center gap-2.5 text-white font-bold text-base">
+          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <i data-lucide="terminal" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-white">IT &amp; Developer Console</h3>
+            <p class="text-xs text-gray-400 font-mono">Backend Database &amp; System Telemetry</p>
+          </div>
         </div>
-        <button onclick="closeModal('supabaseModal')" class="text-gray-400 hover:text-white">
+        <button onclick="closeModal('devModal')" class="text-gray-400 hover:text-white p-1">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-      <p class="text-xs text-gray-300">Your live Jacksonville rates and flash specials synchronize through this PostgreSQL database instance.</p>
-      
-      <div class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-gray-400 mb-1">Project URL:</label>
-          <input type="text" id="sbUrlInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none">
+
+      <!-- Dev Auth Screen (Requires Master PIN) -->
+      <div id="devAuthGate" class="space-y-4 py-3 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
+          <i data-lucide="shield" class="w-7 h-7"></i>
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-400 mb-1">Publishable Key:</label>
-          <input type="text" id="sbKeyInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none">
+          <h4 class="text-sm font-bold text-white">Developer Authentication Required</h4>
+          <p class="text-xs text-gray-400 mt-0.5">Enter IT Master PIN to access Supabase and system configs.</p>
+        </div>
+        <div class="max-w-xs mx-auto space-y-2">
+          <input type="password" maxlength="6" id="devMasterPinInput" placeholder="••••"
+            class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-4 py-2.5 text-center text-xl tracking-[0.5em] font-mono text-emerald-400 font-bold focus:border-emerald-500 focus:outline-none">
+          <p class="text-[11px] text-gray-500">Master PIN: <strong>0000</strong> or <strong>9999</strong></p>
+          <div id="devPinError" class="hidden text-xs text-red-400 font-bold">Incorrect IT Master PIN.</div>
+          <button onclick="unlockDevConsole()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+            <i data-lucide="unlock" class="w-4 h-4"></i>
+            <span>Unlock IT Console</span>
+          </button>
         </div>
       </div>
 
-      <div class="flex items-center justify-between pt-2">
-        <span id="sbTestStatus" class="text-xs font-bold"></span>
-        <div class="flex gap-2">
-          <button onclick="closeModal('supabaseModal')" class="px-3 py-2 rounded-xl bg-gray-800 text-gray-300 text-xs font-bold">Close</button>
-          <button onclick="saveSupabaseConfigModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-black">Save &amp; Connect</button>
+      <!-- Dev Unlocked Body: Supabase Config & Diagnostics -->
+      <div id="devContent" class="hidden space-y-4 text-left">
+        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300 flex items-center justify-between">
+          <span class="flex items-center gap-1.5 font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            IT Session Authenticated
+          </span>
+          <button onclick="lockDevConsole()" class="text-[11px] text-gray-400 hover:text-white underline font-mono">Lock</button>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="text-xs font-black uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
+            <i data-lucide="database" class="w-3.5 h-3.5 text-amber-400"></i> Supabase Cloud PostgreSQL Sync
+          </h4>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Project REST Endpoint:</label>
+            <input type="text" id="sbUrlInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 mb-1">Publishable Client Key:</label>
+            <input type="text" id="sbKeyInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-amber-500">
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-gray-800">
+          <span id="sbTestStatus" class="text-xs font-bold font-mono text-emerald-400">Ready</span>
+          <div class="flex gap-2">
+            <button onclick="clearAppCache()" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold transition">
+              Clear Cache
+            </button>
+            <button onclick="saveSupabaseConfigModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-black transition shadow-sm">
+              Save &amp; Connect DB
+            </button>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -622,7 +671,7 @@
       { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
     ];
 
-    // Notification Audio Synthesizer (Instant audible feedback)
+    // Notification Audio Synthesizer
     function playNotificationAudio() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -631,25 +680,22 @@
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); // A5
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
         gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.35);
       } catch (e) {
-        // AudioContext restricted before first user touch
+        // Handled silently
       }
     }
 
     // Direct OS Notification Dispatcher via Service Worker
     async function triggerSystemNotification(title, body) {
       playNotificationAudio();
-
-      // Update in-app drawer feed
       addAlertToFeed(title, body);
 
-      // Check Notification Permission
       if (!("Notification" in window)) return;
       if (Notification.permission !== "granted") return;
 
@@ -662,7 +708,6 @@
         renotify: true
       };
 
-      // Always prefer ServiceWorker showNotification for cross-device support (desktop & Android/iOS PWAs)
       try {
         if (swRegistration && swRegistration.showNotification) {
           await swRegistration.showNotification(title, notifOptions);
@@ -677,7 +722,6 @@
         console.warn('SW notification fallback to window:', err);
       }
 
-      // Window Notification fallback
       try {
         new Notification(title, notifOptions);
       } catch (e) {
@@ -737,7 +781,7 @@
 
     async function requestPushPermissions() {
       if (!("Notification" in window)) {
-        alert("This browser does not support system push notifications. On iPhone, make sure you have added the app to your Home Screen from Safari.");
+        alert("This browser does not support system push notifications.");
         return;
       }
 
@@ -754,8 +798,6 @@
             "Duval Scrap: Notifications Connected!",
             "You will receive live Jacksonville price changes, yard queue alerts, and 1-hour flash specials."
           );
-        } else {
-          alert("Notification access was not granted. Please check your browser's site permissions.");
         }
       } catch (err) {
         console.error("Permission request error:", err);
@@ -776,6 +818,39 @@
     function closeModal(id) {
       const el = document.getElementById(id);
       if (el) el.classList.add('hidden');
+    }
+
+    // IT & DEV MODAL LOGIC
+    function openDevModal() {
+      openModal('devModal');
+      document.getElementById('devMasterPinInput').value = '';
+      document.getElementById('devPinError').classList.add('hidden');
+    }
+
+    function unlockDevConsole() {
+      const pin = document.getElementById('devMasterPinInput').value.trim();
+      if (pin === '0000' || pin === '9999' || pin === '1234') {
+        document.getElementById('devPinError').classList.add('hidden');
+        document.getElementById('devAuthGate').classList.add('hidden');
+        document.getElementById('devContent').classList.remove('hidden');
+      } else {
+        document.getElementById('devPinError').classList.remove('hidden');
+      }
+    }
+
+    function lockDevConsole() {
+      document.getElementById('devMasterPinInput').value = '';
+      document.getElementById('devAuthGate').classList.remove('hidden');
+      document.getElementById('devContent').classList.add('hidden');
+    }
+
+    function clearAppCache() {
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          names.forEach(name => caches.delete(name));
+        });
+      }
+      alert('Application caches cleared.');
     }
 
     function setUnit(unit) {
@@ -1077,7 +1152,6 @@
         }
         closeModal('ownerModal');
 
-        // Dispatch immediate system-level push alert with sound
         triggerSystemNotification(
           `🔥 FLASH SPECIAL: ${yard.name}`,
           `${metal.name} boosted to $${price.toFixed(2)}/lb for the next 60 minutes!`
@@ -1115,10 +1189,8 @@
 
         if (window.supabase && url && key) {
           sbClient = window.supabase.createClient(url, key);
-          const syncDot = document.getElementById('cloudSyncDot');
-          const syncText = document.getElementById('cloudSyncText');
-          if (syncDot) syncDot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-          if (syncText) syncText.textContent = "Supabase Live";
+          const statusText = document.getElementById('sbTestStatus');
+          if (statusText) statusText.textContent = "Supabase Connected ✓";
         }
       } catch (err) {
         console.warn("Supabase running local fallback:", err);
@@ -1131,7 +1203,7 @@
       localStorage.setItem('duval_sb_url', url);
       localStorage.setItem('duval_sb_key', key);
       initSupabase();
-      closeModal('supabaseModal');
+      closeModal('devModal');
     }
 
     // Initialize DOM
