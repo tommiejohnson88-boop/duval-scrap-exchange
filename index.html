@@ -91,7 +91,7 @@
 
   <!-- TOP HEADER -->
   <header class="w-full bg-[#0d121a] border-b border-gray-800/80 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
       
       <!-- Brand & Location -->
       <div class="flex items-center space-x-3.5">
@@ -99,8 +99,8 @@
           <i data-lucide="scale" class="w-6 h-6"></i>
         </div>
         <div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">Duval Scrap &amp; Metals Exchange</h1>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white leading-tight">Duval Scrap &amp; Metals Exchange</h1>
             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> Duval Live
             </span>
@@ -111,38 +111,51 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2.5 flex-wrap sm:flex-nowrap justify-start sm:justify-end">
-        <button onclick="alert('Duval Scrap Tracker: Live rate sheets, drop calculators, and scale status for Jacksonville scrap facilities.')" class="p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-amber-400 hover:text-white border border-gray-700/70 transition flex items-center justify-center min-w-[42px] min-h-[42px]" title="Help Info">
-          <i data-lucide="help-circle" class="w-5 h-5"></i>
-        </button>
+      <!-- Action Buttons (Responsive: 2-Row Clean Full-Width Grid on Mobile Phones, Single Inline Row on Tablets/Desktop) -->
+      <div class="w-full sm:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
+        
+        <!-- Row 1 on Mobile: Help (fixed) + Bell (fixed) + Text Partner (fills remaining space) -->
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <button onclick="alert('Duval Scrap Tracker: Live rate sheets, drop calculators, and scale status for Jacksonville scrap facilities.')" 
+                  class="p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-amber-400 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
+                  title="Help Info">
+            <i data-lucide="help-circle" class="w-5 h-5"></i>
+          </button>
 
-        <button id="notifBellBtn" onclick="toggleNotificationDrawer()" 
-                class="relative p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700/70 transition flex items-center justify-center min-w-[42px] min-h-[42px]" 
-                title="Price Alerts & Flash Specials">
-          <i data-lucide="bell" class="w-5 h-5 text-amber-400"></i>
-          <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow">
-            0
-          </span>
-        </button>
+          <button id="notifBellBtn" onclick="toggleNotificationDrawer()" 
+                  class="relative p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
+                  title="Price Alerts & Flash Specials">
+            <i data-lucide="bell" class="w-5 h-5 text-amber-400"></i>
+            <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow">
+              0
+            </span>
+          </button>
 
-        <a id="smsShareBtn" href="sms:?body=Check%20out%20the%20Jacksonville%20Scrap%20%26%20Metal%20Exchange%20Tracker%20for%20Duval%20County%20yards%20(Berman%2C%20Quick%20Stop%2C%20JMR%2C%20CMC%2C%20TMR)%3A%20" 
-           class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-sm transition min-h-[42px]">
-          <i data-lucide="message-square" class="w-4 h-4"></i>
-          <span>Text Partner</span>
-        </a>
+          <a id="smsShareBtn" href="sms:?body=Check%20out%20the%20Jacksonville%20Scrap%20%26%20Metal%20Exchange%20Tracker%20for%20Duval%20County%20yards%20(Berman%2C%20Quick%20Stop%2C%20JMR%2C%20CMC%2C%20TMR)%3A%20" 
+             class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-sm transition h-[44px]">
+            <i data-lucide="message-square" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="truncate">Text Partner</span>
+          </a>
+        </div>
 
-        <!-- Scrapyard Terminal Button -->
-        <button onclick="openOwnerModal()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition shadow-md min-h-[42px]">
-          <i data-lucide="sliders" class="w-4 h-4"></i>
-          <span>Scrapyard Dashboard</span>
-        </button>
+        <!-- Row 2 on Mobile: Scrapyard Dashboard & IT Console Split 50/50 -->
+        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
+          <!-- Scrapyard Terminal Button -->
+          <button onclick="openOwnerModal()" 
+                  class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition shadow-md h-[44px]">
+            <i data-lucide="sliders" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="truncate">Scrapyard Dashboard</span>
+          </button>
 
-        <!-- IT Admin & Developer Console Button (Placed Next to Scrapyard Dashboard) -->
-        <button onclick="openDevModal()" class="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition min-h-[42px]" title="IT & App Developer Console">
-          <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
-          <span class="text-xs font-bold font-mono">IT Console</span>
-        </button>
+          <!-- IT Admin & Developer Console Button -->
+          <button onclick="openDevModal()" 
+                  class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition h-[44px]" 
+                  title="IT & App Developer Console">
+            <i data-lucide="terminal" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+            <span class="text-xs font-bold font-mono truncate">IT Console</span>
+          </button>
+        </div>
+
       </div>
 
     </div>
