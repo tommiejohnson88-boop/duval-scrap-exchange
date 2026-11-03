@@ -744,23 +744,23 @@
     async function fetchSupabaseInitialData() {
       if (!supabaseClient) return;
       try {
-        // Fetch metals
+        // Fetch metals safely
         const { data: metalsData, error: mErr } = await supabaseClient.from('metals').select('*');
         if (!mErr && metalsData && metalsData.length > 0) {
           metalsData.forEach(row => {
             const match = metalsCatalog.find(m => m.id === row.id);
             if (match) {
-              match.rates.berman = parseFloat(row.berman_rate);
-              match.rates.quickstop = parseFloat(row.quickstop_rate);
-              match.rates.jmr = parseFloat(row.jmr_rate);
-              match.rates.cmc = parseFloat(row.cmc_rate);
-              match.rates.tmr = parseFloat(row.tmr_rate);
+              if (row.berman_rate != null) match.rates.berman = parseFloat(row.berman_rate);
+              if (row.quickstop_rate != null) match.rates.quickstop = parseFloat(row.quickstop_rate);
+              if (row.jmr_rate != null) match.rates.jmr = parseFloat(row.jmr_rate);
+              if (row.cmc_rate != null) match.rates.cmc = parseFloat(row.cmc_rate);
+              if (row.tmr_rate != null) match.rates.tmr = parseFloat(row.tmr_rate);
             }
           });
           renderApp();
         }
 
-        // Fetch active flash special
+        // Fetch active flash special safely
         const { data: specials, error: sErr } = await supabaseClient
           .from('flash_specials')
           .select('*')
@@ -780,7 +780,51 @@
           startFlashCountdown();
         }
       } catch (err) {
-        console.error("Error fetching Supabase data:", err);
+        console.warn("Notice: Initializing with local rates baseline:", err);
+      }
+    }
+
+    function listenToSupabaseRealtime() {
+      if (!supabaseClient) return;
+
+      try {
+        // Listen for any price updates published from any yard
+        supabaseClient
+          .channel('public:metals')
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'metals' }, payload => {
+            const updatedRow = payload.new;
+            const match = metalsCatalog.find(m => m.id === updatedRow.id);
+            if (match && updatedRow) {
+              if (updatedRow.berman_rate != null) match.rates.berman = parseFloat(updatedRow.berman_rate);
+              if (updatedRow.quickstop_rate != null) match.rates.quickstop = parseFloat(updatedRow.quickstop_rate);
+              if (updatedRow.jmr_rate != null) match.rates.jmr = parseFloat(updatedRow.jmr_rate);
+              if (updatedRow.cmc_rate != null) match.rates.cmc = parseFloat(updatedRow.cmc_rate);
+              if (updatedRow.tmr_rate != null) match.rates.tmr = parseFloat(updatedRow.tmr_rate);
+              renderApp();
+            }
+          })
+          .subscribe();
+
+        // Listen for 1-Hour Flash Specials broadcasted
+        supabaseClient
+          .channel('public:flash_specials')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'flash_specials' }, payload => {
+            const sp = payload.new;
+            if (sp) {
+              activeFlashSpecial = {
+                yard: sp.yard_name,
+                metal: sp.metal_name,
+                price: parseFloat(sp.price),
+                endTime: new Date(sp.ends_at).getTime()
+              };
+              showFlashBanner();
+              startFlashCountdown();
+              triggerNotificationAlert("special", "1-Hour Flash Special Alert!", sp.yard_name, sp.message);
+            }
+          })
+          .subscribe();
+      } catch (e) {
+        console.warn("Realtime subscription note:", e);
       }
     }
 
@@ -1758,3 +1802,45 @@
       const el = document.getElementById(modalId);
       if (el) el.classList.add('hidden');
     }
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        loadPersistedNotifications();
+        populateMetalDropdowns();
+        renderApp();
+      } catch (e) {
+        console.error("Critical rendering error during initial paint:", e);
+      }
+
+      // Safe, deferred icon creation
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        try { window.lucide.createIcons(); } catch(err) { console.warn(err); }
+      }
+
+      // Initialize Supabase asynchronously so network/handshake issues never block local UI rendering
+      setTimeout(() => {
+        try {
+          initSupabase();
+        } catch (sbErr) {
+          console.warn("Supabase background init error:", sbErr);
+        }
+      }, 50);
+
+      if (localStorage.getItem('duval_push_enabled') === 'true' && "Notification" in window && Notification.permission === "granted") {
+        const btn = document.getElementById('enablePushBtn');
+        if (btn) {
+          btn.textContent = "Push Enabled ✓";
+          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-xs";
+        }
+      }
+
+      setTimeout(() => {
+        try {
+          startScrapperTraining(false);
+        } catch(e) {}
+      }, 500);
+    });
+  </script>
+</body>
+</html>
