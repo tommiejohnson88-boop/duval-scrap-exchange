@@ -1,41 +1,26 @@
-const CACHE_NAME = 'duval-scrap-v5';
-const PRECACHE_URLS = [
-  './',
-  './index.html',
-  './manifest.json'
-];
-
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
-  );
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
-      );
-    }).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cached version and update in background
-        fetch(event.request).then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
-          }
-        }).catch(() => {});
-        return cachedResponse;
-      }
-      return fetch(event.request);
-    })
-  );
-});
+{
+"name": "Duval Scrap & Metals Exchange",
+"short_name": "Duval Scrap",
+"description": "Jacksonville scrap metal pricing, scale wait times, and haul payout calculator.",
+"id": "/duval-scrap-exchange/",
+"start_url": "./",
+"scope": "./",
+"display": "standalone",
+"orientation": "portrait-primary",
+"background_color": "#07090e",
+"theme_color": "#07090e",
+"icons": [
+{
+"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='32' stroke-linecap='round' stroke-linejoin='round' transform='translate(56, 56)'%3E%3Cpath d='m266 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='m34 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='M117 350h166'/%3E%3Cpath d='M200 50v300'/%3E%3Cpath d='M50 117h300'/%3E%3C/g%3E%3C/svg%3E",
+"sizes": "192x192",
+"type": "image/svg+xml",
+"purpose": "any maskable"
+},
+{
+"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='32' stroke-linecap='round' stroke-linejoin='round' transform='translate(56, 56)'%3E%3Cpath d='m266 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='m34 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='M117 350h166'/%3E%3Cpath d='M200 50v300'/%3E%3Cpath d='M50 117h300'/%3E%3C/g%3E%3C/svg%3E",
+"sizes": "512x512",
+"type": "image/svg+xml",
+"purpose": "any maskable"
+}
+]
+}
