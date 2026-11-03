@@ -58,7 +58,7 @@
     <!-- Live Cloud WebSocket Telemetry Badge -->
     <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080b10] border border-gray-800 text-[11px] font-mono">
       <span id="cloudSyncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span id="cloudSyncText" class="text-gray-300 font-bold">Supabase Realtime: Active</span>
+      <span id="cloudSyncText" class="text-gray-300 font-bold">Supabase Realtime: Connecting...</span>
     </div>
 
     <!-- Active Navigation View Switcher (Desk Controls vs. Live Driver View) -->
@@ -391,29 +391,19 @@
 
     let sbClient = null;
     let realtimeChannel = null;
+    let localBus = null;
     let activeYardId = 'quickstop';
     let driverSimUnit = 'lb';
     let currentDisplayMode = 'native';
 
-    let metalsCatalog = [
-      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', rate: 5.20 },
-      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', rate: 5.00 },
-      { id: 'copper_2', name: '#2 Copper (Burnt / Solder / Painted)', category: 'Copper', rate: 4.85 },
-      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', rate: 4.45 },
-      { id: 'romex', name: 'Insulated Romex (House Wire)', category: 'Copper', rate: 2.20 },
-      { id: 'yellow_brass', name: 'Clean Yellow Brass', category: 'Brass', rate: 2.80 },
-      { id: 'red_brass', name: 'Red Brass / Composition', category: 'Brass', rate: 3.20 },
-      { id: 'alum_cans', name: 'Aluminum UBC Cans (Clean)', category: 'Aluminum', rate: 0.80 },
-      { id: 'alum_ext', name: '6063 Aluminum Extrusions', category: 'Aluminum', rate: 1.10 },
-      { id: 'alum_sheet', name: 'Sheet Aluminum', category: 'Aluminum', rate: 0.62 },
-      { id: 'alum_wheels', name: 'Aluminum Car Wheels / Rims', category: 'Aluminum', rate: 0.92 },
-      { id: 'stainless_304', name: '304 Stainless Steel (Clean)', category: 'Specialty', rate: 0.52 },
-      { id: 'auto_batteries', name: 'Lead-Acid Car Batteries', category: 'Specialty', rate: 0.20 },
-      { id: 'clean_lead', name: 'Clean Soft Lead', category: 'Specialty', rate: 0.60 },
-      { id: 'electric_motors', name: 'Electric Motors & Alternators', category: 'Ferrous & Core', rate: 0.35 },
-      { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', rate: 0.095 },
-      { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', rate: 0.07 }
-    ];
+    // Native BroadcastChannel for instant local / same-device cross-window sync
+    try {
+      if ('BroadcastChannel' in window) {
+        localBus = new BroadcastChannel('duval_sync_bus');
+      }
+    } catch (e) {
+      console.warn('BroadcastChannel not available:', e);
+    }
 
     // Initialize Supabase Client & WebSocket Connection
     function initTerminalSupabase() {
@@ -422,19 +412,36 @@
         const key = localStorage.getItem('duval_sb_key') || DEFAULT_SB_KEY;
 
         if (window.supabase && url && key) {
-          sbClient = window.supabase.createClient(url, key);
+          sbClient = window.supabase.createClient(url, key, {
+            realtime: {
+              params: {
+                eventsPerSecond: 10
+              }
+            }
+          });
           
-          // Connect to real-time broadcast channel
-          realtimeChannel = sbClient.channel('duval_live_channel')
+          // Connect to real-time broadcast channel with explicit broadcast config
+          realtimeChannel = sbClient.channel('duval_live_channel', {
+            config: { 
+              broadcast: { ack: true, self: false },
+              presence: { key: activeYardId }
+            }
+          });
+
+          realtimeChannel
+            .on('broadcast', { event: 'ping' }, () => {})
             .subscribe((status) => {
               const dot = document.getElementById('cloudSyncDot');
               const text = document.getElementById('cloudSyncText');
               if (status === 'SUBSCRIBED') {
                 if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
-                if (text) text.textContent = "Supabase Realtime: Connected (<200ms)";
-              } else {
+                if (text) text.textContent = "Cloud Sync: Live (<180ms)";
+              } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
                 if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
-                if (text) text.textContent = "Supabase Realtime: Syncing...";
+                if (text) text.textContent = "Local Bus Active (Cloud Standby)";
+              } else {
+                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-blue-400";
+                if (text) text.textContent = "Connecting: " + status;
               }
             });
         }
@@ -687,10 +694,35 @@
         }
       }
 
-      // Local cross-tab storage dispatch
+      const syncPayload = {
+        type: 'status',
+        yard: activeYardId,
+        status: statusString,
+        time: Date.now()
+      };
+
+      // 1. Direct Local BroadcastChannel (instant for tabs/windows on this machine)
+      if (localBus) {
+        try { localBus.postMessage(syncPayload); } catch (e) {}
+      }
+
+      // 2. Supabase Cloud Edge WebSocket Broadcast (reaches other devices instantly)
+      if (realtimeChannel) {
+        try {
+          realtimeChannel.send({
+            type: 'broadcast',
+            event: 'status_update',
+            payload: syncPayload
+          });
+        } catch (e) {
+          console.warn('Edge broadcast err:', e);
+        }
+      }
+
+      // 3. Local cross-tab storage dispatch fallback
       try {
         localStorage.setItem(`duval_terminal_${activeYardId}_status`, statusString);
-        localStorage.setItem('duval_ws_event', JSON.stringify({ type: 'status', yard: activeYardId, status: statusString, time: Date.now() }));
+        localStorage.setItem('duval_ws_event', JSON.stringify(syncPayload));
       } catch (e) {}
     }
 
@@ -702,15 +734,40 @@
         }
       });
 
-      // Save to localStorage for instant cross-tab sync
+      const pricePayload = {
+        type: 'price_batch',
+        yard: activeYardId,
+        rates: metalsCatalog.map(m => ({ id: m.id, rate: m.rate })),
+        time: Date.now()
+      };
+
+      // 1. Instant local BroadcastChannel push
+      if (localBus) {
+        try { localBus.postMessage(pricePayload); } catch (e) {}
+      }
+
+      // 2. Save to localStorage & trigger local cross-tab fallback
       try {
         localStorage.setItem(`duval_terminal_${activeYardId}_rates`, JSON.stringify(metalsCatalog));
-        localStorage.setItem('duval_ws_event', JSON.stringify({ type: 'price_batch', yard: activeYardId, rates: metalsCatalog, time: Date.now() }));
+        localStorage.setItem('duval_ws_event', JSON.stringify(pricePayload));
       } catch (e) {
         console.warn('Storage sync:', e);
       }
 
-      // Supabase PostgreSQL Realtime Broadcast
+      // 3. Cloud Edge WebSocket Broadcast (<180ms across the internet to all phones)
+      if (realtimeChannel) {
+        try {
+          realtimeChannel.send({
+            type: 'broadcast',
+            event: 'price_update',
+            payload: pricePayload
+          });
+        } catch (e) {
+          console.warn('Edge price broadcast exception:', e);
+        }
+      }
+
+      // 4. Supabase Database Table Persistence (if table exists)
       if (sbClient) {
         try {
           const rateColumnName = `${activeYardId}_rate`;
@@ -729,8 +786,10 @@
       }
 
       const indicator = document.getElementById('saveStatusIndicator');
-      indicator.style.opacity = '1';
-      setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+      if (indicator) {
+        indicator.style.opacity = '1';
+        setTimeout(() => { indicator.style.opacity = '0'; }, 2000);
+      }
       renderDriverNativeView();
     }
 
@@ -745,9 +804,32 @@
         const rateInput = document.getElementById(`kioskRate_${metal.id}`);
         if (rateInput) rateInput.value = price.toFixed(2);
 
+        const flashPayload = {
+          type: 'flash_special',
+          yardId: activeYardId,
+          yardName: yard.name,
+          metalId: metal.id,
+          metalName: metal.name,
+          price: price,
+          time: Date.now()
+        };
+
+        // Broadcast to BroadcastChannel
+        if (localBus) {
+          try { localBus.postMessage(flashPayload); } catch (e) {}
+        }
+
         // Broadcast to Supabase
         if (sbClient) {
           try {
+            if (realtimeChannel) {
+              realtimeChannel.send({
+                type: 'broadcast',
+                event: 'flash_update',
+                payload: flashPayload
+              });
+            }
+
             await sbClient.from('flash_specials').insert([{
               yard_id: activeYardId,
               yard_name: yard.name,
@@ -764,14 +846,7 @@
 
         // Broadcast local cross-tab event
         try {
-          localStorage.setItem('duval_ws_event', JSON.stringify({
-            type: 'flash_special',
-            yardId: activeYardId,
-            yardName: yard.name,
-            metalName: metal.name,
-            price: price,
-            time: Date.now()
-          }));
+          localStorage.setItem('duval_ws_event', JSON.stringify(flashPayload));
         } catch (e) {}
 
         publishYardPriceSheet();
