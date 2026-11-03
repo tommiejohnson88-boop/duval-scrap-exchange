@@ -11,13 +11,13 @@
 "theme_color": "#07090e",
 "icons": [
 {
-"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='32' stroke-linecap='round' stroke-linejoin='round' transform='translate(56, 56)'%3E%3Cpath d='m266 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='m34 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='M117 350h166'/%3E%3Cpath d='M200 50v300'/%3E%3Cpath d='M50 117h300'/%3E%3C/g%3E%3C/svg%3E",
+"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192' width='192' height='192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E",
 "sizes": "192x192",
 "type": "image/svg+xml",
-"purpose": "any maskable"
+"purpose": "any"
 },
 {
-"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='32' stroke-linecap='round' stroke-linejoin='round' transform='translate(56, 56)'%3E%3Cpath d='m266 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='m34 266 50-133 50 133c-14.5 10.8-32 16.7-50 16.7s-35.5-5.9-50-16.7Z' fill='%23f59e0b' fill-opacity='0.2'/%3E%3Cpath d='M117 350h166'/%3E%3Cpath d='M200 50v300'/%3E%3Cpath d='M50 117h300'/%3E%3C/g%3E%3C/svg%3E",
+"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Crect width='512' height='512' rx='100' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='24' stroke-linecap='round' stroke-linejoin='round' transform='translate(48, 48)'%3E%3Cpath d='m332.8 332.8 62.4-166.4 62.4 166.4c-18.2 13.5-39.8 20.8-62.4 20.8s-44.2-7.3-62.4-20.8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m41.6 332.8 62.4-166.4 62.4 166.4c-18.2 13.5-39.8 20.8-62.4 20.8s-44.2-7.3-62.4-20.8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M145.6 436.8h124.8' stroke-width='28'/%3E%3Cpath d='M208 62.4v374.4' stroke-width='28'/%3E%3Cpath d='M62.4 145.6h291.2' stroke-width='28'/%3E%3Ccircle cx='208' cy='62.4' r='14' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E",
 "sizes": "512x512",
 "type": "image/svg+xml",
 "purpose": "any maskable"
