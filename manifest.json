@@ -2,10 +2,9 @@
 "name": "Duval Scrap & Metals Exchange",
 "short_name": "Duval Scrap",
 "description": "Jacksonville scrap metal pricing, scale wait times, and haul payout calculator.",
-"start_url": "./index.html",
+"start_url": "./",
 "scope": "./",
 "display": "standalone",
-"orientation": "any",
 "background_color": "#07090e",
 "theme_color": "#07090e",
 "icons": [
