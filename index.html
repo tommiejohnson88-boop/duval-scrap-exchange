@@ -6,10 +6,10 @@
   <title>Duval Scrap & Metals Exchange | Jacksonville, FL</title>
   
   <!-- Classic Gold Balance Scale Favicon & Mobile Touch Icons -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v1">
-  <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v1">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v2">
+  <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v2">
 
-  <link rel="manifest" href="./manifest.json?v=scale_gold_v1">
+  <link rel="manifest" href="./manifest.json?v=scale_gold_v2">
   <meta name="theme-color" content="#07090e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -183,17 +183,26 @@
       </button>
     </div>
 
+    <!-- Notification Controls -->
     <div class="p-3.5 bg-black/60 border-b border-gray-800 flex items-center justify-between text-xs sm:text-sm">
-      <span class="text-gray-400">Phone Notifications:</span>
+      <div class="flex flex-col">
+        <span class="text-gray-300 font-medium">Device System Alerts</span>
+        <span id="pushStatusText" class="text-[11px] text-gray-500 font-mono">Status: Click to test</span>
+      </div>
       <button id="enablePushBtn" onclick="requestPushPermissions()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition">
-        Enable Sound &amp; Push
+        Enable &amp; Test Push
       </button>
     </div>
 
     <div id="notifFeedList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
 
-    <div class="p-4 border-t border-gray-800 bg-[#080b10] text-center">
-      <button onclick="clearAllNotifications()" class="text-xs sm:text-sm text-gray-400 hover:text-gray-200 underline">Clear Alert History</button>
+    <div class="p-4 border-t border-gray-800 bg-[#080b10] flex items-center justify-between">
+      <button onclick="sendDiagnosticTestNotification()" class="text-xs text-amber-400 hover:underline font-bold">
+        Send Test Alert
+      </button>
+      <button onclick="clearAllNotifications()" class="text-xs sm:text-sm text-gray-400 hover:text-gray-200 underline">
+        Clear Alert History
+      </button>
     </div>
   </div>
 
@@ -528,6 +537,22 @@
     let sbClient = null;
     let activeUnit = 'lb';
     let authenticatedYardId = null;
+    let swRegistration = null;
+
+    // Service Worker Registration for Push & Background Notifications
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then((reg) => {
+            swRegistration = reg;
+            console.log('SW Registered for Duval Scrap PWA');
+            updatePushStatusUI();
+          })
+          .catch((err) => {
+            console.warn('SW registration fallback:', err);
+          });
+      });
+    }
 
     const scrapyards = {
       quickstop: {
@@ -596,6 +621,153 @@
       { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', berman: 0.10, quickstop: 0.095, jmr: 0.09, cmc: 0.088, tmr: 0.085 },
       { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
     ];
+
+    // Notification Audio Synthesizer (Instant audible feedback)
+    function playNotificationAudio() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12); // A5
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (e) {
+        // AudioContext restricted before first user touch
+      }
+    }
+
+    // Direct OS Notification Dispatcher via Service Worker
+    async function triggerSystemNotification(title, body) {
+      playNotificationAudio();
+
+      // Update in-app drawer feed
+      addAlertToFeed(title, body);
+
+      // Check Notification Permission
+      if (!("Notification" in window)) return;
+      if (Notification.permission !== "granted") return;
+
+      const notifOptions = {
+        body: body,
+        icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"%3E%3Crect width="192" height="192" rx="36" fill="%2307090e"/%3E%3Cg fill="none" stroke="%23f59e0b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(16, 16)"%3E%3Cpath d="m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z" fill="%23f59e0b" fill-opacity="0.25"/%3E%3Cpath d="m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z" fill="%23f59e0b" fill-opacity="0.25"/%3E%3Cpath d="M56 168h48" stroke-width="12"/%3E%3Cpath d="M80 24v144" stroke-width="12"/%3E%3Cpath d="M24 56h112" stroke-width="12"/%3E%3Ccircle cx="80" cy="24" r="6" fill="%23f59e0b"/%3E%3C/g%3E%3C/svg%3E',
+        badge: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"%3E%3Crect width="192" height="192" rx="36" fill="%2307090e"/%3E%3Cpath d="M80 24v144M24 56h112" stroke="%23f59e0b" stroke-width="16" stroke-linecap="round"/%3E%3C/svg%3E',
+        vibrate: [200, 100, 200],
+        tag: 'duval-rate-alert',
+        renotify: true
+      };
+
+      // Always prefer ServiceWorker showNotification for cross-device support (desktop & Android/iOS PWAs)
+      try {
+        if (swRegistration && swRegistration.showNotification) {
+          await swRegistration.showNotification(title, notifOptions);
+          return;
+        }
+        if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+          const reg = await navigator.serviceWorker.ready;
+          await reg.showNotification(title, notifOptions);
+          return;
+        }
+      } catch (err) {
+        console.warn('SW notification fallback to window:', err);
+      }
+
+      // Window Notification fallback
+      try {
+        new Notification(title, notifOptions);
+      } catch (e) {
+        console.warn('Notification construction error:', e);
+      }
+    }
+
+    function addAlertToFeed(title, message) {
+      const feed = document.getElementById('notifFeedList');
+      const badge = document.getElementById('notifBadge');
+      if (!feed) return;
+
+      const alertEl = document.createElement('div');
+      alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
+      alertEl.innerHTML = `
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i> ${title}
+          </span>
+          <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        </div>
+        <p class="text-xs text-gray-200">${message}</p>
+      `;
+      feed.prepend(alertEl);
+
+      if (badge) {
+        badge.classList.remove('hidden');
+        const count = parseInt(badge.textContent || '0', 10) + 1;
+        badge.textContent = count;
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function updatePushStatusUI() {
+      const statusText = document.getElementById('pushStatusText');
+      const btn = document.getElementById('enablePushBtn');
+      if (!("Notification" in window)) {
+        if (statusText) statusText.textContent = "Status: Not supported on this browser";
+        if (btn) btn.disabled = true;
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        if (statusText) statusText.textContent = "Status: Active & Connected ✓";
+        if (btn) {
+          btn.textContent = "Send Test Alert";
+          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition";
+        }
+      } else if (Notification.permission === 'denied') {
+        if (statusText) statusText.textContent = "Status: Blocked in Browser Settings";
+        if (btn) {
+          btn.textContent = "Unblock in Settings";
+          btn.className = "px-3 py-1.5 rounded-lg bg-red-600/80 text-white font-bold text-xs";
+        }
+      }
+    }
+
+    async function requestPushPermissions() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support system push notifications. On iPhone, make sure you have added the app to your Home Screen from Safari.");
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        sendDiagnosticTestNotification();
+        return;
+      }
+
+      try {
+        const permission = await Notification.requestPermission();
+        updatePushStatusUI();
+        if (permission === 'granted') {
+          triggerSystemNotification(
+            "Duval Scrap: Notifications Connected!",
+            "You will receive live Jacksonville price changes, yard queue alerts, and 1-hour flash specials."
+          );
+        } else {
+          alert("Notification access was not granted. Please check your browser's site permissions.");
+        }
+      } catch (err) {
+        console.error("Permission request error:", err);
+      }
+    }
+
+    function sendDiagnosticTestNotification() {
+      triggerSystemNotification(
+        "Duval Yard Alert (Test)",
+        "Bare Bright Copper spiked +$0.10/lb at Berman Bros ($5.25/lb). Scales are Open."
+      );
+    }
 
     function openModal(id) {
       const el = document.getElementById(id);
@@ -854,6 +1026,12 @@
         status.style.opacity = '1';
         setTimeout(() => { status.style.opacity = '0'; }, 3000);
       }
+
+      const yard = scrapyards[authenticatedYardId];
+      triggerSystemNotification(
+        `Updated: ${yard.name} Price Sheet`,
+        `New scale rates published. Check the Duval board for top payouts.`
+      );
     }
 
     function applyBatchShiftModal(category, delta) {
@@ -871,8 +1049,14 @@
     function setModalScaleStatus(statusType) {
       if (!authenticatedYardId) return;
       const statusMap = { open: 'Scales Open', busy: 'Heavy Line (15m+)', closed: 'Scale Break' };
-      scrapyards[authenticatedYardId].status = statusMap[statusType] || 'Scales Open';
+      const yard = scrapyards[authenticatedYardId];
+      yard.status = statusMap[statusType] || 'Scales Open';
       renderApp();
+
+      triggerSystemNotification(
+        `${yard.name} Scale Status`,
+        `Scale operational update: ${yard.status}. Plan your haul accordingly.`
+      );
     }
 
     function dispatchFlashSpecialFromModal() {
@@ -892,6 +1076,12 @@
           banner.classList.remove('hidden');
         }
         closeModal('ownerModal');
+
+        // Dispatch immediate system-level push alert with sound
+        triggerSystemNotification(
+          `🔥 FLASH SPECIAL: ${yard.name}`,
+          `${metal.name} boosted to $${price.toFixed(2)}/lb for the next 60 minutes!`
+        );
       }
     }
 
@@ -905,21 +1095,14 @@
       if (drawer) drawer.classList.toggle('hidden');
     }
 
-    function requestPushPermissions() {
-      if ("Notification" in window) {
-        Notification.requestPermission().then(perm => {
-          alert(perm === 'granted' ? "Push notifications enabled for Duval County scrap alerts!" : "Notifications denied.");
-        });
-      } else {
-        alert("Push notifications not supported on this browser.");
-      }
-    }
-
     function clearAllNotifications() {
       const list = document.getElementById('notifFeedList');
       if (list) list.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No new alerts.</p>';
       const badge = document.getElementById('notifBadge');
-      if (badge) badge.classList.add('hidden');
+      if (badge) {
+        badge.textContent = '0';
+        badge.classList.add('hidden');
+      }
     }
 
     function initSupabase() {
@@ -956,6 +1139,7 @@
       populateMetalDropdowns();
       renderApp();
       initSupabase();
+      updatePushStatusUI();
       if (window.lucide) window.lucide.createIcons();
     });
   </script>
