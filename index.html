@@ -33,6 +33,14 @@
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     input, select, button { font-size: 16px; }
 
+    @keyframes liveCellPulse {
+      0% { background-color: rgba(245, 158, 11, 0.4); }
+      100% { background-color: transparent; }
+    }
+    .cell-live-update {
+      animation: liveCellPulse 1.8s ease-out;
+    }
+
     @keyframes marqueeScroll {
       0% { transform: translate3d(0, 0, 0); }
       100% { transform: translate3d(-50%, 0, 0); }
@@ -158,6 +166,15 @@
 
       </div>
 
+    </div>
+
+    <!-- Live Cloud Sync Status Banner Indicator (Subtle, professional) -->
+    <div id="liveSyncStatusPill" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-[11px] font-mono text-emerald-400 border-t border-gray-800/40">
+      <span class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="liveSyncStatusMsg">Connected to Duval Realtime WebSocket Feed</span>
+      </span>
+      <span class="text-gray-500 text-[10px]">Latency: &lt;200ms</span>
     </div>
 
     <!-- Live Marquee Ticker -->
@@ -412,10 +429,16 @@
               <p id="authYardAddrDisplay" class="text-xs sm:text-sm text-gray-400"></p>
             </div>
           </div>
-          <button onclick="logoutYardOperator()" class="px-4 py-2 rounded-xl bg-[#0d121a] hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 min-h-[40px]">
-            <i data-lucide="log-out" class="w-4 h-4"></i>
-            <span>Log Out</span>
-          </button>
+          <div class="flex items-center gap-2 flex-wrap">
+            <a id="launchTabletKioskBtn" href="./yard_terminal.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition flex items-center gap-1.5 min-h-[40px] shadow">
+              <i data-lucide="tablet" class="w-4 h-4"></i>
+              <span>Launch 10" Tablet Kiosk</span>
+            </a>
+            <button onclick="logoutYardOperator()" class="px-4 py-2 rounded-xl bg-[#0d121a] hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 min-h-[40px]">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span>Log Out</span>
+            </button>
+          </div>
         </div>
 
         <div class="bg-[#080b10] border border-gray-800 rounded-2xl p-4 sm:p-5">
@@ -559,6 +582,28 @@
             IT Session Authenticated
           </span>
           <button onclick="lockDevConsole()" class="text-[11px] text-gray-400 hover:text-white underline font-mono">Lock</button>
+        </div>
+
+        <!-- Direct Launcher for 10" Weighmaster Tablet Kiosk -->
+        <div class="p-3.5 rounded-xl bg-[#080b10] border border-amber-500/40 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="tablet" class="w-4 h-4"></i> Dedicated Scale Terminal Kiosk
+            </span>
+            <span class="text-[10px] text-gray-400 font-mono">yard_terminal.html</span>
+          </div>
+          <p class="text-xs text-gray-300">Open the standalone, full-screen counter interface designed for yard tablets:</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <a href="./yard_terminal.html?yard=quickstop" target="_blank" class="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black text-xs font-bold transition">
+              Quick Stop Kiosk
+            </a>
+            <a href="./yard_terminal.html?yard=berman" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500 hover:text-black text-xs font-bold transition">
+              Berman Kiosk
+            </a>
+            <a href="./yard_terminal.html" target="_blank" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition">
+              Open Setup Screen
+            </a>
+          </div>
         </div>
 
         <div class="space-y-3">
@@ -1055,6 +1100,12 @@
         document.getElementById('authYardNameDisplay').textContent = yard.name;
         document.getElementById('authYardAddrDisplay').textContent = yard.address;
 
+        // Update the direct tablet kiosk launcher link to auto-lock to this specific yard
+        const kioskLink = document.getElementById('launchTabletKioskBtn');
+        if (kioskLink) {
+          kioskLink.href = `./yard_terminal.html?yard=${yardKey}`;
+        }
+
         buildAuthenticatedInputs(yardKey);
         document.getElementById('ownerAuthScreen').classList.add('hidden');
         document.getElementById('ownerDashboardScreen').classList.remove('hidden');
@@ -1204,11 +1255,144 @@
           sbClient = window.supabase.createClient(url, key);
           const statusText = document.getElementById('sbTestStatus');
           if (statusText) statusText.textContent = "Supabase Connected ✓";
+
+          setupRealtimeSubscriptions();
         }
       } catch (err) {
         console.warn("Supabase running local fallback:", err);
       }
     }
+
+    // Two-Way Realtime WebSocket Subscriptions for Instant Price and Status Updates
+    function setupRealtimeSubscriptions() {
+      if (!sbClient) return;
+
+      const pill = document.getElementById('liveSyncStatusPill');
+      if (pill) pill.classList.remove('hidden');
+
+      // 1. Subscribe to Live Metals Table Changes (under 200ms)
+      sbClient
+        .channel('public:metals')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'metals' }, (payload) => {
+          handleIncomingMetalChange(payload.new);
+        })
+        .subscribe();
+
+      // 2. Subscribe to Direct Realtime Broadcast Channel (zero-latency edge sync)
+      const broadcastChannel = sbClient.channel('duval_live_channel');
+      broadcastChannel
+        .on('broadcast', { event: 'price_update' }, (response) => {
+          if (response.payload && response.payload.rates) {
+            const yardId = response.payload.yard;
+            response.payload.rates.forEach(r => {
+              const localM = metalsCatalog.find(m => m.id === r.id);
+              if (localM && localM[yardId] !== undefined) {
+                localM[yardId] = r.rate;
+              }
+            });
+            playNotificationAudio();
+            renderApp();
+          }
+        })
+        .subscribe();
+
+      // 3. Subscribe to Yard Status Changes (Scales Open / Heavy Line / Break)
+      sbClient
+        .channel('public:yards')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'yards' }, (payload) => {
+          handleIncomingYardChange(payload.new);
+        })
+        .subscribe();
+
+      // 4. Subscribe to 1-Hour Flash Specials
+      sbClient
+        .channel('public:flash_specials')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'flash_specials' }, (payload) => {
+          handleIncomingFlashSpecial(payload.new);
+        })
+        .subscribe();
+    }
+
+    function handleIncomingMetalChange(record) {
+      if (!record || !record.id) return;
+      const metal = metalsCatalog.find(m => m.id === record.id);
+      if (metal) {
+        let changed = false;
+        ['berman', 'quickstop', 'jmr', 'cmc', 'tmr'].forEach(k => {
+          const field = `${k}_rate`;
+          if (record[field] !== undefined && record[field] !== null) {
+            metal[k] = parseFloat(record[field]);
+            changed = true;
+          }
+        });
+        if (changed) {
+          playNotificationAudio();
+          renderApp();
+          triggerSystemNotification(
+            `Live Rate Update: ${metal.name}`,
+            `New rates posted across Duval yards. Top payout re-calculated.`
+          );
+        }
+      }
+    }
+
+    function handleIncomingYardChange(record) {
+      if (!record || !record.id) return;
+      const yard = scrapyards[record.id];
+      if (yard && record.status) {
+        yard.status = record.status;
+        renderApp();
+        triggerSystemNotification(
+          `${yard.name} Scale Status`,
+          `Scale status changed to: ${yard.status}`
+        );
+      }
+    }
+
+    function handleIncomingFlashSpecial(record) {
+      if (!record) return;
+      const banner = document.getElementById('flashSpecialBanner');
+      const text = document.getElementById('flashBannerText');
+      if (banner && text) {
+        text.textContent = `${record.yard_name}: ${record.metal_name} boosted to $${parseFloat(record.price).toFixed(2)}/lb!`;
+        banner.classList.remove('hidden');
+      }
+      playNotificationAudio();
+      triggerSystemNotification(
+        `🔥 1-Hour Flash Special: ${record.yard_name}`,
+        `${record.metal_name} boosted to $${parseFloat(record.price).toFixed(2)}/lb for the next 60 minutes!`
+      );
+    }
+
+    // LocalStorage Cross-Tab Listener (Simulates WebSocket in split-screen browsers without internet)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'duval_ws_event' && e.newValue) {
+        try {
+          const evt = JSON.parse(e.newValue);
+          if (evt.type === 'price_batch' && evt.rates) {
+            evt.rates.forEach(r => {
+              const localM = metalsCatalog.find(m => m.id === r.id);
+              if (localM && localM[evt.yard] !== undefined) {
+                localM[evt.yard] = r.rate;
+              }
+            });
+            playNotificationAudio();
+            renderApp();
+          } else if (evt.type === 'status' && evt.yard && evt.status) {
+            if (scrapyards[evt.yard]) {
+              scrapyards[evt.yard].status = evt.status;
+              renderApp();
+            }
+          } else if (evt.type === 'flash_special') {
+            handleIncomingFlashSpecial({
+              yard_name: evt.yardName,
+              metal_name: evt.metalName,
+              price: evt.price
+            });
+          }
+        } catch (err) {}
+      }
+    });
 
     function saveSupabaseConfigModal() {
       const url = document.getElementById('sbUrlInput').value.trim();
