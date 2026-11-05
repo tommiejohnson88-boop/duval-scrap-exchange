@@ -1,689 +1,922 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Duval Scrap & Metals Exchange | Jacksonville, FL - Weighmaster Terminal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Duval Scrap • Weighmaster Terminal</title>
+  
+  <meta name="theme-color" content="#07090e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="application-name" content="Scale Terminal">
 
-  <!-- PWA & Mobile Standalone Settings -->
-  <meta name="theme-color" content="#07080A" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- DEDICATED WEIGHMASTER TERMINAL WEB MANIFEST -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Duval%20Weighmaster%20Scale%20Terminal%22%2C%22short_name%22%3A%22Scale%20Terminal%22%2C%22start_url%22%3A%22.%2Fyard_terminal.html%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22landscape-primary%22%2C%22background_color%22%3A%22%2307090e%22%2C%22theme_color%22%3A%22%2307090e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20192%20192'%253E%253Crect%20width%3D'192'%20height%3D'192'%20rx%3D'36'%20fill%3D'%252307090e'%2F%253E%253Cpath%20d%3D'M96%2024v144M32%2064h128'%20stroke%3D'%2523f59e0b'%20stroke-width%3D'16'%20stroke-linecap%3D'round'%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 
-  <!-- Tailwind CSS & Lucide Icons -->
+  <!-- Classic Gold Balance Scale Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cpath d='M96 24v144M32 64h128' stroke='%23f59e0b' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
-    
-    * {
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background-color: #07080A;
-      color: #E2E8F0;
-    }
-
-    .font-mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Scale Operational Status Pill Buttons */
-    .status-btn {
-      border: 1px solid #1E2530;
-      background-color: #141923;
-      user-select: none;
-    }
-
-    .inactive-open {
-      color: #10B981;
-      background-color: #141923;
-      border-color: #1E2530;
-    }
-    .inactive-line {
-      color: #F59E0B;
-      background-color: #141923;
-      border-color: #1E2530;
-    }
-    .inactive-break {
-      color: #F87171;
-      background-color: #141923;
-      border-color: #1E2530;
-    }
-
-    .active-open {
-      background-color: #00875A !important;
-      border-color: #00A86B !important;
-      color: #FFFFFF !important;
-      box-shadow: 0 0 12px rgba(0, 168, 107, 0.35);
-    }
-    .active-line {
-      background-color: #D97706 !important;
-      border-color: #F59E0B !important;
-      color: #FFFFFF !important;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
-    }
-    .active-break {
-      background-color: #DC2626 !important;
-      border-color: #EF4444 !important;
-      color: #FFFFFF !important;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
-    }
-
-    /* Flash Special Pulsing Animation */
-    .flash-pulse {
-      animation: flashGlow 2s infinite ease-in-out;
-    }
-    @keyframes flashGlow {
-      0%, 100% { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 0 10px rgba(245, 158, 11, 0.15); }
-      50% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
-    }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    * { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+    input, select { -webkit-user-select: auto; user-select: auto; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #07090e; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 9999px; }
   </style>
 </head>
-<body class="h-screen w-screen overflow-hidden flex flex-col bg-[#07080A]">
+<body class="bg-[#07090e] text-gray-100 min-h-screen flex flex-col h-screen overflow-hidden antialiased">
 
-  <!-- TOP HEADER -->
-  <header class="h-14 border-b border-neutral-800/80 px-4 flex items-center justify-between bg-[#0C0E12] shrink-0">
-    <div class="flex items-center gap-3">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-          <i data-lucide="scale" class="w-5 h-5 text-amber-500"></i>
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-sm font-black tracking-wide text-white uppercase">Quick Stop Recycling</h1>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/80 text-emerald-400 border border-emerald-500/40">STATION ACTIVE</span>
-          </div>
-          <p class="text-[10px] text-neutral-400">603 E 8th St, Jacksonville, FL • Duval County</p>
-        </div>
+  <!-- TOP TABLET APP BAR -->
+  <header class="w-full bg-[#0d121a] border-b border-gray-800 px-4 py-2.5 flex items-center justify-between flex-shrink-0 z-30 shadow-md">
+    
+    <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+        <i data-lucide="scale" class="w-5 h-5"></i>
       </div>
-
-      <div class="h-6 w-px bg-neutral-800 mx-2"></div>
-
-      <!-- Sync Status Pill -->
-      <div id="sync-status" class="px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800 text-[11px] font-mono text-emerald-400 flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-        <span id="sync-text">Live Sync Bus: Connected</span>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 id="terminalYardName" class="text-base font-black text-white leading-tight">Scale House Terminal</h1>
+          <span id="yardStationBadge" class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            Station Active
+          </span>
+        </div>
+        <p id="terminalYardAddress" class="text-xs text-gray-400 font-medium">Jacksonville Commercial Weight Desk</p>
       </div>
     </div>
 
-    <!-- Right Quick Controls -->
-    <div class="flex items-center gap-2">
-      <button onclick="triggerSoundNotification(); alert('Scale Desk Audio & COM1 Ready.')" class="px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-black font-extrabold text-xs flex items-center gap-1.5 cursor-pointer shadow-sm">
+    <!-- Live Cloud WebSocket Telemetry Badge -->
+    <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#080b10] border border-gray-800 text-[11px] font-mono">
+      <span id="cloudSyncDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span id="cloudSyncText" class="text-gray-300 font-bold">Live Cloud Active (Database Synced)</span>
+    </div>
+
+    <!-- Active Navigation View Switcher (Desk Controls vs. Live Driver View) -->
+    <div class="inline-flex p-1 bg-[#080b10] border border-gray-800 rounded-xl">
+      <button id="navDeskBtn" onclick="switchView('desk')" class="px-5 py-2 rounded-lg text-xs font-black transition flex items-center gap-2 bg-amber-500 text-black shadow-md">
         <i data-lucide="sliders" class="w-4 h-4"></i>
         <span>Scale Desk Controls</span>
       </button>
-
-      <button onclick="window.open('./index.html', '_blank')" class="px-3.5 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 font-semibold text-xs border border-neutral-700 flex items-center gap-1.5 cursor-pointer">
+      <button id="navDriverBtn" onclick="switchView('driver')" class="px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 text-gray-400 hover:text-white">
         <i data-lucide="eye" class="w-4 h-4"></i>
         <span>Live Driver View (Public)</span>
       </button>
+    </div>
 
-      <button onclick="toggleFullScreen()" class="p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white cursor-pointer" title="Fullscreen Kiosk">
-        <i data-lucide="maximize" class="w-4 h-4"></i>
+    <!-- Tablet Tool Actions -->
+    <div class="flex items-center gap-2">
+      <button onclick="sendDiagnosticPingToDrivers()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 shadow" title="Test Live Connection to Drivers">
+        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+        <span>Test Ping</span>
       </button>
 
-      <button onclick="toggleSettingsDrawer(true)" class="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Settings & Terminal Lock">
-        <i data-lucide="lock" class="w-4 h-4 text-neutral-400"></i>
+      <button onclick="toggleFullScreen()" class="p-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition" title="Toggle Fullscreen Kiosk">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
+      </button>
+      <button onclick="lockStationPrompt()" class="px-3.5 py-2 rounded-xl bg-gray-800 hover:bg-red-950 hover:text-red-400 border border-gray-700 text-xs font-bold transition flex items-center gap-1.5" title="Lock Desk">
+        <i data-lucide="lock" class="w-3.5 h-3.5"></i>
         <span>Lock Terminal</span>
       </button>
     </div>
   </header>
 
-  <!-- FLASH SPECIAL COUNTDOWN BANNER -->
-  <div id="live-flash-banner" class="hidden bg-gradient-to-r from-amber-950/90 via-black to-neutral-950 border-b border-amber-500/50 px-4 py-2 flex items-center justify-between flash-pulse shrink-0">
-    <div class="flex items-center gap-3">
-      <div class="w-7 h-7 rounded-lg bg-amber-500 text-black flex items-center justify-center font-bold">
-        <i data-lucide="zap" class="w-4 h-4 fill-black"></i>
-      </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="text-[11px] font-black uppercase tracking-wider text-amber-400">1-HOUR FLASH SPECIAL ACTIVE</span>
-          <span id="flash-countdown" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">59:59 REMAINING</span>
-        </div>
-        <p id="flash-details" class="text-xs font-bold text-white">#1 Bare Bright Copper: $3.65/lb</p>
-      </div>
-    </div>
-    <button onclick="clearFlashSpecial()" class="px-2.5 py-1 rounded bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-white text-[11px] font-bold">
-      Cancel
-    </button>
-  </div>
-
-  <!-- MAIN TERMINAL SPLIT -->
-  <main class="flex-1 flex overflow-hidden">
+  <!-- VIEW 1: OPERATOR SCALE DESK CONTROLS -->
+  <main id="deskView" class="flex-1 overflow-hidden flex flex-col md:flex-row p-3 gap-3">
     
-    <!-- LEFT SIDEBAR: GATE & SPOT SHIFTS (330px) -->
-    <aside class="w-[330px] border-r border-neutral-800/80 p-3.5 flex flex-col gap-3.5 overflow-y-auto shrink-0 bg-[#0A0C0F]">
+    <!-- LEFT PANEL (QUICK SHIFTS, QUEUE STATUS, FLASH SPECIALS) -->
+    <div class="w-full md:w-80 lg:w-96 flex flex-col gap-3 flex-shrink-0 overflow-y-auto pr-1">
       
-      <!-- SCALE OPERATIONAL STATUS[cite: 2] -->
-      <div class="p-3.5 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
-        <h3 class="text-xs font-black tracking-wider text-white uppercase mb-1">
-          SCALE OPERATIONAL STATUS
-        </h3>
-        <p class="text-[11px] leading-relaxed text-neutral-400 mb-3">
-          Keep drivers informed to manage queue times and avoid congestion along the scale corridor.
-        </p>
-
+      <!-- Scale Gate Status Card -->
+      <div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-gray-400">Scale Gate Status</span>
+          <span id="currentStatusBadge" class="text-xs font-mono font-bold text-emerald-400">Scales Open</span>
+        </div>
         <div class="grid grid-cols-3 gap-2">
-          <button 
-            id="status-btn-open"
-            onclick="setOperationalStatus('open')"
-            class="status-btn active-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
-          >
-            Scales Open
+          <button onclick="updateScaleStatus('open')" id="btnStatusOpen" class="py-3 rounded-xl bg-emerald-600 text-white font-black text-xs text-center shadow transition flex flex-col items-center justify-center gap-1">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Open</span>
           </button>
-
-          <button 
-            id="status-btn-line"
-            onclick="setOperationalStatus('line')"
-            class="status-btn inactive-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
-          >
-            Heavy Line
+          <button onclick="updateScaleStatus('busy')" id="btnStatusBusy" class="py-3 rounded-xl bg-gray-900 border border-gray-800 text-amber-400 font-bold text-xs text-center hover:bg-gray-800 transition flex flex-col items-center justify-center gap-1">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            <span>Line (15m+)</span>
           </button>
-
-          <button 
-            id="status-btn-break"
-            onclick="setOperationalStatus('break')"
-            class="status-btn inactive-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer"
-          >
-            Scale Break
+          <button onclick="updateScaleStatus('closed')" id="btnStatusClosed" class="py-3 rounded-xl bg-gray-900 border border-gray-800 text-red-400 font-bold text-xs text-center hover:bg-gray-800 transition flex flex-col items-center justify-center gap-1">
+            <i data-lucide="pause-circle" class="w-4 h-4"></i>
+            <span>Break</span>
           </button>
         </div>
       </div>
 
-      <!-- COMEX SPOT SHIFTS -->
-      <div class="p-3 rounded-2xl bg-[#0D1117]/80 border border-[#1E2530]">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-black text-neutral-300 uppercase tracking-wider flex items-center gap-1">
-            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-500"></i>
-            COMEX SPOT SHIFTS
+      <!-- Quick COMEX Category Shifts -->
+      <div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> COMEX Spot Shifts
           </span>
-          <span class="text-[10px] font-mono text-neutral-500 font-bold">1-Tap Adjust</span>
+          <span class="text-[10px] text-gray-500 font-mono">1-Tap Adjust</span>
         </div>
 
+        <div class="space-y-2.5">
+          <div>
+            <div class="text-[11px] font-bold text-gray-400 mb-1 flex items-center justify-between">
+              <span>Copper Grades</span>
+              <span class="text-[10px] font-mono text-emerald-400">$0.05 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="applyBatchDelta('Copper', 0.05)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-emerald-950/70 border border-emerald-500/30 text-emerald-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>+$0.05 Copper</span>
+              </button>
+              <button onclick="applyBatchDelta('Copper', -0.05)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-red-950/70 border border-red-500/30 text-red-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>-$0.05 Copper</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold text-gray-400 mb-1 flex items-center justify-between">
+              <span>Yellow &amp; Red Brass</span>
+              <span class="text-[10px] font-mono text-amber-300">$0.05 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="applyBatchDelta('Brass', 0.05)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-amber-950/70 border border-amber-500/30 text-amber-300 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>+$0.05 Brass</span>
+              </button>
+              <button onclick="applyBatchDelta('Brass', -0.05)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-red-950/70 border border-red-500/30 text-red-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>-$0.05 Brass</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold text-gray-400 mb-1 flex items-center justify-between">
+              <span>Aluminum (UBC &amp; Extrusions)</span>
+              <span class="text-[10px] font-mono text-gray-400">$0.02 step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="applyBatchDelta('Aluminum', 0.02)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-emerald-950/70 border border-emerald-500/30 text-emerald-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>+$0.02 Alum</span>
+              </button>
+              <button onclick="applyBatchDelta('Aluminum', -0.02)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-red-950/70 border border-red-500/30 text-red-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>-$0.02 Alum</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-[11px] font-bold text-gray-400 mb-1 flex items-center justify-between">
+              <span>Ferrous / Steel</span>
+              <span class="text-[10px] font-mono text-sky-400">$0.50/cwt step</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="applyBatchDelta('Ferrous & Core', 0.005)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-sky-950/70 border border-sky-500/30 text-sky-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-up" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>+$0.50/cwt</span>
+              </button>
+              <button onclick="applyBatchDelta('Ferrous & Core', -0.005)" class="py-2 px-3 rounded-xl bg-[#080b10] hover:bg-red-950/70 border border-red-500/30 text-red-400 text-xs font-black transition flex items-center justify-center gap-1.5 shadow-sm active:scale-95">
+                <i data-lucide="arrow-down" class="w-3.5 h-3.5 shrink-0 stroke-[3]"></i>
+                <span>-$0.50/cwt</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-Hour Flash Special Trigger -->
+      <div class="bg-gradient-to-br from-[#0d121a] to-amber-950/20 border border-amber-500/40 rounded-2xl p-4 shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="flame" class="w-4 h-4 text-red-400"></i> Broadcast Flash Special
+          </span>
+          <span class="text-[10px] text-amber-300 font-bold">60 Min Push</span>
+        </div>
         <div class="space-y-2">
-          <!-- Copper -->
-          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-200">Copper Grades</span>
-              <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/30">$0.05 step</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategory('Copper', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
-              </button>
-              <button onclick="adjustCategory('Copper', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
-              </button>
-            </div>
-          </div>
-
-          <!-- Brass -->
-          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-200">Yellow &amp; Red Brass</span>
-              <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-500/30">$0.05 step</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategory('Brass', 0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.05
-              </button>
-              <button onclick="adjustCategory('Brass', -0.05)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.05
-              </button>
-            </div>
-          </div>
-
-          <!-- Aluminum -->
-          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-200">Aluminum (UBC &amp; Extrusions)</span>
-              <span class="text-[10px] font-mono font-bold text-sky-400 bg-sky-950/40 px-1.5 py-0.5 rounded border border-sky-500/30">$0.02 step</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategory('Aluminum', 0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.02
-              </button>
-              <button onclick="adjustCategory('Aluminum', -0.02)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.02
-              </button>
-            </div>
-          </div>
-
-          <!-- Ferrous -->
-          <div class="p-2 rounded-xl bg-neutral-900/60 border border-neutral-800">
-            <div class="flex justify-between items-center text-xs mb-1.5">
-              <span class="font-bold text-neutral-200">Ferrous / Steel</span>
-              <span class="text-[10px] font-mono font-bold text-indigo-400 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-500/30">$0.50/cwt step</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="adjustCategory('Ferrous', 0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +$0.50
-              </button>
-              <button onclick="adjustCategory('Ferrous', -0.50)" class="py-1.5 rounded-lg bg-neutral-800/90 hover:bg-neutral-700 text-red-400 font-mono text-xs font-bold border border-red-500/20 flex items-center justify-center gap-1 cursor-pointer">
-                <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> -$0.50
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BROADCAST FLASH SPECIAL[cite: 1] -->
-      <div class="mt-auto p-3.5 rounded-2xl bg-[#0D1117] border border-[#1E2530]">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs font-black text-amber-500 uppercase tracking-wide flex items-center gap-1.5">
-            <i data-lucide="radio" class="w-4 h-4"></i>
-            BROADCAST FLASH SPECIAL
-          </span>
-          <span class="text-[10px] text-neutral-400 font-mono font-bold">60 Min Push</span>
-        </div>
-
-        <div class="mb-2">
-          <select id="flash-commodity-select" class="w-full bg-black border border-neutral-700 rounded-lg px-2.5 py-2 text-xs font-medium text-white focus:border-amber-500 focus:outline-none">
-            <option value="#1 Bare Bright Copper">#1 Bare Bright Copper</option>
-            <option value="#1 Copper Tubing">#1 Copper Tubing</option>
-            <option value="Clean Yellow Brass">Clean Yellow Brass</option>
-            <option value="Aluminum UBC Cans">Aluminum UBC (Cans)</option>
-            <option value="#1 Prepared Steel">#1 Prepared Steel</option>
+          <select id="deskFlashMetal" onchange="handleFlashMetalChange(this.value)" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none">
           </select>
-        </div>
-
-        <div class="flex gap-2">
-          <div class="relative flex-1">
-            <span class="absolute left-3 top-2 text-neutral-500 text-xs font-mono font-bold">$</span>
-            <input 
-              id="flash-price-input" 
-              type="number" 
-              step="0.05" 
-              value="3.65" 
-              class="w-full bg-black border border-neutral-700 rounded-lg pl-7 pr-2.5 py-2 text-xs font-mono font-bold text-white focus:border-amber-500 focus:outline-none" 
-            />
-          </div>
-          <button 
-            onclick="broadcastFlashSpecial()" 
-            class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs uppercase tracking-wider rounded-lg flex items-center gap-1.5 cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95 transition-all"
-          >
-            <i data-lucide="radio" class="w-3.5 h-3.5"></i>
-            <span>Broadcast</span>
-          </button>
-        </div>
-      </div>
-
-    </aside>
-
-    <!-- RIGHT MAIN PANEL: LIVE RATES -->
-    <section class="flex-1 flex flex-col p-6 overflow-hidden bg-[#07080A]">
-      <div class="flex items-center justify-between pb-4 border-b border-neutral-800/80 shrink-0">
-        <div>
-          <h2 class="text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
-            <i data-lucide="edit-3" class="w-5 h-5 text-amber-500"></i>
-            TODAY'S LIVE SCALE BUY RATES
-          </h2>
-          <p class="text-xs text-neutral-400">Touch any price to edit. Auto-syncs to driver phones upon publishing.</p>
-        </div>
-
-        <button onclick="publishLiveSheet()" class="px-6 py-2.5 bg-[#F59E0B] hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all cursor-pointer">
-          <i data-lucide="send" class="w-4 h-4"></i>
-          <span>Publish Live Sheet</span>
-        </button>
-      </div>
-
-      <div class="flex-1 overflow-y-auto mt-4 pr-1">
-        <table class="w-full text-left text-xs font-mono">
-          <thead>
-            <tr class="text-neutral-500 border-b border-neutral-800 pb-2">
-              <th class="py-2.5 px-3">CATEGORY</th>
-              <th class="py-2.5 px-3">COMMODITY / GRADE</th>
-              <th class="py-2.5 px-3 text-right">BUY PRICE</th>
-              <th class="py-2.5 px-3 text-right">UNIT</th>
-              <th class="py-2.5 px-3 text-center">STATUS</th>
-            </tr>
-          </thead>
-          <tbody id="rates-table-body" class="divide-y divide-neutral-900">
-            <!-- Drawn automatically -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- PIN & SETTINGS DRAWER -->
-  <div id="settings-drawer" class="hidden fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-xs">
-    <div class="w-full max-w-sm h-full bg-[#0C0E12] border-l border-neutral-800 p-6 flex flex-col justify-between shadow-2xl">
-      <div>
-        <div class="flex items-center justify-between pb-4 border-b border-neutral-800">
-          <div class="flex items-center gap-2">
-            <i data-lucide="settings-2" class="w-5 h-5 text-amber-500"></i>
-            <h3 class="text-sm font-bold tracking-wider text-white uppercase">Terminal Configuration</h3>
-          </div>
-          <button onclick="toggleSettingsDrawer(false)" class="p-1 rounded text-neutral-400 hover:text-white cursor-pointer">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 my-4">
-          <div class="p-2.5 bg-neutral-900 rounded-lg border border-neutral-800">
-            <span class="text-[10px] text-neutral-500 uppercase font-bold block">Terminal</span>
-            <span class="text-xs font-mono font-bold text-neutral-200">WM-TERMINAL-01</span>
-          </div>
-          <div class="p-2.5 bg-neutral-900 rounded-lg border border-neutral-800">
-            <span class="text-[10px] text-neutral-500 uppercase font-bold block">Yard</span>
-            <span class="text-xs font-bold text-amber-500">Quick Stop Recycling</span>
-          </div>
-        </div>
-
-        <div id="drawer-locked-view" class="p-4 bg-neutral-900/60 border border-neutral-800 rounded-xl mt-4">
-          <span class="text-xs font-bold text-neutral-300 block mb-2">Manager PIN Authorization</span>
-          <input id="drawer-pin-input" type="password" maxlength="6" placeholder="Enter PIN" class="w-full px-3 py-2 text-center text-xl tracking-widest font-mono bg-black border border-neutral-700 rounded-lg text-white mb-3" />
-          <button onclick="verifyDrawerPin()" class="w-full py-2 bg-[#006272] hover:bg-teal-700 text-white text-xs font-bold uppercase rounded-lg cursor-pointer">Authorize Station</button>
-        </div>
-
-        <div id="drawer-unlocked-view" class="hidden space-y-4 mt-4">
-          <div class="p-3 bg-emerald-950/40 border border-emerald-500/30 rounded-lg text-emerald-400 text-xs flex items-center justify-between">
-            <span class="font-bold">Manager Mode Unlocked</span>
-            <button onclick="lockDrawer()" class="underline text-[10px] cursor-pointer">Lock</button>
-          </div>
-
-          <div class="p-4 bg-neutral-900 border border-neutral-800 rounded-xl space-y-2.5">
-            <span class="text-[10px] text-neutral-400 font-bold uppercase block tracking-wider">Install Terminal To Tablet</span>
-            <p class="text-[11px] text-neutral-400">Add Weighmaster directly to your home screen in dedicated fullscreen kiosk mode.</p>
-            <button onclick="triggerPwaInstall()" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black text-xs font-black uppercase rounded-lg flex items-center justify-center gap-2 cursor-pointer shadow-md">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>Install WeighMaster Terminal</span>
+          <div class="flex gap-2">
+            <div class="relative flex-1">
+              <span class="absolute left-3 top-2 text-xs text-gray-500 font-bold">$</span>
+              <input type="number" step="0.05" id="deskFlashPrice" value="5.40" 
+                class="w-full bg-[#080b10] border border-amber-500/60 rounded-xl pl-6 pr-3 py-2 text-sm text-white font-mono font-black focus:outline-none">
+            </div>
+            <button onclick="publishFlashSpecial()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs transition shadow flex items-center gap-1.5">
+              <i data-lucide="radio" class="w-4 h-4"></i> Broadcast
             </button>
           </div>
         </div>
       </div>
 
-      <div class="pt-4 border-t border-neutral-800 flex justify-between text-[11px] text-neutral-500 font-mono">
-        <span>Protocol: RS-232</span>
-        <span>Build: v2.7.0-connected</span>
+    </div>
+
+    <!-- RIGHT PANEL: 17 METAL PRICE EDITING GRID -->
+    <div class="flex-1 bg-[#0d121a] border border-gray-800 rounded-2xl flex flex-col overflow-hidden shadow-sm">
+      <div class="p-3.5 border-b border-gray-800 bg-[#080b10] flex items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
+            <i data-lucide="edit-3" class="w-4 h-4 text-amber-400"></i> Today's Live Scale Buy Rates
+          </h2>
+          <p class="text-[11px] text-gray-400">Touch any price to edit. Auto-syncs to driver phones upon publishing.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="saveStatusIndicator" class="text-xs font-bold text-emerald-400 opacity-0 transition-opacity flex items-center gap-1.5">
+            <i data-lucide="check" class="w-4 h-4"></i> Published!
+          </span>
+          <button type="button" onclick="publishYardPriceSheet()" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs sm:text-sm shadow-md transition flex items-center gap-2 active:scale-95">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Publish Live Sheet</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="metalEditGrid" class="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      </div>
+    </div>
+
+  </main>
+
+  <!-- VIEW 2: LIVE DRIVER / SCRAPPER PREVIEW TAB -->
+  <main id="driverView" class="hidden flex-1 p-3 overflow-hidden">
+    <div class="w-full h-full bg-[#0d121a] border border-gray-800 rounded-2xl flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-4 py-2.5 bg-[#080b10] border-b border-gray-800 flex items-center justify-between text-xs text-gray-400 flex-wrap gap-2">
+        <span class="flex items-center gap-2 text-white font-bold">
+          <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+          <span>Live Customer Feed (What Scrappers See on Mobile)</span>
+        </span>
+        <div class="flex items-center gap-3">
+          <div class="inline-flex p-0.5 bg-[#07090e] border border-gray-800 rounded-lg text-[11px]">
+            <button id="toggleNativeBoardBtn" onclick="toggleDriverDisplayMode('native')" class="px-2.5 py-1 rounded font-bold bg-amber-500 text-black">
+              Direct Live Board
+            </button>
+            <button id="toggleIframeBtn" onclick="toggleDriverDisplayMode('frame')" class="px-2.5 py-1 rounded font-bold text-gray-400 hover:text-white">
+              Phone Frame
+            </button>
+          </div>
+          <button onclick="reloadDriverFrame()" class="text-xs text-amber-400 hover:underline flex items-center gap-1 font-bold">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+          </button>
+        </div>
+      </div>
+
+      <div id="driverNativeContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
+        <div class="bg-[#080b10] border border-gray-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-gray-300">Calculator Test:</span>
+            <input type="number" id="driverSimWeight" value="100" oninput="renderDriverNativeView()"
+              class="w-24 bg-[#0d121a] border border-gray-700 rounded-lg px-2.5 py-1 text-sm font-mono font-bold text-amber-400 text-right">
+            <span class="text-xs text-gray-400 font-bold">lbs</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-gray-300">Unit:</span>
+            <button id="driverUnitLb" onclick="setDriverUnit('lb')" class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black">$/lb</button>
+            <button id="driverUnitCwt" onclick="setDriverUnit('cwt')" class="px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white bg-[#0d121a] border border-gray-700">$/cwt</button>
+          </div>
+        </div>
+
+        <div class="bg-[#080b10] border border-gray-800 rounded-xl overflow-hidden shadow-sm">
+          <div class="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
+            <h4 class="text-xs font-black uppercase tracking-wider text-white flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i> Duval County Daily Scrap Board
+            </h4>
+            <span id="driverActiveUnitLabel" class="text-xs font-mono font-bold text-amber-400">Rates in $/lb</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-[#07090e] text-gray-400 uppercase font-black border-b border-gray-800 text-[11px]">
+                <tr>
+                  <th class="py-3 px-4 min-w-[200px]">Commodity Grade</th>
+                  <th class="py-3 px-3 text-right text-amber-400">This Yard Rate</th>
+                  <th class="py-3 px-3 text-right text-emerald-400">Haul Payout</th>
+                  <th class="py-3 px-3 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody id="driverNativeTableBody" class="divide-y divide-gray-800 font-mono">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="driverIframeContainer" class="hidden flex-1 relative bg-[#07090e]">
+        <iframe id="driverFrame" 
+          src="./index.html" 
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+          allow="fullscreen; clipboard-read; clipboard-write;"
+          class="w-full h-full border-none">
+        </iframe>
+      </div>
+    </div>
+  </main>
+
+  <!-- STATION SELECTION / INITIAL LOGIN OVERLAY -->
+  <div id="stationLockOverlay" class="fixed inset-0 z-50 bg-[#07090e]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0d121a] border border-gray-800 rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-6 shadow-2xl text-center">
+      <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto shadow-inner">
+        <i data-lucide="shield-check" class="w-8 h-8"></i>
+      </div>
+      <div>
+        <h3 class="text-lg font-black text-white">Weighmaster Terminal Setup</h3>
+        <p class="text-xs text-gray-400 mt-1">Select your facility to lock this tablet to your scale desk.</p>
+      </div>
+
+      <div class="space-y-3 text-left">
+        <div>
+          <label class="block text-xs font-black uppercase text-gray-400 mb-1">Facility Name:</label>
+          <select id="kioskYardSelect" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3.5 py-3 text-sm font-bold text-white focus:outline-none focus:border-amber-500">
+            <option value="quickstop">Quick Stop Recycling (E 8th St)</option>
+            <option value="berman">Berman Bros, Inc. (Evergreen Ave)</option>
+            <option value="jmr">Jacksonville Metal Recycling (Philips Hwy)</option>
+            <option value="cmc">CMC Recycling (N Lane Ave)</option>
+            <option value="tmr">Trademark Metals (TMR - Beaver St)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-black uppercase text-gray-400 mb-1">Station 4-Digit PIN:</label>
+          <input type="password" maxlength="4" id="kioskPinInput" placeholder="••••"
+            class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.5em] font-mono text-amber-400 font-black focus:outline-none focus:border-amber-500">
+          <p class="text-[11px] text-gray-500 text-center mt-1">Quick Stop (1234) • Berman (2500) • JMR (7101) • CMC (4840) • TMR (3540)</p>
+          <div id="kioskPinError" class="hidden text-xs text-red-400 text-center font-bold mt-1">Invalid station security PIN.</div>
+        </div>
+
+        <button onclick="unlockKioskTerminal()" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-sm transition shadow-lg flex items-center justify-center gap-2">
+          <i data-lucide="key" class="w-4 h-4"></i> Lock &amp; Activate Tablet Station
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- AUDIO NOTIFICATION ENGINE -->
   <script>
-    function triggerSoundNotification() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.45);
-      } catch (e) {}
-    }
-  </script>
+    const yardsData = {
+      quickstop: { id: 'quickstop', name: 'Quick Stop Recycling', address: '603 E 8th St, Jacksonville, FL', pin: '1234', status: 'open' },
+      berman: { id: 'berman', name: 'Berman Bros, Inc.', address: '2500 Evergreen Ave, Jacksonville, FL', pin: '2500', status: 'open' },
+      jmr: { id: 'jmr', name: 'Jacksonville Metal Recycling', address: '7101 Philips Hwy, Jacksonville, FL', pin: '7101', status: 'open' },
+      cmc: { id: 'cmc', name: 'CMC Recycling', address: '4840 N Lane Ave, Jacksonville, FL', pin: '4840', status: 'open' },
+      tmr: { id: 'tmr', name: 'Trademark Metals (TMR)', address: '3540 W Beaver St, Jacksonville, FL', pin: '3540', status: 'open' }
+    };
 
-  <!-- CORE TERMINAL LOGIC & HARDCODED SUPABASE SYNC -->
-  <script>
-    // 1. HARDCODED SUPABASE CREDENTIALS (Live from Project Settings)
-    const SUPABASE_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
-
-    let supabaseClient = null;
-    if (window.supabase) {
-      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    }
-
-    // 2. HARDCODED RATES (Guarantees zero blank screen)
-    let currentRates = [
-      { id: 1, category: 'Copper', grade: '#1 Bare Bright Copper', price: 3.45, unit: 'lb' },
-      { id: 2, category: 'Copper', grade: '#1 Copper Tubing / Bus Bar', price: 3.25, unit: 'lb' },
-      { id: 3, category: 'Copper', grade: '#2 Copper Wire & Tubing', price: 3.05, unit: 'lb' },
-      { id: 4, category: 'Copper', grade: '#1 Insulated Wire (85%)', price: 2.15, unit: 'lb' },
-      { id: 5, category: 'Brass', grade: 'Clean Yellow Brass Solids', price: 1.95, unit: 'lb' },
-      { id: 6, category: 'Brass', grade: 'Red Brass / Plumbing Brass', price: 2.25, unit: 'lb' },
-      { id: 7, category: 'Aluminum', grade: 'Clean Aluminum Extrusions 6063', price: 0.72, unit: 'lb' },
-      { id: 8, category: 'Aluminum', grade: 'Aluminum UBC (Clean Cans)', price: 0.55, unit: 'lb' },
-      { id: 9, category: 'Ferrous', grade: '#1 Prepared Steel (5ft & under)', price: 11.50, unit: 'cwt' },
-      { id: 10, category: 'Ferrous', grade: 'Clean Automotive Cast Iron', price: 12.00, unit: 'cwt' },
-      { id: 11, category: 'Ferrous', grade: 'Unprepared Shredder Feed / Sheet', price: 8.50, unit: 'cwt' }
+    let metalsCatalog = [
+      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', rate: 5.20 },
+      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', rate: 5.00 },
+      { id: 'copper_2', name: '#2 Copper (Burnt / Solder / Painted)', category: 'Copper', rate: 4.85 },
+      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', rate: 4.45 },
+      { id: 'romex', name: 'Insulated Romex (House Wire)', category: 'Copper', rate: 2.20 },
+      { id: 'yellow_brass', name: 'Clean Yellow Brass', category: 'Brass', rate: 2.80 },
+      { id: 'red_brass', name: 'Red Brass / Composition', category: 'Brass', rate: 3.20 },
+      { id: 'alum_cans', name: 'Aluminum UBC Cans (Clean)', category: 'Aluminum', rate: 0.80 },
+      { id: 'alum_ext', name: '6063 Aluminum Extrusions', category: 'Aluminum', rate: 1.10 },
+      { id: 'alum_sheet', name: 'Sheet Aluminum', category: 'Aluminum', rate: 0.62 },
+      { id: 'alum_wheels', name: 'Aluminum Car Wheels / Rims', category: 'Aluminum', rate: 0.92 },
+      { id: 'stainless_304', name: '304 Stainless Steel (Clean Non-Mag)', category: 'Specialty', rate: 0.52 },
+      { id: 'auto_batteries', name: 'Lead-Acid Car Batteries', category: 'Specialty', rate: 0.20 },
+      { id: 'clean_lead', name: 'Clean Soft Lead', category: 'Specialty', rate: 0.60 },
+      { id: 'electric_motors', name: 'Electric Motors & Alternators', category: 'Ferrous & Core', rate: 0.35 },
+      { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', rate: 0.095 },
+      { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', rate: 0.070 }
     ];
 
-    let activeFlashSpecial = null;
-    let flashCountdownTimer = null;
+    let localBus = null;
+    let activeYardId = 'quickstop';
+    let driverSimUnit = 'lb';
+    let currentDisplayMode = 'native';
 
-    // 3. BROADCAST SYNC ENGINE (Both Local Bus & Supabase Channel)
-    const broadcastBus = window.BroadcastChannel ? new BroadcastChannel('duval_scrap_bus') : null;
+    const SB_REST_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co/rest/v1';
+    const SB_API_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
 
-    function dispatchSync(eventType, payload) {
-      const envelope = {
-        type: eventType,
-        yard: 'Quick Stop Recycling',
-        timestamp: Date.now(),
-        payload: payload
-      };
+    try {
+      if ('BroadcastChannel' in window) {
+        localBus = new BroadcastChannel('duval_sync_bus');
+      }
+    } catch (e) {
+      console.warn('BroadcastChannel fallback:', e);
+    }
 
-      // A. Local Broadcast
-      if (broadcastBus) broadcastBus.postMessage(envelope);
+    function initTerminalRelay() {
+      const dot = document.getElementById('cloudSyncDot');
+      const text = document.getElementById('cloudSyncText');
+      if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+      if (text) text.textContent = "Live Cloud Active (Database Synced)";
+    }
+
+    async function writeAlertToDatabase(record) {
       try {
-        localStorage.setItem('duval_scrap_sync_state', JSON.stringify(envelope));
-      } catch (e) {}
+        await fetch(`${SB_REST_URL}/flash_specials`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SB_API_KEY,
+            'Authorization': `Bearer ${SB_API_KEY}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(record)
+        });
+      } catch (err) {}
+    }
 
-      // B. Cloud Supabase Channel
-      if (supabaseClient) {
-        supabaseClient.channel('duval_scrap_live').send({
-          type: 'broadcast',
-          event: eventType,
-          payload: envelope
+    async function writeYardStatusToDatabase(yardKey, statusText) {
+      try {
+        await fetch(`${SB_REST_URL}/yards?id=eq.${yardKey}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SB_API_KEY,
+            'Authorization': `Bearer ${SB_API_KEY}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ status: statusText, updated_at: new Date().toISOString() })
+        });
+      } catch (err) {}
+    }
+
+    async function writeRatesToDatabase(yardKey, rates) {
+      for (const item of rates) {
+        const updatePayload = {};
+        updatePayload[`${yardKey}_rate`] = parseFloat(item.rate);
+        try {
+          await fetch(`${SB_REST_URL}/metals?id=eq.${item.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SB_API_KEY,
+              'Authorization': `Bearer ${SB_API_KEY}`,
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(updatePayload)
+          });
+        } catch (e) {}
+      }
+    }
+
+    function dispatchSyncEvent(eventType, payload) {
+      if (eventType === 'flash_special') {
+        writeAlertToDatabase({
+          yard_id: payload.yardId || activeYardId,
+          yard_name: payload.yardName || 'Jacksonville Scrapyard',
+          metal_id: payload.metalId,
+          metal_name: payload.metalName,
+          price: parseFloat(payload.price),
+          ends_at: new Date(Date.now() + 3600000).toISOString(),
+          is_active: true
+        });
+      } else if (eventType === 'status_update') {
+        writeYardStatusToDatabase(payload.yard, payload.status);
+        writeAlertToDatabase({
+          yard_id: payload.yard,
+          yard_name: payload.yardName,
+          metal_id: 'status_update',
+          metal_name: payload.status,
+          price: 0.00,
+          ends_at: new Date(Date.now() + 300000).toISOString(),
+          is_active: true
+        });
+      } else if (eventType === 'diagnostic_ping') {
+        writeAlertToDatabase({
+          yard_id: payload.yard || activeYardId,
+          yard_name: payload.yardName || 'Scale Terminal',
+          metal_id: 'ping',
+          metal_name: payload.message || 'Weighmaster Live Ping',
+          price: 0.00,
+          ends_at: new Date(Date.now() + 300000).toISOString(),
+          is_active: true
+        });
+      } else if (eventType === 'price_batch' && payload.rates) {
+        writeRatesToDatabase(payload.yard, payload.rates);
+        writeAlertToDatabase({
+          yard_id: payload.yard,
+          yard_name: payload.yardName,
+          metal_id: payload.alertSubtype || 'price_batch',
+          metal_name: payload.alertMessage || 'Live Sheet Published',
+          price: payload.delta || 0.00,
+          ends_at: new Date(Date.now() + 300000).toISOString(),
+          is_active: true
         });
       }
-    }
 
-    // 4. TABLE RENDER
-    function renderTable() {
-      const tbody = document.getElementById('rates-table-body');
-      if (!tbody) return;
-
-      tbody.innerHTML = currentRates.map(item => {
-        let catColor = 'text-neutral-400';
-        if (item.category === 'Copper') catColor = 'text-amber-500 font-bold';
-        if (item.category === 'Brass') catColor = 'text-yellow-400 font-bold';
-        if (item.category === 'Aluminum') catColor = 'text-sky-400 font-bold';
-        if (item.category === 'Ferrous') catColor = 'text-indigo-400 font-bold';
-
-        return `
-          <tr class="hover:bg-neutral-900/70 transition-colors">
-            <td class="py-3 px-3 ${catColor}">${item.category}</td>
-            <td class="py-3 px-3 text-neutral-200 font-sans font-medium text-xs">${item.grade}</td>
-            <td class="py-3 px-3 text-right">
-              <span class="text-neutral-500 font-mono mr-0.5">$</span>
-              <input type="number" step="0.01" value="${item.price.toFixed(2)}" 
-                onchange="updateSinglePrice(${item.id}, this.value)"
-                class="w-20 text-right bg-black border border-neutral-800 rounded px-1.5 py-1 text-emerald-400 font-mono font-bold text-sm focus:border-amber-500 focus:outline-none" />
-            </td>
-            <td class="py-3 px-3 text-right text-neutral-400 font-mono">/${item.unit}</td>
-            <td class="py-3 px-3 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/60 text-emerald-400 border border-emerald-500/20">
-                LIVE
-              </span>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      if (window.lucide) lucide.createIcons();
-    }
-
-    renderTable();
-
-    // 5. SPOT ADJUSTMENTS
-    function updateSinglePrice(id, val) {
-      const num = parseFloat(val);
-      if (isNaN(num)) return;
-      currentRates = currentRates.map(r => r.id === id ? { ...r, price: num } : r);
-      dispatchSync('RATE_UPDATED', { rates: currentRates });
-    }
-
-    function adjustCategory(cat, delta) {
-      currentRates = currentRates.map(r => {
-        if (r.category === cat) {
-          return { ...r, price: Math.max(0.01, +(r.price + delta).toFixed(2)) };
-        }
-        return r;
-      });
-      renderTable();
-      triggerSoundNotification();
-      dispatchSync('SPOT_SHIFT', { category: cat, delta: delta, rates: currentRates });
-    }
-
-    // 6. OPERATIONAL STATUS[cite: 2]
-    function setOperationalStatus(state) {
-      const btnOpen = document.getElementById('status-btn-open');
-      const btnLine = document.getElementById('status-btn-line');
-      const btnBreak = document.getElementById('status-btn-break');
-
-      btnOpen.className = 'status-btn inactive-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      btnLine.className = 'status-btn inactive-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      btnBreak.className = 'status-btn inactive-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-
-      if (state === 'open') {
-        btnOpen.className = 'status-btn active-open py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      } else if (state === 'line') {
-        btnLine.className = 'status-btn active-line py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
-      } else if (state === 'break') {
-        btnBreak.className = 'status-btn active-break py-2.5 px-1 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center text-center cursor-pointer';
+      if (localBus) {
+        try { localBus.postMessage(payload); } catch (e) {}
       }
 
-      triggerSoundNotification();
-      dispatchSync('GATE_STATUS_CHANGED', { status: state });
+      try {
+        localStorage.setItem('duval_ws_event', JSON.stringify({ ...payload, _ts: Date.now() }));
+      } catch (e) {}
     }
 
-    // 7. FLASH BROADCAST[cite: 1]
-    function broadcastFlashSpecial() {
-      const commodity = document.getElementById('flash-commodity-select').value;
-      const price = parseFloat(document.getElementById('flash-price-input').value) || 3.65;
-      const expiresAt = Date.now() + (60 * 60 * 1000);
-
+    function sendDiagnosticPingToDrivers() {
+      const yard = yardsData[activeYardId] || yardsData.quickstop;
       const payload = {
-        commodity: commodity,
-        price: price.toFixed(2),
-        expiresAt: expiresAt
+        type: 'diagnostic_ping',
+        yard: activeYardId,
+        yardName: yard.name,
+        message: `Live connection verified from ${yard.name}!`,
+        time: Date.now()
       };
 
-      renderFlashBanner(payload);
-      triggerSoundNotification();
-      dispatchSync('FLASH_SPECIAL_BROADCAST', payload);
-    }
+      dispatchSyncEvent('diagnostic_ping', payload);
 
-    function renderFlashBanner(data) {
-      activeFlashSpecial = data;
-      const banner = document.getElementById('live-flash-banner');
-      const details = document.getElementById('flash-details');
-      banner.classList.remove('hidden');
-      details.innerText = `${data.commodity}: $${data.price}/lb (Flash Special Active)`;
-
-      if (flashCountdownTimer) clearInterval(flashCountdownTimer);
-      updateCountdown();
-      flashCountdownTimer = setInterval(updateCountdown, 1000);
-      lucide.createIcons();
-    }
-
-    function updateCountdown() {
-      if (!activeFlashSpecial) return;
-      const remainingMs = activeFlashSpecial.expiresAt - Date.now();
-      const badge = document.getElementById('flash-countdown');
-      if (remainingMs <= 0) {
-        clearFlashSpecial();
-        return;
+      const indicator = document.getElementById('saveStatusIndicator');
+      if (indicator) {
+        indicator.textContent = '⚡ Ping Sent to Drivers!';
+        indicator.style.opacity = '1';
+        setTimeout(() => { 
+          indicator.style.opacity = '0'; 
+          indicator.textContent = 'Published!';
+        }, 2000);
       }
-      const m = Math.floor(remainingMs / 60000);
-      const s = Math.floor((remainingMs % 60000) / 1000);
-      badge.innerText = `${m}:${s < 10 ? '0' : ''}${s} REMAINING`;
     }
 
-    function clearFlashSpecial() {
-      if (flashCountdownTimer) clearInterval(flashCountdownTimer);
-      activeFlashSpecial = null;
-      document.getElementById('live-flash-banner').classList.add('hidden');
-      dispatchSync('FLASH_SPECIAL_CLEARED', {});
-    }
+    function checkAutoLock() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramYard = urlParams.get('yard');
+      const savedYard = localStorage.getItem('duval_kiosk_yard');
 
-    function publishLiveSheet() {
-      triggerSoundNotification();
-      dispatchSync('RATES_PUBLISHED', { rates: currentRates });
-      alert("✅ Scale sheet published! All driver phones synced.");
-    }
-
-    // 8. DRAWER & FULLSCREEN
-    function toggleSettingsDrawer(show) {
-      document.getElementById('settings-drawer').classList.toggle('hidden', !show);
-    }
-
-    function verifyDrawerPin() {
-      const pin = document.getElementById('drawer-pin-input').value;
-      if (pin.length >= 4) {
-        document.getElementById('drawer-locked-view').classList.add('hidden');
-        document.getElementById('drawer-unlocked-view').classList.remove('hidden');
+      if (paramYard && yardsData[paramYard]) {
+        activeYardId = paramYard;
+        activateTerminal();
+      } else if (savedYard && yardsData[savedYard]) {
+        activeYardId = savedYard;
+        activateTerminal();
       } else {
-        alert('Enter a valid 4-digit PIN.');
+        const overlay = document.getElementById('stationLockOverlay');
+        if (overlay) overlay.classList.remove('hidden');
+        renderPriceGrid();
+        populateFlashSelect();
       }
     }
 
-    function lockDrawer() {
-      document.getElementById('drawer-pin-input').value = '';
-      document.getElementById('drawer-locked-view').classList.remove('hidden');
-      document.getElementById('drawer-unlocked-view').classList.add('hidden');
+    function unlockKioskTerminal() {
+      const selYard = document.getElementById('kioskYardSelect').value;
+      const pin = document.getElementById('kioskPinInput').value.trim();
+      const err = document.getElementById('kioskPinError');
+      const yard = yardsData[selYard];
+
+      if (yard && pin === yard.pin) {
+        if (err) err.classList.add('hidden');
+        activeYardId = selYard;
+        try { localStorage.setItem('duval_kiosk_yard', selYard); } catch (e) {}
+        activateTerminal();
+      } else {
+        if (err) err.classList.remove('hidden');
+      }
+    }
+
+    function activateTerminal() {
+      const overlay = document.getElementById('stationLockOverlay');
+      if (overlay) overlay.classList.add('hidden');
+
+      const yard = yardsData[activeYardId] || yardsData.quickstop;
+      const nameEl = document.getElementById('terminalYardName');
+      const addrEl = document.getElementById('terminalYardAddress');
+      if (nameEl) nameEl.textContent = yard.name;
+      if (addrEl) addrEl.textContent = yard.address;
+
+      populateFlashSelect();
+      renderPriceGrid();
+      renderDriverNativeView();
+      initTerminalRelay();
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function lockStationPrompt() {
+      try { localStorage.removeItem('duval_kiosk_yard'); } catch (e) {}
+      const pin = document.getElementById('kioskPinInput');
+      if (pin) pin.value = '';
+      const overlay = document.getElementById('stationLockOverlay');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+
+    function switchView(tab) {
+      const deskView = document.getElementById('deskView');
+      const driverView = document.getElementById('driverView');
+      const deskBtn = document.getElementById('navDeskBtn');
+      const driverBtn = document.getElementById('navDriverBtn');
+
+      if (tab === 'desk') {
+        if (deskView) deskView.classList.remove('hidden');
+        if (driverView) driverView.classList.add('hidden');
+        if (deskBtn) deskBtn.className = "px-5 py-2 rounded-lg text-xs font-black transition flex items-center gap-2 bg-amber-500 text-black shadow-md";
+        if (driverBtn) driverBtn.className = "px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 text-gray-400 hover:text-white";
+      } else {
+        if (deskView) deskView.classList.add('hidden');
+        if (driverView) driverView.classList.remove('hidden');
+        if (driverBtn) driverBtn.className = "px-5 py-2 rounded-lg text-xs font-black transition flex items-center gap-2 bg-amber-500 text-black shadow-md";
+        if (deskBtn) deskBtn.className = "px-5 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 text-gray-400 hover:text-white";
+        renderDriverNativeView();
+      }
+    }
+
+    function toggleDriverDisplayMode(mode) {
+      currentDisplayMode = mode;
+      const nativeBox = document.getElementById('driverNativeContainer');
+      const frameBox = document.getElementById('driverIframeContainer');
+      const nativeBtn = document.getElementById('toggleNativeBoardBtn');
+      const frameBtn = document.getElementById('toggleIframeBtn');
+
+      if (mode === 'native') {
+        if (nativeBox) nativeBox.classList.remove('hidden');
+        if (frameBox) frameBox.classList.add('hidden');
+        if (nativeBtn) nativeBtn.className = "px-2.5 py-1 rounded font-bold bg-amber-500 text-black";
+        if (frameBtn) frameBtn.className = "px-2.5 py-1 rounded font-bold text-gray-400 hover:text-white";
+        renderDriverNativeView();
+      } else {
+        if (nativeBox) nativeBox.classList.add('hidden');
+        if (frameBox) frameBox.classList.remove('hidden');
+        if (frameBtn) frameBtn.className = "px-2.5 py-1 rounded font-bold bg-amber-500 text-black";
+        if (nativeBtn) nativeBtn.className = "px-2.5 py-1 rounded font-bold text-gray-400 hover:text-white";
+        reloadDriverFrame();
+      }
+    }
+
+    function setDriverUnit(u) {
+      driverSimUnit = u;
+      const lbBtn = document.getElementById('driverUnitLb');
+      const cwtBtn = document.getElementById('driverUnitCwt');
+      const lbl = document.getElementById('driverActiveUnitLabel');
+      if (u === 'lb') {
+        if (lbBtn) lbBtn.className = "px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black";
+        if (cwtBtn) cwtBtn.className = "px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white bg-[#0d121a] border border-gray-700";
+        if (lbl) lbl.textContent = "Rates in $/lb";
+      } else {
+        if (cwtBtn) cwtBtn.className = "px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black";
+        if (lbBtn) lbBtn.className = "px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white bg-[#0d121a] border border-gray-700";
+        if (lbl) lbl.textContent = "Rates in $/cwt (100 lbs)";
+      }
+      renderDriverNativeView();
+    }
+
+    function renderDriverNativeView() {
+      const tbody = document.getElementById('driverNativeTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const weight = parseFloat(document.getElementById('driverSimWeight')?.value) || 100;
+      const yard = yardsData[activeYardId] || yardsData.quickstop;
+
+      metalsCatalog.forEach(m => {
+        const ratePerLb = m.rate;
+        const displayRate = driverSimUnit === 'cwt' ? (ratePerLb * 100).toFixed(2) : ratePerLb.toFixed(2);
+        const unitSuffix = driverSimUnit === 'cwt' ? '/cwt' : '/lb';
+        const payout = (ratePerLb * weight).toFixed(2);
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-800/40 transition";
+        tr.innerHTML = `
+          <td class="py-3 px-4 text-white font-bold">
+            <div>${m.name}</div>
+            <div class="text-[10px] text-gray-400 uppercase font-sans font-normal">${m.category}</div>
+          </td>
+          <td class="py-3 px-3 text-right text-amber-400 font-bold">$${displayRate}${unitSuffix}</td>
+          <td class="py-3 px-3 text-right text-emerald-400 font-black">$${payout}</td>
+          <td class="py-3 px-3 text-center">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              ${yard.status === 'closed' ? 'Scale Break' : (yard.status === 'busy' ? 'Heavy Line' : 'Scales Open')}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    function reloadDriverFrame() {
+      const frame = document.getElementById('driverFrame');
+      if (frame) frame.src = './index.html?yard=' + encodeURIComponent(activeYardId) + '&t=' + Date.now();
     }
 
     function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen().catch(() => {});
+      try {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      } catch (e) {}
+    }
+
+    function populateFlashSelect() {
+      const sel = document.getElementById('deskFlashMetal');
+      if (!sel) return;
+      sel.innerHTML = '';
+      metalsCatalog.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = `${m.name} ($${m.rate.toFixed(2)})`;
+        sel.appendChild(opt);
+      });
+      if (metalsCatalog.length > 0) {
+        handleFlashMetalChange(metalsCatalog[0].id);
       }
     }
 
-    // 9. PWA INSTALL
-    let deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
+    function handleFlashMetalChange(selectedId) {
+      const metal = metalsCatalog.find(m => m.id === selectedId);
+      const priceInput = document.getElementById('deskFlashPrice');
+      if (metal && priceInput) {
+        priceInput.value = metal.rate.toFixed(2);
+      }
+    }
+
+    function renderPriceGrid() {
+      const grid = document.getElementById('metalEditGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      metalsCatalog.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "bg-[#080b10] border border-gray-800 rounded-xl p-3 flex items-center justify-between gap-3 shadow-sm";
+        card.innerHTML = `
+          <div class="min-w-0 flex-1">
+            <h4 class="text-xs font-bold text-white truncate">${m.name}</h4>
+            <span class="text-[10px] text-gray-400 uppercase font-mono">${m.category}</span>
+          </div>
+          <div class="relative w-28 flex-shrink-0">
+            <span class="absolute left-2.5 top-2 text-xs font-bold text-gray-500">$</span>
+            <input type="number" step="0.01" id="kioskRate_${m.id}" value="${m.rate.toFixed(2)}"
+              onchange="handleManualRateChange('${m.id}', this.value)"
+              class="w-full bg-[#0d121a] border border-gray-700 rounded-lg pl-6 pr-2 py-1.5 text-sm font-mono font-black text-amber-400 focus:outline-none focus:border-amber-500 text-right">
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function handleManualRateChange(metalId, val) {
+      const parsed = parseFloat(val);
+      if (!isNaN(parsed)) {
+        const m = metalsCatalog.find(item => item.id === metalId);
+        if (m) m.rate = parsed;
+      }
+    }
+
+    function applyBatchDelta(category, delta) {
+      metalsCatalog.filter(m => m.category === category).forEach(m => {
+        const input = document.getElementById(`kioskRate_${m.id}`);
+        let current = m.rate;
+        if (input && !isNaN(parseFloat(input.value))) {
+          current = parseFloat(input.value);
+        }
+        const updated = Math.max(0.01, parseFloat((current + delta).toFixed(3)));
+        m.rate = updated;
+        if (input) input.value = updated.toFixed(2);
+      });
+      
+      let shiftMsg = '';
+      const sign = delta > 0 ? '+' : '';
+      if (category === 'Ferrous & Core') {
+        const cwtDelta = (delta * 100).toFixed(2);
+        shiftMsg = `${category} shifted ${sign}$${cwtDelta}/cwt across all grades`;
+      } else {
+        shiftMsg = `${category} shifted ${sign}$${delta.toFixed(2)}/lb across all grades`;
+      }
+
+      publishYardPriceSheet({
+        alertSubtype: 'spot_shift',
+        alertMessage: shiftMsg,
+        delta: delta
+      });
+    }
+
+    function updateScaleStatus(type) {
+      const bOpen = document.getElementById('btnStatusOpen');
+      const bBusy = document.getElementById('btnStatusBusy');
+      const bClosed = document.getElementById('btnStatusClosed');
+      const badge = document.getElementById('currentStatusBadge');
+
+      if (bOpen) bOpen.className = "py-3 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 font-bold text-xs text-center transition flex flex-col items-center justify-center gap-1";
+      if (bBusy) bBusy.className = "py-3 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 font-bold text-xs text-center transition flex flex-col items-center justify-center gap-1";
+      if (bClosed) bClosed.className = "py-3 rounded-xl bg-gray-900 border border-gray-800 text-gray-400 font-bold text-xs text-center transition flex flex-col items-center justify-center gap-1";
+
+      let statusString = 'Scales Open';
+      if (type === 'open') {
+        if (bOpen) bOpen.className = "py-3 rounded-xl bg-emerald-600 text-white font-black text-xs text-center shadow transition flex flex-col items-center justify-center gap-1";
+        if (badge) { badge.textContent = "Scales Open"; badge.className = "text-xs font-mono font-bold text-emerald-400"; }
+        statusString = 'Scales Open';
+      } else if (type === 'busy') {
+        if (bBusy) bBusy.className = "py-3 rounded-xl bg-amber-500 text-black font-black text-xs text-center shadow transition flex flex-col items-center justify-center gap-1";
+        if (badge) { badge.textContent = "Heavy Line (15m+)"; badge.className = "text-xs font-mono font-bold text-amber-400"; }
+        statusString = 'Heavy Line (15m+)';
+      } else {
+        if (bClosed) bClosed.className = "py-3 rounded-xl bg-red-600 text-white font-black text-xs text-center shadow transition flex flex-col items-center justify-center gap-1";
+        if (badge) { badge.textContent = "Scale Break"; badge.className = "text-xs font-mono font-bold text-red-400"; }
+        statusString = 'Scale Break';
+      }
+
+      const yard = yardsData[activeYardId];
+      if (yard) yard.status = statusString;
+
+      const syncPayload = {
+        type: 'status',
+        yard: activeYardId,
+        yardName: yard ? yard.name : activeYardId,
+        status: statusString,
+        time: Date.now()
+      };
+
+      try {
+        localStorage.setItem(`duval_terminal_${activeYardId}_status`, statusString);
+      } catch (e) {}
+
+      dispatchSyncEvent('status_update', syncPayload);
+    }
+
+    function publishYardPriceSheet(customMeta = null) {
+      metalsCatalog.forEach(m => {
+        const input = document.getElementById(`kioskRate_${m.id}`);
+        if (input && !isNaN(parseFloat(input.value))) {
+          m.rate = parseFloat(input.value);
+        }
+      });
+
+      const yard = yardsData[activeYardId] || yardsData.quickstop;
+
+      const pricePayload = {
+        type: 'price_batch',
+        yard: activeYardId,
+        yardName: yard.name,
+        rates: metalsCatalog.map(m => ({ id: m.id, name: m.name, rate: m.rate })),
+        alertSubtype: customMeta && customMeta.alertSubtype ? customMeta.alertSubtype : 'price_batch',
+        alertMessage: customMeta && customMeta.alertMessage ? customMeta.alertMessage : 'Daily scrap rates updated across all metals.',
+        delta: customMeta && customMeta.delta ? customMeta.delta : 0.00,
+        time: Date.now()
+      };
+
+      try {
+        localStorage.setItem(`duval_terminal_${activeYardId}_rates`, JSON.stringify(metalsCatalog));
+      } catch (e) {}
+
+      dispatchSyncEvent('price_batch', pricePayload);
+
+      const indicator = document.getElementById('saveStatusIndicator');
+      if (indicator) {
+        indicator.textContent = 'Published & Sent!';
+        indicator.style.opacity = '1';
+        setTimeout(() => { 
+          indicator.style.opacity = '0'; 
+          indicator.textContent = 'Published!';
+        }, 2500);
+      }
+      renderDriverNativeView();
+    }
+
+    function publishFlashSpecial() {
+      const metalId = document.getElementById('deskFlashMetal')?.value || metalsCatalog[0].id;
+      const price = parseFloat(document.getElementById('deskFlashPrice')?.value) || 5.40;
+      const metal = metalsCatalog.find(m => m.id === metalId);
+      const yard = yardsData[activeYardId] || yardsData.quickstop;
+
+      if (metal && yard) {
+        metal.rate = price;
+        const rateInput = document.getElementById(`kioskRate_${metal.id}`);
+        if (rateInput) rateInput.value = price.toFixed(2);
+
+        const flashPayload = {
+          type: 'flash_special',
+          yardId: activeYardId,
+          yard_id: activeYardId,
+          yardName: yard.name,
+          yard_name: yard.name,
+          metalId: metal.id,
+          metal_id: metal.id,
+          metalName: metal.name,
+          metal_name: metal.name,
+          price: price,
+          time: Date.now()
+        };
+
+        dispatchSyncEvent('flash_special', flashPayload);
+        publishYardPriceSheet();
+
+        const indicator = document.getElementById('saveStatusIndicator');
+        if (indicator) {
+          indicator.textContent = 'Special Broadcast Sent!';
+          indicator.style.opacity = '1';
+          setTimeout(() => { 
+            indicator.style.opacity = '0'; 
+            indicator.textContent = 'Published!';
+          }, 3000);
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAutoLock();
+      if (window.lucide) window.lucide.createIcons();
     });
-
-    function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt = null;
-      } else {
-        alert("To install on your tablet:\n1. Open browser menu (⋮ or Share)\n2. Tap 'Add to Home Screen'");
-      }
-    }
-
-    // Realtime Supabase Channel Connection
-    if (supabaseClient) {
-      supabaseClient.channel('duval_scrap_live')
-        .on('broadcast', { event: '*' }, (payload) => {
-          if (payload.payload && payload.payload.type === 'FLASH_SPECIAL_BROADCAST') {
-            renderFlashBanner(payload.payload.payload);
-          }
-        })
-        .subscribe((status) => {
-          const syncPill = document.getElementById('sync-status');
-          if (status === 'SUBSCRIBED' && syncPill) {
-            syncPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-400"></span><span>Supabase Realtime: Connected</span>';
-          }
-        });
-    }
-
-    if (window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>
