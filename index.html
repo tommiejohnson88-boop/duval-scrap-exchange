@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Duval Scrap & Metals Exchange | Jacksonville, FL</title>
+  <title>Duval Scrap &amp; Metals Exchange | Jacksonville, FL</title>
   
   <!-- Classic Gold Balance Scale Favicon & Mobile Touch Icons -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v2">
-  <link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v2">
 
-  <link rel="manifest" href="./manifest.json?v=scale_gold_v2">
   <meta name="theme-color" content="#07090e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,11 +19,9 @@
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Supabase JS Client v2 CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -37,9 +33,7 @@
       0% { background-color: rgba(245, 158, 11, 0.4); }
       100% { background-color: transparent; }
     }
-    .cell-live-update {
-      animation: liveCellPulse 1.8s ease-out;
-    }
+    .cell-live-update { animation: liveCellPulse 1.8s ease-out; }
 
     @keyframes marqueeScroll {
       0% { transform: translate3d(0, 0, 0); }
@@ -51,9 +45,7 @@
       will-change: transform;
       animation: marqueeScroll 28s linear infinite;
     }
-    .animate-marquee:hover {
-      animation-play-state: paused;
-    }
+    .animate-marquee:hover { animation-play-state: paused; }
 
     .table-scroll { -webkit-overflow-scrolling: touch; }
     .table-scroll::-webkit-scrollbar { height: 6px; }
@@ -67,6 +59,9 @@
         z-index: 10;
         background-color: #0f141c;
         box-shadow: 2px 0 6px rgba(0, 0, 0, 0.5);
+        max-width: 125px;
+        min-width: 115px !important;
+        width: 120px;
       }
     }
 
@@ -86,11 +81,11 @@
         <span class="bg-black/50 text-amber-300 font-bold px-2.5 py-1 rounded-md uppercase tracking-wider text-xs flash-pulse flex items-center gap-1.5">
           <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i> 1-Hour Flash Special
         </span>
-        <span id="flashBannerText" class="font-medium text-sm sm:text-base"></span>
+        <span id="flashBannerText" class="font-medium text-sm sm:text-base">Quick Stop: Bare Bright Copper boosted to $5.40/lb!</span>
       </div>
       <div class="flex items-center gap-3">
         <span class="text-amber-100 font-mono text-xs sm:text-sm flex items-center gap-1">
-          <i data-lucide="timer" class="w-4 h-4"></i> Ends in: <strong id="flashCountdown" class="text-white font-bold tracking-wider">59:45</strong>
+          <i data-lucide="timer" class="w-4 h-4"></i> Ends in: <strong id="flashCountdown" class="text-white font-bold tracking-wider">58:40</strong>
         </span>
         <button onclick="dismissFlashBanner()" class="text-white hover:text-amber-200 text-xs sm:text-sm font-medium underline ml-2">Dismiss</button>
       </div>
@@ -119,12 +114,10 @@
         </div>
       </div>
 
-      <!-- Action Buttons (Responsive: 2-Row Clean Full-Width Grid on Mobile Phones, Single Inline Row on Tablets/Desktop) -->
+      <!-- Action Buttons -->
       <div class="w-full sm:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
-        
-        <!-- Row 1 on Mobile: Help (fixed) + Bell (fixed) + Text Partner (fills remaining space) -->
         <div class="flex items-center gap-2 w-full sm:w-auto">
-          <button onclick="alert('Duval Scrap Tracker: Live rate sheets, drop calculators, and scale status for Jacksonville scrap facilities.')" 
+          <button onclick="toggleHelpModal()" 
                   class="p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-amber-400 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
                   title="Help Info">
             <i data-lucide="help-circle" class="w-5 h-5"></i>
@@ -132,49 +125,52 @@
 
           <button id="notifBellBtn" onclick="toggleNotificationDrawer()" 
                   class="relative p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
-                  title="Price Alerts & Flash Specials">
+                  title="Price Alerts &amp; Flash Specials">
             <i data-lucide="bell" class="w-5 h-5 text-amber-400"></i>
             <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow">
               0
             </span>
           </button>
-
-          <a id="smsShareBtn" href="sms:?body=Check%20out%20the%20Jacksonville%20Scrap%20%26%20Metal%20Exchange%20Tracker%20for%20Duval%20County%20yards%20(Berman%2C%20Quick%20Stop%2C%20JMR%2C%20CMC%2C%20TMR)%3A%20" 
-             class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-sm transition h-[44px]">
-            <i data-lucide="message-square" class="w-4 h-4 flex-shrink-0"></i>
-            <span class="truncate">Text Partner</span>
-          </a>
         </div>
 
-        <!-- Row 2 on Mobile: Scrapyard Dashboard & IT Console Split 50/50 -->
-        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
-          <!-- Scrapyard Terminal Button -->
-          <button onclick="openOwnerModal()" 
-                  class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition shadow-md h-[44px]">
-            <i data-lucide="sliders" class="w-4 h-4 flex-shrink-0"></i>
-            <span class="truncate">Scrapyard Dashboard</span>
-          </button>
-
-          <!-- IT Admin & Developer Console Button -->
+        <!-- Reordered Action Buttons: 1. IT Console | 2. Text Partner | 3. Dead Locked Yard Dash Button -->
+        <div class="grid grid-cols-3 sm:flex sm:items-center gap-2 w-full sm:w-auto">
+          <!-- 1. IT Console -->
           <button onclick="openDevModal()" 
                   class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition h-[44px]" 
-                  title="IT & App Developer Console">
+                  title="IT &amp; App Developer Console">
             <i data-lucide="terminal" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
             <span class="text-xs font-bold font-mono truncate">IT Console</span>
           </button>
-        </div>
 
+          <!-- 2. Text Partner -->
+          <a id="smsShareBtn" href="sms:?body=Check%20out%20the%20Jacksonville%20Scrap%20%26%20Metal%20Exchange%20Tracker%20for%20Duval%20County%20yards%20(Berman%2C%20Quick%20Stop%2C%20JMR%2C%20CMC%2C%20TMR)%3A%20" 
+             class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-sm transition h-[44px]">
+            <i data-lucide="message-square" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="truncate">Text Partner</span>
+          </a>
+
+          <!-- 3. Dead Locked Yard Dash Button (Future Upgrade Feature) -->
+          <button type="button" 
+                  disabled
+                  title="Yard Dash (Coming in Future Upgrade)"
+                  class="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2.5 rounded-xl bg-gray-900/90 text-gray-500 border border-gray-800/80 cursor-not-allowed opacity-60 h-[44px] select-none">
+            <i data-lucide="lock" class="w-3.5 h-3.5 flex-shrink-0 text-gray-500"></i>
+            <span class="text-xs font-bold truncate">Yard Dash</span>
+            <span class="hidden sm:inline-block text-[9px] font-mono uppercase bg-gray-800 text-gray-400 px-1 py-0.2 rounded">Soon</span>
+          </button>
+        </div>
       </div>
 
     </div>
 
-    <!-- Live Cloud Sync Status Banner Indicator (Subtle, professional) -->
+    <!-- Live Cloud Sync Status Banner -->
     <div id="liveSyncStatusPill" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-[11px] font-mono text-emerald-400 border-t border-gray-800/40">
       <span class="flex items-center gap-1.5">
         <span id="liveSyncPillDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="liveSyncStatusMsg">Connecting to Duval Realtime Feed...</span>
+        <span id="liveSyncStatusMsg">Live Cloud Sync Active (&lt;180ms)</span>
       </span>
-      <span id="liveSyncLatencyLabel" class="text-gray-500 text-[10px]">Latency: &lt;180ms</span>
+      <span id="liveSyncLatencyLabel" class="text-gray-500 text-[10px]">Latency: 42ms</span>
     </div>
 
     <!-- Live Marquee Ticker -->
@@ -182,22 +178,22 @@
       <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#080b10] to-transparent z-10 pointer-events-none"></div>
       <div class="animate-marquee flex items-center gap-10 text-xs sm:text-sm text-gray-300 font-medium">
         <span class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5"></i> Duval Spot Averages:</span>
-        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.15 - $5.25/lb</strong></span>
+        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.20 - $5.25/lb</strong></span>
         <span>#1 Copper: <strong class="text-emerald-400 font-bold">$4.95 - $5.05/lb</strong></span>
-        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.75 - $2.85/lb</strong></span>
+        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.80 - $2.85/lb</strong></span>
         <span>Alum Cans (UBC): <strong class="text-gray-100 font-bold">$0.80 - $0.82/lb</strong></span>
         <span>6063 Extrusions: <strong class="text-gray-100 font-bold">$1.10 - $1.15/lb</strong></span>
         <span>HMS #1 Steel: <strong class="text-sky-300 font-bold">$185/GT</strong></span>
-        <span class="text-gray-500 font-semibold">Updated: Today 8:00 AM EST •</span>
+        <span class="text-gray-500 font-semibold">Updated: Live Intake Sheets •</span>
 
         <span class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5"></i> Duval Spot Averages:</span>
-        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.15 - $5.25/lb</strong></span>
+        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.20 - $5.25/lb</strong></span>
         <span>#1 Copper: <strong class="text-emerald-400 font-bold">$4.95 - $5.05/lb</strong></span>
-        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.75 - $2.85/lb</strong></span>
+        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.80 - $2.85/lb</strong></span>
         <span>Alum Cans (UBC): <strong class="text-gray-100 font-bold">$0.80 - $0.82/lb</strong></span>
         <span>6063 Extrusions: <strong class="text-gray-100 font-bold">$1.10 - $1.15/lb</strong></span>
         <span>HMS #1 Steel: <strong class="text-sky-300 font-bold">$185/GT</strong></span>
-        <span class="text-gray-500 font-semibold">Updated: Today 8:00 AM EST •</span>
+        <span class="text-gray-500 font-semibold">Updated: Live Intake Sheets •</span>
       </div>
       <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#080b10] to-transparent z-10 pointer-events-none"></div>
     </div>
@@ -215,18 +211,27 @@
       </button>
     </div>
 
-    <!-- Notification Controls -->
     <div class="p-3.5 bg-black/60 border-b border-gray-800 flex items-center justify-between text-xs sm:text-sm">
       <div class="flex flex-col">
         <span class="text-gray-300 font-medium">Device System Alerts</span>
-        <span id="pushStatusText" class="text-[11px] text-gray-500 font-mono">Status: Click to test</span>
+        <span id="pushStatusText" class="text-[11px] text-emerald-400 font-mono">Status: Connected ✓</span>
       </div>
-      <button id="enablePushBtn" onclick="requestPushPermissions()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition">
-        Enable &amp; Test Push
+      <button onclick="sendDiagnosticTestNotification()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition">
+        Send Test Alert
       </button>
     </div>
 
-    <div id="notifFeedList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+    <div id="notifFeedList" class="flex-1 overflow-y-auto p-4 space-y-3">
+      <div class="p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i> Daily Morning Intake
+          </span>
+          <span class="text-gray-500 text-[11px] font-mono">Just Now</span>
+        </div>
+        <p class="text-xs text-gray-200">Scale masters have posted updated rates across all 5 Duval County recycling yards.</p>
+      </div>
+    </div>
 
     <div class="p-4 border-t border-gray-800 bg-[#080b10] flex items-center justify-between">
       <button onclick="sendDiagnosticTestNotification()" class="text-xs text-amber-400 hover:underline font-bold">
@@ -241,10 +246,56 @@
   <!-- MAIN VIEWPORT -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-7">
 
+    <!-- 30-DAY MARKET TRENDS SECTION -->
+    <div class="bg-gradient-to-br from-[#0d121a] to-[#0a0e14] border border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-stretch md:items-center gap-6">
+      <div class="absolute -right-20 -top-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none transition-colors duration-1000" id="trendGlow"></div>
+      
+      <div class="w-full md:w-1/3 space-y-2 z-10 flex flex-col justify-center">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400" id="trendIcon"></i> 30-Day Market Trend
+          </h3>
+          <span id="trendDeltaBadge" class="px-2 py-0.5 rounded text-[11px] font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">+$0.20/lb</span>
+        </div>
+        <div>
+          <h4 id="trendMetalName" class="text-xl font-bold text-white tracking-tight">Bare Bright Copper</h4>
+          <p class="text-xs text-gray-400 font-mono mt-1">COMEX Index vs Duval Median</p>
+        </div>
+        <div class="flex items-center gap-4 pt-2">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500">
+            <div class="w-2 h-2 rounded-full border border-gray-500 border-dashed"></div> COMEX Base
+          </div>
+          <div class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400" id="trendLegendLocal">
+            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div> Duval Median
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full md:w-2/3 relative z-10 flex flex-col h-32 sm:h-40">
+        <div class="relative flex-grow min-h-0 overflow-visible">
+          <span id="trendStartVal" class="absolute bottom-1 left-1 text-[10px] text-gray-400 font-mono font-bold z-20 bg-[#0d121a]/80 px-1 rounded">$4.90</span>
+          <span id="trendEndVal" class="absolute top-0 right-0 text-[10px] text-white font-mono font-bold bg-[#0d121a] px-1.5 py-0.5 rounded border border-gray-700 shadow-sm z-20">$5.05/lb</span>
+          
+          <svg class="w-full h-full overflow-visible" viewBox="0 0 400 100" preserveAspectRatio="none">
+            <path d="M0,0 L0,100 M100,0 L100,100 M200,0 L200,100 M300,0 L300,100 M400,0 L400,100" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 4" />
+            <path id="trendComexPath" d="M0,80 Q50,75 100,70 T200,65 T300,55 T400,50" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4 4" style="transition: all 1s ease-in-out;" />
+            <path id="trendLocalPath" d="M0,70 Q50,60 100,55 T200,40 T300,30 T400,20" fill="none" stroke="#34d399" stroke-width="3" style="filter: drop-shadow(0px 4px 6px rgba(52,211,153,0.3)); transition: all 1s ease-in-out;" />
+          </svg>
+        </div>
+        
+        <div class="w-full flex justify-between text-[9px] sm:text-[10px] text-gray-500 font-mono pt-1 border-t border-gray-800/80 mt-2 flex-shrink-0">
+          <span>-30d</span>
+          <span>-22d</span>
+          <span>-15d</span>
+          <span>-7d</span>
+          <span class="text-amber-400 font-bold">Today</span>
+        </div>
+      </div>
+    </div>
+
     <!-- CONTROLS & WEIGHT CALCULATOR BAR -->
     <div class="bg-[#0d121a] border border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full box-border overflow-hidden">
       
-      <!-- Unit Pricing Toggle -->
       <div class="flex items-center gap-3 w-full md:w-auto">
         <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-400 whitespace-nowrap">View Pricing:</span>
         <div class="grid grid-cols-2 p-1 bg-[#080b10] border border-gray-800 rounded-xl w-full sm:w-auto">
@@ -257,7 +308,6 @@
         </div>
       </div>
 
-      <!-- Quick Haul Payout Calculator Inputs -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto justify-end">
         <div class="flex items-center gap-2.5">
           <label for="calcWeight" class="text-xs sm:text-sm font-bold text-gray-300 whitespace-nowrap">Drop Weight:</label>
@@ -283,36 +333,47 @@
     <!-- CALCULATOR HIGHLIGHT RESULT BANNER -->
     <div id="calculatorHighlight" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4"></div>
 
-    <!-- MAIN 5-YARD COMPARISON TABLE -->
+    <!-- MAIN 5-YARD COMPARISON TABLE & MOBILE VIEWPORT MODE TOGGLE -->
     <div class="bg-[#0d121a] border border-gray-800/80 rounded-2xl overflow-hidden shadow-sm">
-      <div class="px-5 sm:px-6 py-4 sm:py-5 border-b border-gray-800/80 flex items-center justify-between flex-wrap gap-2">
+      <div class="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-gray-800/80 flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h2 class="text-sm sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
+          <h2 class="text-xs sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
             <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i> Duval County Daily Scrap Board
           </h2>
-          <p class="text-xs text-gray-400 mt-0.5">Rates updated directly from scale masters &amp; morning intake tickets</p>
+          <p class="text-[11px] sm:text-xs text-gray-400 mt-0.5">Rates updated directly from scale masters &amp; morning intake tickets</p>
         </div>
-        <div class="text-xs sm:text-sm text-gray-300">
-          Showing <span id="displayedUnitLabel" class="text-amber-400 font-extrabold">$/lb (Pound)</span>
+        <div class="flex items-center gap-2">
+          <!-- Mobile Viewport Mode Toggle (Table vs Cards) -->
+          <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-lg text-xs">
+            <button id="viewTableBtn" onclick="toggleMobileBoardMode('table')" class="px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition">Table</button>
+            <button id="viewCardsBtn" onclick="toggleMobileBoardMode('cards')" class="px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition">Cards</button>
+          </div>
+          <div class="text-[11px] sm:text-sm text-gray-300">
+            Showing <span id="displayedUnitLabel" class="text-amber-400 font-extrabold">$/cwt (100 lbs)</span>
+          </div>
         </div>
       </div>
 
-      <div class="overflow-x-auto table-scroll">
-        <table class="w-full text-left text-sm sm:text-base">
-          <thead class="bg-[#080b10] text-gray-400 uppercase font-black border-b border-gray-800 tracking-wider text-xs">
+      <!-- Standard Table (Compact Column Sizing to Prevent Mobile Sticky Overflow) -->
+      <div id="boardTableWrapper" class="hidden overflow-x-auto table-scroll">
+        <table class="w-full text-left text-xs sm:text-base">
+          <thead class="bg-[#080b10] text-gray-400 uppercase font-black border-b border-gray-800 tracking-wider text-[10px] sm:text-xs">
             <tr>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[240px] sticky-col">Metal Commodity Grade</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[130px] text-right text-emerald-400">Berman Bros</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[130px] text-right text-amber-300">Quick Stop</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[130px] text-right text-sky-400">Jacksonville Metal</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[130px] text-right text-blue-400">CMC Recycling</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[130px] text-right text-indigo-400">Trademark (TMR)</th>
-              <th scope="col" class="py-3.5 px-4 sm:px-5 min-w-[120px] text-center">Top Payout</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2.5 sm:px-5 w-[120px] sm:w-auto sm:min-w-[220px] sticky-col">Metal Grade</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-emerald-400">Berman</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-amber-300">Quick Stop</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-sky-400">JMR</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-blue-400">CMC</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-indigo-400">TMR</th>
+              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-5 min-w-[80px] sm:min-w-[120px] text-center text-amber-400">Top Pay</th>
             </tr>
           </thead>
-          <tbody id="metalsTableBody" class="divide-y divide-gray-800/60 font-mono text-sm sm:text-base"></tbody>
+          <tbody id="metalsTableBody" class="divide-y divide-gray-800/60 font-mono text-xs sm:text-base"></tbody>
         </table>
       </div>
+
+      <!-- MOBILE-FIRST CARDS VIEW (Clean, No-Cram Layout with Generous Box Widths) -->
+      <div id="boardCardsWrapper" class="p-3 sm:p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
     </div>
 
     <!-- JACKSONVILLE RECYCLING YARD PROFILES -->
@@ -333,211 +394,31 @@
 
   </main>
 
-  <!-- OWNER INTAKE DASHBOARD MODAL -->
-  <div id="ownerModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-5">
-    <div class="bg-[#0d121a] border border-gray-800 rounded-3xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden relative">
-      
-      <div class="px-5 sm:px-6 py-4 sm:py-5 border-b border-gray-800 flex items-center justify-between bg-[#080b10]">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
-            <i data-lucide="lock" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2 flex-wrap">
-              <span>Scrapyard Weight Master Terminal</span>
-              <span id="activeYardBadge" class="hidden px-2.5 py-0.5 rounded text-xs font-black bg-amber-500/20 text-amber-400 border border-amber-500/30"></span>
-            </h3>
-            <p id="ownerHeaderSubtitle" class="text-xs text-gray-400">Scale house operator credentials &amp; 4-digit PIN verification</p>
-          </div>
-        </div>
-        <button onclick="closeModal('ownerModal')" class="text-gray-400 hover:text-white transition p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
-          <i data-lucide="x" class="w-6 h-6"></i>
+  <!-- HELP & INFO MODAL -->
+  <div id="helpModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-[#0d121a] border border-gray-800 rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl relative">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <i data-lucide="help-circle" class="w-5 h-5 text-amber-400"></i> Duval Scrap Exchange Guide
+        </h3>
+        <button onclick="toggleHelpModal()" class="text-gray-400 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
-
-      <!-- SCREEN 1: OPERATOR AUTHENTICATION GATE -->
-      <div id="ownerAuthScreen" class="p-6 sm:p-10 flex flex-col items-center justify-center text-center space-y-6 my-auto overflow-y-auto">
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-inner">
-          <i data-lucide="shield-check" class="w-9 h-9 sm:w-11 sm:h-11"></i>
-        </div>
-        
-        <div class="max-w-md space-y-1.5">
-          <h4 class="text-lg sm:text-xl font-black text-white">Scrapyard Operator Login</h4>
-          <p class="text-xs sm:text-sm text-gray-400">Authenticate via corporate account and enter your facility's 4-digit security PIN to unlock intake sheets.</p>
-        </div>
-
-        <div class="w-full max-w-sm space-y-4">
-          <button onclick="simulateGoogleSignIn()" class="w-full py-3 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-black text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-2.5">
-            <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-            <span>Continue with Google</span>
-          </button>
-
-          <div class="flex items-center gap-3">
-            <div class="h-px bg-gray-800 flex-1"></div>
-            <span class="text-xs uppercase text-gray-500 font-bold">Or Email Login</span>
-            <div class="h-px bg-gray-800 flex-1"></div>
-          </div>
-
-          <div class="text-left space-y-1">
-            <label class="block text-xs font-black uppercase tracking-wider text-gray-400">Scale Desk Email:</label>
-            <input type="email" id="wmEmailInput" placeholder="desk@quickstop.com" value="desk@quickstop.com" 
-              class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3.5 py-2 text-sm text-white font-medium focus:border-amber-500 focus:outline-none">
-          </div>
-
-          <div class="text-left space-y-1">
-            <label class="block text-xs font-black uppercase tracking-wider text-gray-300">Select Facility:</label>
-            <select id="loginYardSelect" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3.5 py-2.5 text-sm font-bold text-white focus:border-amber-500 focus:outline-none">
-              <option value="quickstop">Quick Stop Recycling (E 8th St)</option>
-              <option value="berman">Berman Bros, Inc. (Evergreen Ave)</option>
-              <option value="jmr">Jacksonville Metal Recycling (Philips Hwy)</option>
-              <option value="cmc">CMC Recycling (N Lane Ave)</option>
-              <option value="tmr">Trademark Metals (TMR - Beaver St)</option>
-            </select>
-          </div>
-
-          <div class="text-left space-y-1">
-            <label class="block text-xs font-black uppercase tracking-wider text-gray-300">4-Digit Security PIN:</label>
-            <input type="password" maxlength="4" id="loginPinInput" placeholder="••••" 
-              class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-3 text-center text-2xl tracking-[0.5em] font-mono text-amber-400 font-black focus:border-amber-500 focus:outline-none">
-            <p class="text-xs text-gray-400 mt-1.5 text-center">Default PINs: Quick Stop (<strong>1234</strong>) | Berman (<strong>2500</strong>) | JMR (<strong>7101</strong>) | CMC (<strong>4840</strong>) | TMR (<strong>3540</strong>)</p>
-          </div>
-
-          <div id="loginErrorMsg" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm font-bold">
-            Invalid PIN! Access restricted to verified scale operators.
-          </div>
-
-          <button onclick="authenticateYardOperator()" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-black shadow-md transition flex items-center justify-center gap-2 min-h-[48px]">
-            <i data-lucide="key" class="w-5 h-5"></i>
-            <span>Unlock Yard Dashboard</span>
-          </button>
-        </div>
+      <div class="space-y-3 text-xs sm:text-sm text-gray-300 leading-relaxed">
+        <p><strong>• Live County Comparison:</strong> Real-time scrap metal buy sheets compared across Berman Bros, Quick Stop, JMR, CMC, and TMR.</p>
+        <p><strong>• Payout Calculator:</strong> Enter your estimated weight to see the total haul cash value at every Jacksonville facility.</p>
+        <p><strong>• Realtime Sync:</strong> Rates and scale wait times sync automatically when weighmasters post updates from their scale house terminals.</p>
       </div>
-
-      <!-- SCREEN 2: AUTHENTICATED YARD DASHBOARD -->
-      <div id="ownerDashboardScreen" class="hidden flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
-        
-        <div class="bg-[#080b10] p-4 sm:p-5 rounded-2xl border border-gray-800 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
-              <i data-lucide="check-circle" class="w-6 h-6"></i>
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <h4 id="authYardNameDisplay" class="text-base font-black text-white"></h4>
-                <span class="px-2 py-0.5 rounded text-[11px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Authenticated</span>
-              </div>
-              <p id="authYardAddrDisplay" class="text-xs sm:text-sm text-gray-400"></p>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <a id="launchTabletKioskBtn" href="./yard_terminal.html" target="_blank" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition flex items-center gap-1.5 min-h-[40px] shadow">
-              <i data-lucide="tablet" class="w-4 h-4"></i>
-              <span>Launch 10" Tablet Kiosk</span>
-            </a>
-            <button onclick="logoutYardOperator()" class="px-4 py-2 rounded-xl bg-[#0d121a] hover:bg-gray-800 text-gray-300 hover:text-white border border-gray-700 text-xs sm:text-sm font-bold transition flex items-center gap-1.5 min-h-[40px]">
-              <i data-lucide="log-out" class="w-4 h-4"></i>
-              <span>Log Out</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-[#080b10] border border-gray-800 rounded-2xl p-4 sm:p-5">
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs sm:text-sm font-black text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-              <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Quick Scale Shifts (Batch COMEX Spot Moves)
-            </span>
-            <span class="text-xs text-gray-500 font-semibold">Applies only to your yard</span>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <button onclick="applyBatchShiftModal('Copper', 0.05)" class="px-3 py-2.5 rounded-xl bg-gray-900 hover:bg-emerald-950 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-black transition flex items-center justify-center gap-1 min-h-[44px]">
-              + $0.05 Copper
-            </button>
-            <button onclick="applyBatchShiftModal('Copper', -0.05)" class="px-3 py-2.5 rounded-xl bg-gray-900 hover:bg-red-950 border border-red-500/30 text-red-400 text-xs sm:text-sm font-black transition flex items-center justify-center gap-1 min-h-[44px]">
-              - $0.05 Copper
-            </button>
-            <button onclick="applyBatchShiftModal('Aluminum', 0.02)" class="px-3 py-2.5 rounded-xl bg-gray-900 hover:bg-emerald-950 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-black transition flex items-center justify-center gap-1 min-h-[44px]">
-              + $0.02 Aluminum
-            </button>
-            <button onclick="applyBatchShiftModal('Ferrous & Core', 0.50)" class="px-3 py-2.5 rounded-xl bg-gray-900 hover:bg-sky-950 border border-sky-500/30 text-sky-400 text-xs sm:text-sm font-black transition flex items-center justify-center gap-1 min-h-[44px]">
-              + $0.50/cwt Steel
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-gradient-to-br from-[#080b10] to-amber-950/20 border border-amber-500/40 rounded-2xl p-4 sm:p-5 space-y-3">
-            <div class="flex items-center gap-2 text-amber-400">
-              <i data-lucide="flame" class="w-5 h-5"></i>
-              <h5 class="text-xs sm:text-sm font-black uppercase tracking-wider">Push 1-Hour Flash Special</h5>
-            </div>
-            <p class="text-xs sm:text-sm text-gray-300">Need scrap on the scale right now? Trigger a temporary rate boost with push alerts.</p>
-            <div class="grid grid-cols-2 gap-2.5">
-              <div>
-                <label class="block text-xs text-gray-400 mb-1 font-bold">Metal Grade:</label>
-                <select id="flashMetalSelect" class="w-full bg-[#0d121a] border border-gray-700 rounded-xl px-2.5 py-2 text-xs sm:text-sm font-bold text-white focus:outline-none"></select>
-              </div>
-              <div>
-                <label class="block text-xs text-gray-400 mb-1 font-bold">Flash Price ($/lb):</label>
-                <input type="number" step="0.05" id="flashSpecialPrice" value="5.40" 
-                  class="w-full bg-[#0d121a] border border-amber-500/60 rounded-xl px-3 py-2 text-sm text-white font-mono font-black focus:outline-none">
-              </div>
-            </div>
-            <button onclick="dispatchFlashSpecialFromModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-black text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-2 min-h-[44px]">
-              <i data-lucide="radio" class="w-4 h-4"></i>
-              <span>Broadcast 1-Hour Special</span>
-            </button>
-          </div>
-
-          <div class="bg-[#080b10] border border-gray-800 rounded-2xl p-4 sm:p-5 space-y-3">
-            <h5 class="text-xs sm:text-sm font-black text-gray-300 uppercase tracking-wider">Scale Operational Status</h5>
-            <p class="text-xs sm:text-sm text-gray-400">Keep drivers informed to manage queue times and avoid congestion along the scale corridor.</p>
-            <div class="grid grid-cols-3 gap-2 pt-1">
-              <button onclick="setModalScaleStatus('open')" id="mStatusOpen" class="py-2.5 px-2 rounded-xl bg-emerald-600 text-white font-bold text-xs flex flex-col items-center justify-center text-center shadow min-h-[44px]">
-                <span>Scales Open</span>
-              </button>
-              <button onclick="setModalScaleStatus('busy')" id="mStatusBusy" class="py-2.5 px-2 rounded-xl bg-gray-900 hover:bg-gray-800 text-amber-400 font-bold text-xs border border-gray-800 flex flex-col items-center justify-center text-center min-h-[44px]">
-                <span>Heavy Line</span>
-              </button>
-              <button onclick="setModalScaleStatus('closed')" id="mStatusClosed" class="py-2.5 px-2 rounded-xl bg-gray-900 hover:bg-gray-800 text-red-400 font-bold text-xs border border-gray-800 flex flex-col items-center justify-center text-center min-h-[44px]">
-                <span>Scale Break</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs sm:text-sm font-black uppercase tracking-wider text-gray-300">Today's Buy Rates ($/lb):</span>
-            <span class="text-xs text-gray-400 font-mono">Auto-converts to $/cwt</span>
-          </div>
-          <div id="authenticatedPriceInputs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
-        </div>
-
+      <div class="pt-3 border-t border-gray-800 text-right">
+        <button onclick="toggleHelpModal()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-xl">Got It</button>
       </div>
-
-      <!-- FOOTER -->
-      <div id="ownerModalFooter" class="hidden px-5 sm:px-6 py-4 border-t border-gray-800 bg-[#080b10] flex flex-wrap items-center justify-between gap-3">
-        <span id="saveStatus" class="text-xs sm:text-sm text-emerald-400 font-bold flex items-center gap-1.5 opacity-0 transition-opacity">
-          <i data-lucide="check-circle" class="w-4 h-4"></i> Rates published live to Duval apps!
-        </span>
-        <div class="flex items-center gap-2.5">
-          <button onclick="closeModal('ownerModal')" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm font-bold min-h-[40px]">
-            Close
-          </button>
-          <button onclick="saveAuthenticatedYardPrices()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs sm:text-sm font-black transition shadow min-h-[40px]">
-            Publish Daily Price Sheet
-          </button>
-        </div>
-      </div>
-
     </div>
   </div>
 
-  <!-- IT ADMIN & DEVELOPER CONSOLE MODAL (PROTECTED, HIDDEN FROM CUSTOMERS) -->
+  <!-- IT ADMIN & DEVELOPER CONSOLE MODAL -->
   <div id="devModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
     <div class="bg-[#0d121a] border border-gray-700 rounded-3xl w-full max-w-xl p-6 sm:p-7 space-y-5 shadow-2xl overflow-hidden relative">
-      
-      <!-- Dev Modal Header -->
       <div class="flex items-center justify-between border-b border-gray-800 pb-4">
         <div class="flex items-center gap-2.5 text-white font-bold text-base">
           <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -549,184 +430,56 @@
           </div>
         </div>
         <button onclick="closeModal('devModal')" class="text-gray-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
+          <i data-lucide="x" class="w-6 h-6"></i>
         </button>
       </div>
 
-      <!-- Dev Auth Screen (Requires Master PIN) -->
-      <div id="devAuthGate" class="space-y-4 py-3 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
-          <i data-lucide="shield" class="w-7 h-7"></i>
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-white">Live Data Synchronization</div>
+            <div class="text-[11px] text-emerald-400 font-mono">Polling direct REST API every 2,000ms</div>
+          </div>
+          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
         </div>
-        <div>
-          <h4 class="text-sm font-bold text-white">Developer Authentication Required</h4>
-          <p class="text-xs text-gray-400 mt-0.5">Enter IT Master PIN to access Supabase and system configs.</p>
-        </div>
-        <div class="max-w-xs mx-auto space-y-2">
-          <input type="password" maxlength="6" id="devMasterPinInput" placeholder="••••"
-            class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-4 py-2.5 text-center text-xl tracking-[0.5em] font-mono text-emerald-400 font-bold focus:border-emerald-500 focus:outline-none">
-          <p class="text-[11px] text-gray-500">Master PIN: <strong>0000</strong> or <strong>9999</strong></p>
-          <div id="devPinError" class="hidden text-xs text-red-400 font-bold">Incorrect IT Master PIN.</div>
-          <button onclick="unlockDevConsole()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5">
-            <i data-lucide="unlock" class="w-4 h-4"></i>
-            <span>Unlock IT Console</span>
-          </button>
+        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 flex items-center justify-between">
+          <div>
+            <div class="text-xs font-bold text-white">Audio Engine (Web Audio API)</div>
+            <div class="text-[11px] text-gray-400 font-mono">Synthesizer Active (587Hz &rarr; 880Hz)</div>
+          </div>
+          <button onclick="playNotificationAudio()" class="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-lg text-amber-400">Test Chime</button>
         </div>
       </div>
 
-      <!-- Dev Unlocked Body: Supabase Config & Diagnostics -->
-      <div id="devContent" class="hidden space-y-4 text-left">
-        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300 flex items-center justify-between">
-          <span class="flex items-center gap-1.5 font-bold">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            IT Session Authenticated
-          </span>
-          <button onclick="lockDevConsole()" class="text-[11px] text-gray-400 hover:text-white underline font-mono">Lock</button>
-        </div>
-
-        <!-- Direct Launcher for 10" Weighmaster Tablet Kiosk -->
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-amber-500/40 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-black uppercase text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="tablet" class="w-4 h-4"></i> Dedicated Scale Terminal Kiosk
-            </span>
-            <span class="text-[10px] text-gray-400 font-mono">yard_terminal.html</span>
-          </div>
-          <p class="text-xs text-gray-300">Open the standalone, full-screen counter interface designed for yard tablets:</p>
-          <div class="flex flex-wrap gap-2 pt-1">
-            <a href="./yard_terminal.html?yard=quickstop" target="_blank" class="px-3 py-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500 hover:text-black text-xs font-bold transition">
-              Quick Stop Kiosk
-            </a>
-            <a href="./yard_terminal.html?yard=berman" target="_blank" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500 hover:text-black text-xs font-bold transition">
-              Berman Kiosk
-            </a>
-            <a href="./yard_terminal.html" target="_blank" class="px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-xs font-bold transition">
-              Open Setup Screen
-            </a>
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <h4 class="text-xs font-black uppercase tracking-wider text-gray-300 flex items-center gap-1.5">
-            <i data-lucide="database" class="w-3.5 h-3.5 text-amber-400"></i> Supabase Cloud PostgreSQL Sync
-          </h4>
-          <div>
-            <label class="block text-xs font-bold text-gray-400 mb-1">Project REST Endpoint:</label>
-            <input type="text" id="sbUrlInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-amber-500">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-400 mb-1">Publishable Client Key:</label>
-            <input type="text" id="sbKeyInput" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-amber-500">
-          </div>
-        </div>
-
-        <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-gray-800">
-          <span id="sbTestStatus" class="text-xs font-bold font-mono text-emerald-400">Ready</span>
-          <div class="flex gap-2">
-            <button onclick="clearAppCache()" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-bold transition">
-              Clear Cache
-            </button>
-            <button onclick="saveSupabaseConfigModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-black transition shadow-sm">
-              Save &amp; Connect DB
-            </button>
-          </div>
-        </div>
+      <div class="pt-3 border-t border-gray-800 text-right">
+        <button onclick="closeModal('devModal')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl text-white">Close</button>
       </div>
-
     </div>
   </div>
 
   <!-- APPLICATION SCRIPT LOGIC -->
   <script>
-    const DEFAULT_SB_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co';
-    const DEFAULT_SB_KEY = 'sb_publishable_jKwgStk_B5zrIiAuZlFazA_1bSB4414';
-
-    let sbClient = null;
-    let activeUnit = 'lb';
+    let activeUnit = 'cwt'; 
     let authenticatedYardId = null;
-    let swRegistration = null;
-    let localBus = null;
+    let mobileBoardMode = 'cards';
+    let lastProcessedAlertTimestamp = 0;
 
-    // Listen on native BroadcastChannel for immediate cross-tab & multi-window updates
-    try {
-      if ('BroadcastChannel' in window) {
-        localBus = new BroadcastChannel('duval_sync_bus');
-        localBus.onmessage = (event) => {
-          handleIncomingSyncPacket(event.data);
-        };
-      }
-    } catch (e) {
-      console.warn('BroadcastChannel not supported:', e);
-    }
-
-    // Service Worker Registration for Push & Background Notifications
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-          .then((reg) => {
-            swRegistration = reg;
-            console.log('SW Registered for Duval Scrap PWA');
-            updatePushStatusUI();
-          })
-          .catch((err) => {
-            console.warn('SW registration fallback:', err);
-          });
-      });
-    }
+    const SB_REST_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co/rest/v1';
+    const SB_API_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
 
     const scrapyards = {
-      quickstop: {
-        id: 'quickstop',
-        name: 'Quick Stop Recycling',
-        address: '603 E 8th St, Jacksonville, FL 32206',
-        phone: '(904) 358-2460',
-        hours: 'Mon-Fri 8:00 AM - 4:00 PM',
-        status: 'Scales Open',
-        pin: '1234'
-      },
-      berman: {
-        id: 'berman',
-        name: 'Berman Bros, Inc.',
-        address: '2500 Evergreen Ave, Jacksonville, FL 32206',
-        phone: '(904) 355-9694',
-        hours: 'Mon-Fri 7:30 AM - 4:30 PM',
-        status: 'Scales Open',
-        pin: '2500'
-      },
-      jmr: {
-        id: 'jmr',
-        name: 'Jacksonville Metal Recycling',
-        address: '7101 Philips Hwy, Jacksonville, FL 32256',
-        phone: '(904) 731-9273',
-        hours: 'Mon-Fri 8:00 AM - 4:30 PM',
-        status: 'Scales Open',
-        pin: '7101'
-      },
-      cmc: {
-        id: 'cmc',
-        name: 'CMC Recycling',
-        address: '4840 N Lane Ave, Jacksonville, FL 32254',
-        phone: '(904) 786-2244',
-        hours: 'Mon-Fri 7:30 AM - 4:00 PM',
-        status: 'Scales Open',
-        pin: '4840'
-      },
-      tmr: {
-        id: 'tmr',
-        name: 'Trademark Metals (TMR)',
-        address: '3540 W Beaver St, Jacksonville, FL 32254',
-        phone: '(904) 387-9511',
-        hours: 'Mon-Fri 7:30 AM - 4:00 PM',
-        status: 'Scales Open',
-        pin: '3540'
-      }
+      quickstop: { id: 'quickstop', name: 'Quick Stop Recycling', shortName: 'Q-Stop', address: '603 E 8th St, Jacksonville, FL 32206', phone: '(904) 358-2460', hours: 'Mon-Fri 8:00 AM - 4:00 PM', status: 'Scales Open', pin: '1234' },
+      berman: { id: 'berman', name: 'Berman Bros, Inc.', shortName: 'Berman', address: '2500 Evergreen Ave, Jacksonville, FL 32206', phone: '(904) 355-9694', hours: 'Mon-Fri 7:30 AM - 4:30 PM', status: 'Scales Open', pin: '2500' },
+      jmr: { id: 'jmr', name: 'Jacksonville Metal Recycling', shortName: 'JMR', address: '7101 Philips Hwy, Jacksonville, FL 32256', phone: '(904) 731-9273', hours: 'Mon-Fri 8:00 AM - 4:30 PM', status: 'Scales Open', pin: '7101' },
+      cmc: { id: 'cmc', name: 'CMC Recycling', shortName: 'CMC', address: '4840 N Lane Ave, Jacksonville, FL 32254', phone: '(904) 786-2244', hours: 'Mon-Fri 7:30 AM - 4:00 PM', status: 'Scales Open', pin: '4840' },
+      tmr: { id: 'tmr', name: 'Trademark Metals (TMR)', shortName: 'TMR', address: '3540 W Beaver St, Jacksonville, FL 32254', phone: '(904) 387-9511', hours: 'Mon-Fri 7:30 AM - 4:00 PM', status: 'Scales Open', pin: '3540' }
     };
 
     let metalsCatalog = [
-      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', berman: 5.25, quickstop: 5.20, jmr: 5.05, cmc: 4.95, tmr: 4.90 },
-      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', berman: 5.05, quickstop: 5.00, jmr: 4.90, cmc: 4.80, tmr: 4.75 },
-      { id: 'copper_2', name: '#2 Copper (Burnt / Solder / Painted)', category: 'Copper', berman: 4.95, quickstop: 4.85, jmr: 4.70, cmc: 4.60, tmr: 4.55 },
-      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', berman: 4.55, quickstop: 4.45, jmr: 4.35, cmc: 4.25, tmr: 4.20 },
+      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', berman: 5.50, quickstop: 5.20, jmr: 5.05, cmc: 5.30, tmr: 4.90 },
+      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', berman: 5.10, quickstop: 5.00, jmr: 4.90, cmc: 5.10, tmr: 4.75 },
+      { id: 'copper_2', name: '#2 Copper (Burnt / Solder / Painted)', category: 'Copper', berman: 4.95, quickstop: 4.85, jmr: 4.70, cmc: 4.95, tmr: 4.55 },
+      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', berman: 4.55, quickstop: 4.45, jmr: 4.35, cmc: 4.55, tmr: 4.20 },
       { id: 'romex', name: 'Insulated Romex (House Wire)', category: 'Copper', berman: 2.25, quickstop: 2.20, jmr: 2.10, cmc: 2.05, tmr: 2.00 },
       { id: 'yellow_brass', name: 'Clean Yellow Brass', category: 'Brass', berman: 2.85, quickstop: 2.80, jmr: 2.75, cmc: 2.70, tmr: 2.65 },
       { id: 'red_brass', name: 'Red Brass / Composition', category: 'Brass', berman: 3.25, quickstop: 3.20, jmr: 3.15, cmc: 3.10, tmr: 3.05 },
@@ -742,186 +495,167 @@
       { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
     ];
 
-    // Notification Audio Synthesizer
-    function playNotificationAudio() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
-      } catch (e) {
-        // Handled silently
-      }
+    const marketTrends = [
+      { id: 'bare_bright', name: "Bare Bright Copper (#1 Clean Wire)", delta: "+$0.20/lb", isUp: true, start: "$4.90", end: "$5.05", comexPath: "M0,80 Q50,75 100,70 T200,65 T300,55 T400,50", localPath: "M0,70 Q50,60 100,55 T200,40 T300,30 T400,20", colorClass: "text-emerald-400", bgClass: "bg-emerald-500/15", borderClass: "border-emerald-500/30", hexColor: "#34d399", icon: "trending-up" },
+      { id: 'yellow_brass', name: "Clean Yellow Brass", delta: "+$0.05/lb", isUp: true, start: "$2.65", end: "$2.75", comexPath: "M0,60 Q50,55 100,55 T200,50 T300,48 T400,45", localPath: "M0,70 Q50,65 100,60 T200,50 T300,40 T400,30", colorClass: "text-amber-400", bgClass: "bg-amber-500/15", borderClass: "border-amber-500/30", hexColor: "#fbbf24", icon: "trending-up" },
+      { id: 'steel_hms', name: "HMS #1 Prepared Steel (1/4\")", delta: "-$10/GT", isUp: false, start: "$195", end: "$185", comexPath: "M0,20 Q50,25 100,30 T200,40 T300,50 T400,60", localPath: "M0,30 Q50,35 100,45 T200,60 T300,70 T400,80", colorClass: "text-red-400", bgClass: "bg-red-500/15", borderClass: "border-red-500/30", hexColor: "#f87171", icon: "trending-down" },
+      { id: 'alum_cans', name: "Aluminum UBC Cans (Clean)", delta: "+$0.04/lb", isUp: true, start: "$0.74", end: "$0.78", comexPath: "M0,70 Q50,68 100,65 T200,60 T300,58 T400,55", localPath: "M0,60 Q50,55 100,50 T200,40 T300,35 T400,30", colorClass: "text-sky-400", bgClass: "bg-sky-500/15", borderClass: "border-sky-500/30", hexColor: "#38bdf8", icon: "trending-up" }
+    ];
+
+    let currentTrendIdx = 0;
+
+    function getDuvalMedian(metalId) {
+      const metal = metalsCatalog.find(m => m.id === metalId);
+      if (!metal) return 0;
+      const rates = [metal.berman, metal.quickstop, metal.jmr, metal.cmc, metal.tmr].sort((a, b) => a - b);
+      return rates[2];
     }
 
-    // Direct OS Notification Dispatcher via Service Worker
-    async function triggerSystemNotification(title, body) {
-      playNotificationAudio();
-      addAlertToFeed(title, body);
+    function updateMarketTrendUI() {
+      const t = marketTrends[currentTrendIdx];
+      const nameEl = document.getElementById('trendMetalName');
+      const deltaEl = document.getElementById('trendDeltaBadge');
+      const iconEl = document.getElementById('trendIcon');
+      const startEl = document.getElementById('trendStartVal');
+      const endEl = document.getElementById('trendEndVal');
+      const comexP = document.getElementById('trendComexPath');
+      const localP = document.getElementById('trendLocalPath');
+      const legendL = document.getElementById('trendLegendLocal');
+      const glow = document.getElementById('trendGlow');
 
-      if (!("Notification" in window)) return;
-      if (Notification.permission !== "granted") return;
+      if (!nameEl) return;
 
-      const notifOptions = {
-        body: body,
-        icon: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"%3E%3Crect width="192" height="192" rx="36" fill="%2307090e"/%3E%3Cg fill="none" stroke="%23f59e0b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(16, 16)"%3E%3Cpath d="m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z" fill="%23f59e0b" fill-opacity="0.25"/%3E%3Cpath d="m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z" fill="%23f59e0b" fill-opacity="0.25"/%3E%3Cpath d="M56 168h48" stroke-width="12"/%3E%3Cpath d="M80 24v144" stroke-width="12"/%3E%3Cpath d="M24 56h112" stroke-width="12"/%3E%3Ccircle cx="80" cy="24" r="6" fill="%23f59e0b"/%3E%3C/g%3E%3C/svg%3E',
-        badge: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"%3E%3Crect width="192" height="192" rx="36" fill="%2307090e"/%3E%3Cpath d="M80 24v144M24 56h112" stroke="%23f59e0b" stroke-width="16" stroke-linecap="round"/%3E%3C/svg%3E',
-        vibrate: [200, 100, 200],
-        tag: 'duval-rate-alert',
-        renotify: true
-      };
+      const shortName = t.name.split(" (")[0];
+      nameEl.textContent = shortName;
 
-      try {
-        if (swRegistration && swRegistration.showNotification) {
-          await swRegistration.showNotification(title, notifOptions);
-          return;
-        }
-        if (navigator.serviceWorker && navigator.serviceWorker.ready) {
-          const reg = await navigator.serviceWorker.ready;
-          await reg.showNotification(title, notifOptions);
-          return;
-        }
-      } catch (err) {
-        console.warn('SW notification fallback to window:', err);
+      const medianRate = getDuvalMedian(t.id);
+      const mult = activeUnit === 'cwt' ? 100 : 1;
+      const unitSuffix = activeUnit === 'cwt' ? '/cwt' : '/lb';
+
+      deltaEl.textContent = t.delta;
+      deltaEl.className = "px-2 py-0.5 rounded text-[11px] font-black border transition-colors " + t.bgClass + " " + t.colorClass + " " + t.borderClass;
+
+      if (iconEl) {
+        iconEl.setAttribute('data-lucide', t.icon);
+        iconEl.className = "w-4 h-4 transition-colors " + t.colorClass;
       }
 
-      try {
-        new Notification(title, notifOptions);
-      } catch (e) {
-        console.warn('Notification construction error:', e);
+      if (startEl) startEl.textContent = t.start;
+      if (endEl) {
+        endEl.textContent = medianRate > 0 ? `$${(medianRate * mult).toFixed(2)}${unitSuffix}` : t.end;
       }
-    }
 
-    function addAlertToFeed(title, message) {
-      const feed = document.getElementById('notifFeedList');
-      const badge = document.getElementById('notifBadge');
-      if (!feed) return;
-
-      const alertEl = document.createElement('div');
-      alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
-      alertEl.innerHTML = `
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-amber-400 flex items-center gap-1.5">
-            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i> ${title}
-          </span>
-          <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-        </div>
-        <p class="text-xs text-gray-200">${message}</p>
-      `;
-      feed.prepend(alertEl);
-
-      if (badge) {
-        badge.classList.remove('hidden');
-        const count = parseInt(badge.textContent || '0', 10) + 1;
-        badge.textContent = count;
+      if (comexP) comexP.setAttribute('d', t.comexPath);
+      if (localP) {
+        localP.setAttribute('d', t.localPath);
+        localP.setAttribute('stroke', t.hexColor);
+        localP.style.filter = "drop-shadow(0px 4px 6px " + t.hexColor + "40)";
       }
+
+      if (legendL) {
+        legendL.className = "flex items-center gap-1.5 text-[11px] font-bold transition-colors " + t.colorClass;
+        legendL.innerHTML = '<div class="w-2 h-2 rounded-full shadow-[0_0_8px_' + t.hexColor + '80]" style="background-color: ' + t.hexColor + ';"></div> Duval Median';
+      }
+
+      if (glow) {
+        glow.className = t.isUp
+          ? "absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-1000 bg-emerald-500/5"
+          : "absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-1000 bg-red-500/5";
+      }
+
       if (window.lucide) window.lucide.createIcons();
     }
 
-    function updatePushStatusUI() {
-      const statusText = document.getElementById('pushStatusText');
-      const btn = document.getElementById('enablePushBtn');
-      if (!("Notification" in window)) {
-        if (statusText) statusText.textContent = "Status: Not supported on this browser";
-        if (btn) btn.disabled = true;
-        return;
-      }
-
-      if (Notification.permission === 'granted') {
-        if (statusText) statusText.textContent = "Status: Active & Connected ✓";
-        if (btn) {
-          btn.textContent = "Send Test Alert";
-          btn.className = "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition";
-        }
-      } else if (Notification.permission === 'denied') {
-        if (statusText) statusText.textContent = "Status: Blocked in Browser Settings";
-        if (btn) {
-          btn.textContent = "Unblock in Settings";
-          btn.className = "px-3 py-1.5 rounded-lg bg-red-600/80 text-white font-bold text-xs";
-        }
-      }
+    function startMarketTrendRotation() {
+      updateMarketTrendUI();
+      setInterval(() => {
+        currentTrendIdx = (currentTrendIdx + 1) % marketTrends.length;
+        updateMarketTrendUI();
+      }, 10000);
     }
 
-    async function requestPushPermissions() {
-      if (!("Notification" in window)) {
-        alert("This browser does not support system push notifications.");
-        return;
-      }
+    function toggleMobileBoardMode(mode) {
+      mobileBoardMode = mode;
+      const tWrap = document.getElementById('boardTableWrapper');
+      const cWrap = document.getElementById('boardCardsWrapper');
+      const tBtn = document.getElementById('viewTableBtn');
+      const cBtn = document.getElementById('viewCardsBtn');
 
-      if (Notification.permission === 'granted') {
-        sendDiagnosticTestNotification();
-        return;
-      }
-
-      try {
-        const permission = await Notification.requestPermission();
-        updatePushStatusUI();
-        if (permission === 'granted') {
-          triggerSystemNotification(
-            "Duval Scrap: Notifications Connected!",
-            "You will receive live Jacksonville price changes, yard queue alerts, and 1-hour flash specials."
-          );
-        }
-      } catch (err) {
-        console.error("Permission request error:", err);
-      }
-    }
-
-    function sendDiagnosticTestNotification() {
-      triggerSystemNotification(
-        "Duval Yard Alert (Test)",
-        "Bare Bright Copper spiked +$0.10/lb at Berman Bros ($5.25/lb). Scales are Open."
-      );
-    }
-
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('hidden');
-    }
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    }
-
-    // IT & DEV MODAL LOGIC
-    function openDevModal() {
-      openModal('devModal');
-      document.getElementById('devMasterPinInput').value = '';
-      document.getElementById('devPinError').classList.add('hidden');
-    }
-
-    function unlockDevConsole() {
-      const pin = document.getElementById('devMasterPinInput').value.trim();
-      if (pin === '0000' || pin === '9999' || pin === '1234') {
-        document.getElementById('devPinError').classList.add('hidden');
-        document.getElementById('devAuthGate').classList.add('hidden');
-        document.getElementById('devContent').classList.remove('hidden');
+      if (mode === 'cards') {
+        if (tWrap) tWrap.classList.add('hidden');
+        if (cWrap) cWrap.classList.remove('hidden');
+        if (cBtn) cBtn.className = "px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition";
+        if (tBtn) tBtn.className = "px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition";
+        renderMobileCards();
       } else {
-        document.getElementById('devPinError').classList.remove('hidden');
+        if (tWrap) tWrap.classList.remove('hidden');
+        if (cWrap) cWrap.classList.add('hidden');
+        if (tBtn) tBtn.className = "px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition";
+        if (cBtn) cBtn.className = "px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition";
       }
     }
 
-    function lockDevConsole() {
-      document.getElementById('devMasterPinInput').value = '';
-      document.getElementById('devAuthGate').classList.remove('hidden');
-      document.getElementById('devContent').classList.add('hidden');
-    }
+    function renderMobileCards() {
+      const cWrap = document.getElementById('boardCardsWrapper');
+      if (!cWrap) return;
+      cWrap.innerHTML = '';
 
-    function clearAppCache() {
-      if ('caches' in window) {
-        caches.keys().then(names => {
-          names.forEach(name => caches.delete(name));
-        });
-      }
-      alert('Application caches cleared.');
+      const mult = activeUnit === 'cwt' ? 100 : 1;
+      const unitSuffix = activeUnit === 'cwt' ? '/cwt' : '/lb';
+
+      metalsCatalog.forEach(metal => {
+        const yards = [
+          { key: 'berman', label: 'Berman', rate: metal.berman, color: 'text-emerald-400' },
+          { key: 'quickstop', label: 'Quick Stop', shortLabel: 'Q-Stop', rate: metal.quickstop, color: 'text-amber-300' },
+          { key: 'jmr', label: 'JMR', shortLabel: 'JMR', rate: metal.jmr, color: 'text-sky-400' },
+          { key: 'cmc', label: 'CMC', shortLabel: 'CMC', rate: metal.cmc, color: 'text-blue-400' },
+          { key: 'tmr', label: 'TMR', shortLabel: 'TMR', rate: metal.tmr, color: 'text-indigo-400' }
+        ];
+
+        const maxRate = Math.max(...yards.map(y => y.rate));
+        const topYards = yards.filter(y => y.rate === maxRate);
+        const topNames = topYards.map(y => y.shortLabel || y.label).join(' / ');
+
+        const card = document.createElement('div');
+        card.className = "bg-[#080b10] border border-gray-800 hover:border-gray-700 rounded-2xl p-3.5 space-y-3 transition shadow-sm flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 border-b border-gray-800/80 pb-2.5">
+              <div class="min-w-0 flex-1">
+                <h4 class="text-sm font-black text-white leading-snug break-words">${metal.name}</h4>
+                <span class="inline-block px-2 py-0.5 mt-1 rounded text-[10px] uppercase font-bold tracking-wider bg-gray-900 text-gray-400 border border-gray-800">${metal.category}</span>
+              </div>
+              <div class="text-right flex-shrink-0 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1.5 rounded-xl ml-2">
+                <span class="text-[9px] uppercase tracking-wider text-amber-400 font-extrabold block">Top Pay (${topNames})</span>
+                <span class="text-sm sm:text-base font-black font-mono text-amber-300">$${(maxRate * mult).toFixed(2)}${unitSuffix}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 pt-2.5 font-mono">
+              ${yards.map(y => {
+                const isTop = y.rate === maxRate;
+                const formattedPrice = `$${(y.rate * mult).toFixed(2)}`;
+                return `
+                  <div class="p-2 rounded-xl flex flex-col items-center justify-center transition min-w-0 ${
+                    isTop 
+                      ? 'bg-amber-500/15 border border-amber-500/50 shadow-sm ring-1 ring-amber-500/30' 
+                      : 'bg-[#0d121a] border border-gray-800/80'
+                  }">
+                    <span class="text-[11px] font-sans font-bold block ${y.color} truncate w-full text-center">
+                      ${y.shortLabel || y.label}
+                    </span>
+                    <span class="text-xs sm:text-sm font-black block mt-0.5 tracking-tight ${isTop ? 'text-amber-300 font-extrabold' : 'text-gray-200'}">
+                      ${formattedPrice}
+                    </span>
+                    ${isTop ? '<span class="inline-block mt-1 text-[8px] uppercase tracking-wider bg-amber-500 text-black font-black px-1.5 py-0.2 rounded-full">Top</span>' : '<span class="inline-block mt-1 text-[8px] text-transparent select-none">-</span>'}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+        cWrap.appendChild(card);
+      });
     }
 
     function setUnit(unit) {
@@ -940,15 +674,13 @@
         label.textContent = "$/cwt (100 lbs)";
       }
       renderApp();
+      updateMarketTrendUI();
     }
 
     function populateMetalDropdowns() {
       const calcSelect = document.getElementById('calcMetal');
-      const flashSelect = document.getElementById('flashMetalSelect');
       if (!calcSelect) return;
-
       calcSelect.innerHTML = '';
-      if (flashSelect) flashSelect.innerHTML = '';
 
       const categories = [...new Set(metalsCatalog.map(m => m.category))];
       categories.forEach(cat => {
@@ -959,13 +691,6 @@
           opt.value = metal.id;
           opt.textContent = metal.name;
           group.appendChild(opt);
-
-          if (flashSelect) {
-            const fOpt = document.createElement('option');
-            fOpt.value = metal.id;
-            fOpt.textContent = metal.name;
-            flashSelect.appendChild(fOpt);
-          }
         });
         calcSelect.appendChild(group);
       });
@@ -1030,20 +755,22 @@
           const row = document.createElement('tr');
           row.className = "hover:bg-gray-800/40 transition border-b border-gray-800/50";
           row.innerHTML = `
-            <td class="py-3 px-4 sm:px-5 font-semibold text-white sticky-col">
-              <div>${metal.name}</div>
-              <div class="text-[11px] text-gray-400 font-normal uppercase">${metal.category}</div>
+            <td class="py-2.5 sm:py-3 px-2 sm:px-4 font-semibold text-white sticky-col truncate">
+              <div class="truncate text-xs sm:text-sm font-bold">${metal.name}</div>
+              <div class="text-[9px] sm:text-[11px] text-gray-400 font-normal uppercase">${metal.category}</div>
             </td>
-            <td class="py-3 px-4 sm:px-5 text-right ${metal.berman === maxRate ? 'text-emerald-400 font-black' : 'text-gray-300'}">${formatVal(metal.berman)}</td>
-            <td class="py-3 px-4 sm:px-5 text-right ${metal.quickstop === maxRate ? 'text-amber-400 font-black' : 'text-gray-300'}">${formatVal(metal.quickstop)}</td>
-            <td class="py-3 px-4 sm:px-5 text-right ${metal.jmr === maxRate ? 'text-sky-400 font-black' : 'text-gray-300'}">${formatVal(metal.jmr)}</td>
-            <td class="py-3 px-4 sm:px-5 text-right ${metal.cmc === maxRate ? 'text-blue-400 font-black' : 'text-gray-300'}">${formatVal(metal.cmc)}</td>
-            <td class="py-3 px-4 sm:px-5 text-right ${metal.tmr === maxRate ? 'text-indigo-400 font-black' : 'text-gray-300'}">${formatVal(metal.tmr)}</td>
-            <td class="py-3 px-4 sm:px-5 text-center font-black text-amber-400">${formatVal(maxRate)}</td>
+            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.berman === maxRate ? 'text-emerald-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.berman)}</td>
+            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.quickstop === maxRate ? 'text-amber-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.quickstop)}</td>
+            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.jmr === maxRate ? 'text-sky-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.jmr)}</td>
+            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.cmc === maxRate ? 'text-blue-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.cmc)}</td>
+            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.tmr === maxRate ? 'text-indigo-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.tmr)}</td>
+            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center font-black text-amber-400 text-xs sm:text-sm bg-[#080b10]">${formatVal(maxRate)}</td>
           `;
           tbody.appendChild(row);
         });
       }
+
+      renderMobileCards();
 
       if (cardsGrid) {
         cardsGrid.innerHTML = '';
@@ -1079,171 +806,74 @@
       if (window.lucide) window.lucide.createIcons();
     }
 
-    function openOwnerModal() {
-      openModal('ownerModal');
-      if (authenticatedYardId) {
-        document.getElementById('ownerAuthScreen').classList.add('hidden');
-        document.getElementById('ownerDashboardScreen').classList.remove('hidden');
-        document.getElementById('ownerModalFooter').classList.remove('hidden');
-      } else {
-        document.getElementById('ownerAuthScreen').classList.remove('hidden');
-        document.getElementById('ownerDashboardScreen').classList.add('hidden');
-        document.getElementById('ownerModalFooter').classList.add('hidden');
-      }
+    function playNotificationAudio() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const audioCtx = new AudioCtx();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+      } catch (e) {}
     }
 
-    function simulateGoogleSignIn() {
-      document.getElementById('loginPinInput').value = '1234';
-      authenticateYardOperator();
-    }
-
-    function authenticateYardOperator() {
-      const yardSelect = document.getElementById('loginYardSelect');
-      const pinInput = document.getElementById('loginPinInput');
-      const errorMsg = document.getElementById('loginErrorMsg');
-      const yardKey = yardSelect.value;
-      const yard = scrapyards[yardKey];
-
-      if (yard && pinInput.value === yard.pin) {
-        errorMsg.classList.add('hidden');
-        authenticatedYardId = yardKey;
-        
-        document.getElementById('activeYardBadge').textContent = yard.name;
-        document.getElementById('activeYardBadge').classList.remove('hidden');
-        document.getElementById('authYardNameDisplay').textContent = yard.name;
-        document.getElementById('authYardAddrDisplay').textContent = yard.address;
-
-        // Update the direct tablet kiosk launcher link to auto-lock to this specific yard
-        const kioskLink = document.getElementById('launchTabletKioskBtn');
-        if (kioskLink) {
-          kioskLink.href = `./yard_terminal.html?yard=${yardKey}`;
-        }
-
-        buildAuthenticatedInputs(yardKey);
-        document.getElementById('ownerAuthScreen').classList.add('hidden');
-        document.getElementById('ownerDashboardScreen').classList.remove('hidden');
-        document.getElementById('ownerModalFooter').classList.remove('hidden');
-      } else {
-        errorMsg.classList.remove('hidden');
-      }
-    }
-
-    function logoutYardOperator() {
-      authenticatedYardId = null;
-      document.getElementById('loginPinInput').value = '';
-      document.getElementById('activeYardBadge').classList.add('hidden');
-      document.getElementById('ownerAuthScreen').classList.remove('hidden');
-      document.getElementById('ownerDashboardScreen').classList.add('hidden');
-      document.getElementById('ownerModalFooter').classList.add('hidden');
-    }
-
-    function buildAuthenticatedInputs(yardKey) {
-      const container = document.getElementById('authenticatedPriceInputs');
-      if (!container) return;
-      container.innerHTML = '';
-
-      metalsCatalog.forEach(metal => {
-        const val = metal[yardKey];
-        const div = document.createElement('div');
-        div.className = "bg-[#080b10] p-3 rounded-xl border border-gray-800 space-y-1";
-        div.innerHTML = `
-          <label class="block text-xs font-bold text-gray-300 truncate">${metal.name}</label>
-          <div class="relative">
-            <span class="absolute left-3 top-2 text-xs font-bold text-gray-500">$</span>
-            <input type="number" step="0.01" id="rateInput_${metal.id}" value="${val.toFixed(2)}"
-              class="w-full bg-[#0d121a] border border-gray-700 rounded-lg pl-7 pr-3 py-1.5 text-sm font-mono font-bold text-white focus:outline-none focus:border-amber-500">
+    function sendDiagnosticTestNotification() {
+      playNotificationAudio();
+      const feed = document.getElementById('notifFeedList');
+      const badge = document.getElementById('notifBadge');
+      if (feed) {
+        const alertEl = document.createElement('div');
+        alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
+        alertEl.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i> Scale House Test Ping
+            </span>
+            <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
+          <p class="text-xs text-gray-200">Terminal link confirmed! Rates and special alerts are syncing actively.</p>
         `;
-        container.appendChild(div);
-      });
-    }
-
-    function saveAuthenticatedYardPrices() {
-      if (!authenticatedYardId) return;
-
-      metalsCatalog.forEach(metal => {
-        const input = document.getElementById(`rateInput_${metal.id}`);
-        if (input) {
-          const val = parseFloat(input.value);
-          if (!isNaN(val)) {
-            metal[authenticatedYardId] = val;
-          }
-        }
-      });
-
-      renderApp();
-
-      const status = document.getElementById('saveStatus');
-      if (status) {
-        status.style.opacity = '1';
-        setTimeout(() => { status.style.opacity = '0'; }, 3000);
+        feed.prepend(alertEl);
       }
-
-      const yard = scrapyards[authenticatedYardId];
-      triggerSystemNotification(
-        `Updated: ${yard.name} Price Sheet`,
-        `New scale rates published. Check the Duval board for top payouts.`
-      );
-    }
-
-    function applyBatchShiftModal(category, delta) {
-      if (!authenticatedYardId) return;
-      metalsCatalog.filter(m => m.category === category).forEach(metal => {
-        const input = document.getElementById(`rateInput_${metal.id}`);
-        if (input) {
-          let curr = parseFloat(input.value) || metal[authenticatedYardId];
-          curr = Math.max(0.01, curr + delta);
-          input.value = curr.toFixed(2);
-        }
-      });
-    }
-
-    function setModalScaleStatus(statusType) {
-      if (!authenticatedYardId) return;
-      const statusMap = { open: 'Scales Open', busy: 'Heavy Line (15m+)', closed: 'Scale Break' };
-      const yard = scrapyards[authenticatedYardId];
-      yard.status = statusMap[statusType] || 'Scales Open';
-      renderApp();
-
-      triggerSystemNotification(
-        `${yard.name} Scale Status`,
-        `Scale operational update: ${yard.status}. Plan your haul accordingly.`
-      );
-    }
-
-    function dispatchFlashSpecialFromModal() {
-      const metalId = document.getElementById('flashMetalSelect').value;
-      const price = parseFloat(document.getElementById('flashSpecialPrice').value);
-      const metal = metalsCatalog.find(m => m.id === metalId);
-      const yard = scrapyards[authenticatedYardId];
-
-      if (metal && yard && !isNaN(price)) {
-        metal[authenticatedYardId] = price;
-        renderApp();
-
-        const banner = document.getElementById('flashSpecialBanner');
-        const text = document.getElementById('flashBannerText');
-        if (banner && text) {
-          text.textContent = `${yard.name}: ${metal.name} boosted to $${price.toFixed(2)}/lb!`;
-          banner.classList.remove('hidden');
-        }
-        closeModal('ownerModal');
-
-        triggerSystemNotification(
-          `🔥 FLASH SPECIAL: ${yard.name}`,
-          `${metal.name} boosted to $${price.toFixed(2)}/lb for the next 60 minutes!`
-        );
+      if (badge) {
+        badge.classList.remove('hidden');
+        badge.textContent = parseInt(badge.textContent || '0', 10) + 1;
       }
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    function dismissFlashBanner() {
-      const banner = document.getElementById('flashSpecialBanner');
-      if (banner) banner.classList.add('hidden');
-    }
-
-    function toggleNotificationDrawer() {
-      const drawer = document.getElementById('notifDrawer');
-      if (drawer) drawer.classList.toggle('hidden');
+    function addCustomNotification(title, message, iconName = 'bell') {
+      playNotificationAudio();
+      const feed = document.getElementById('notifFeedList');
+      const badge = document.getElementById('notifBadge');
+      if (feed) {
+        const alertEl = document.createElement('div');
+        alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
+        alertEl.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i> ${title}
+            </span>
+            <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <p class="text-xs text-gray-200">${message}</p>
+        `;
+        feed.prepend(alertEl);
+      }
+      if (badge) {
+        badge.classList.remove('hidden');
+        badge.textContent = parseInt(badge.textContent || '0', 10) + 1;
+      }
+      if (window.lucide) window.lucide.createIcons();
     }
 
     function clearAllNotifications() {
@@ -1256,197 +886,130 @@
       }
     }
 
-    function initSupabase() {
-      try {
-        const url = localStorage.getItem('duval_sb_url') || DEFAULT_SB_URL;
-        const key = localStorage.getItem('duval_sb_key') || DEFAULT_SB_KEY;
-
-        document.getElementById('sbUrlInput').value = url;
-        document.getElementById('sbKeyInput').value = key;
-
-        if (window.supabase && url && key) {
-          sbClient = window.supabase.createClient(url, key);
-          const statusText = document.getElementById('sbTestStatus');
-          if (statusText) statusText.textContent = "Supabase Connected ✓";
-
-          setupRealtimeSubscriptions();
-        }
-      } catch (err) {
-        console.warn("Supabase running local fallback:", err);
-      }
+    function toggleNotificationDrawer() {
+      const drawer = document.getElementById('notifDrawer');
+      if (drawer) drawer.classList.toggle('hidden');
     }
 
-    // Two-Way Realtime WebSocket Subscriptions for Instant Price and Status Updates
-    function setupRealtimeSubscriptions() {
-      if (!sbClient) return;
-
-      const pill = document.getElementById('liveSyncStatusPill');
-      const dot = document.getElementById('liveSyncPillDot');
-      const msg = document.getElementById('liveSyncStatusMsg');
-      if (pill) pill.classList.remove('hidden');
-
-      // 1. Direct Edge Broadcast Channel matching the Yard Terminal
-      const broadcastChannel = sbClient.channel('duval_live_channel', {
-        config: { 
-          broadcast: { ack: false, self: false }
-        }
-      });
-
-      broadcastChannel
-        .on('broadcast', { event: 'price_update' }, (response) => {
-          if (response.payload) {
-            handleIncomingSyncPacket(response.payload);
-          }
-        })
-        .on('broadcast', { event: 'status_update' }, (response) => {
-          if (response.payload) {
-            handleIncomingSyncPacket(response.payload);
-          }
-        })
-        .on('broadcast', { event: 'flash_update' }, (response) => {
-          if (response.payload) {
-            handleIncomingSyncPacket(response.payload);
-          }
-        })
-        .subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
-            if (dot) dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-            if (msg) msg.textContent = "Connected: Live Weighmaster Cloud Sync (<180ms)";
-          } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-            if (dot) dot.className = "w-2 h-2 rounded-full bg-amber-400";
-            if (msg) msg.textContent = "Local Sync Bus Active (Cloud Standby)";
-          }
-        });
-
-      // 2. Subscribe to Live Metals Table Changes (database persistence fallback)
-      sbClient
-        .channel('public:metals')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'metals' }, (payload) => {
-          handleIncomingMetalChange(payload.new);
-        })
-        .subscribe();
-
-      // 3. Subscribe to Yard Status Changes
-      sbClient
-        .channel('public:yards')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'yards' }, (payload) => {
-          handleIncomingYardChange(payload.new);
-        })
-        .subscribe();
-
-      // 4. Subscribe to 1-Hour Flash Specials
-      sbClient
-        .channel('public:flash_specials')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'flash_specials' }, (payload) => {
-          handleIncomingFlashSpecial(payload.new);
-        })
-        .subscribe();
+    function toggleHelpModal() {
+      const modal = document.getElementById('helpModal');
+      if (modal) modal.classList.toggle('hidden');
     }
 
-    // Unified Packet Handler across BroadcastChannel, WebSockets, and LocalStorage
-    function handleIncomingSyncPacket(pkt) {
-      if (!pkt) return;
-
-      if (pkt.type === 'price_batch' && pkt.rates && pkt.yard) {
-        pkt.rates.forEach(r => {
-          const localM = metalsCatalog.find(m => m.id === r.id);
-          if (localM && localM[pkt.yard] !== undefined) {
-            localM[pkt.yard] = parseFloat(r.rate);
-          }
-        });
-        playNotificationAudio();
-        renderApp();
-      } else if (pkt.type === 'status' && pkt.yard && pkt.status) {
-        if (scrapyards[pkt.yard]) {
-          scrapyards[pkt.yard].status = pkt.status;
-          renderApp();
-          playNotificationAudio();
-        }
-      } else if (pkt.type === 'flash_special') {
-        handleIncomingFlashSpecial({
-          yard_name: pkt.yardName,
-          metal_name: pkt.metalName,
-          price: pkt.price
-        });
-      }
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
     }
 
-    function handleIncomingMetalChange(record) {
-      if (!record || !record.id) return;
-      const metal = metalsCatalog.find(m => m.id === record.id);
-      if (metal) {
-        let changed = false;
-        ['berman', 'quickstop', 'jmr', 'cmc', 'tmr'].forEach(k => {
-          const field = `${k}_rate`;
-          if (record[field] !== undefined && record[field] !== null) {
-            metal[k] = parseFloat(record[field]);
-            changed = true;
-          }
-        });
-        if (changed) {
-          playNotificationAudio();
-          renderApp();
-          triggerSystemNotification(
-            `Live Rate Update: ${metal.name}`,
-            `New rates posted across Duval yards. Top payout re-calculated.`
-          );
-        }
-      }
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
     }
 
-    function handleIncomingYardChange(record) {
-      if (!record || !record.id) return;
-      const yard = scrapyards[record.id];
-      if (yard && record.status) {
-        yard.status = record.status;
-        renderApp();
-        triggerSystemNotification(
-          `${yard.name} Scale Status`,
-          `Scale status changed to: ${yard.status}`
-        );
-      }
-    }
+    function openDevModal() { openModal('devModal'); }
 
-    function handleIncomingFlashSpecial(record) {
-      if (!record) return;
+    function dismissFlashBanner() {
       const banner = document.getElementById('flashSpecialBanner');
-      const text = document.getElementById('flashBannerText');
-      if (banner && text) {
-        text.textContent = `${record.yard_name}: ${record.metal_name} boosted to $${parseFloat(record.price).toFixed(2)}/lb!`;
-        banner.classList.remove('hidden');
-      }
-      playNotificationAudio();
-      triggerSystemNotification(
-        `🔥 1-Hour Flash Special: ${record.yard_name}`,
-        `${record.metal_name} boosted to $${parseFloat(record.price).toFixed(2)}/lb for the next 60 minutes!`
-      );
+      if (banner) banner.classList.add('hidden');
     }
 
-    // LocalStorage Cross-Tab Listener Fallback
-    window.addEventListener('storage', (e) => {
-      if (e.key === 'duval_ws_event' && e.newValue) {
-        try {
-          const evt = JSON.parse(e.newValue);
-          handleIncomingSyncPacket(evt);
-        } catch (err) {}
-      }
-    });
-
-    function saveSupabaseConfigModal() {
-      const url = document.getElementById('sbUrlInput').value.trim();
-      const key = document.getElementById('sbKeyInput').value.trim();
-      localStorage.setItem('duval_sb_url', url);
-      localStorage.setItem('duval_sb_key', key);
-      initSupabase();
-      closeModal('devModal');
+    // Direct Database REST Polling
+    async function pollLiveDatabase() {
+      try {
+        const resAlerts = await fetch(`${SB_REST_URL}/flash_specials?select=*&order=created_at.desc&limit=1`, {
+          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
+        });
+        if (resAlerts.ok) {
+          const rows = await resAlerts.json();
+          if (rows && rows.length > 0) {
+            const latest = rows[0];
+            const alertTime = new Date(latest.created_at).getTime();
+            if (alertTime > lastProcessedAlertTimestamp) {
+              if (lastProcessedAlertTimestamp !== 0) {
+                if (latest.metal_id === 'ping') {
+                  sendDiagnosticTestNotification();
+                } else if (latest.metal_id === 'spot_shift') {
+                  const iconType = parseFloat(latest.price) >= 0 ? 'trending-up' : 'trending-down';
+                  addCustomNotification(`${latest.yard_name}: Spot Shift`, latest.metal_name, iconType);
+                  fetchLiveRatesFromDb();
+                } else if (latest.metal_id === 'price_batch') {
+                  addCustomNotification(`${latest.yard_name}`, 'New intake price sheet posted. Scale rates refreshed.', 'check-circle');
+                  fetchLiveRatesFromDb();
+                } else if (latest.metal_id === 'status_update') {
+                  const yardKey = latest.yard_id;
+                  if (scrapyards[yardKey]) {
+                    scrapyards[yardKey].status = latest.metal_name;
+                    renderApp();
+                  }
+                  addCustomNotification(`${latest.yard_name}`, `Scale status updated to: ${latest.metal_name}`, 'clock');
+                } else {
+                  playNotificationAudio();
+                  const banner = document.getElementById('flashSpecialBanner');
+                  const text = document.getElementById('flashBannerText');
+                  if (banner && text) {
+                    text.textContent = `${latest.yard_name}: ${latest.metal_name} boosted to $${parseFloat(latest.price).toFixed(2)}/lb!`;
+                    banner.classList.remove('hidden');
+                  }
+                  addCustomNotification(`🔥 Flash Special: ${latest.yard_name}`, `${latest.metal_name} boosted to $${parseFloat(latest.price).toFixed(2)}/lb for the next 60 minutes!`, 'flame');
+                }
+              }
+              lastProcessedAlertTimestamp = alertTime;
+            }
+          }
+        }
+      } catch (e) {}
     }
 
-    // Initialize DOM
+    async function fetchLiveRatesFromDb() {
+      try {
+        const res = await fetch(`${SB_REST_URL}/metals?select=*`, {
+          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
+        });
+        if (res.ok) {
+          const rows = await res.json();
+          rows.forEach(r => {
+            const m = metalsCatalog.find(item => item.id === r.id);
+            if (m) {
+              if (r.berman_rate !== undefined) m.berman = parseFloat(r.berman_rate);
+              if (r.quickstop_rate !== undefined) m.quickstop = parseFloat(r.quickstop_rate);
+              if (r.jmr_rate !== undefined) m.jmr = parseFloat(r.jmr_rate);
+              if (r.cmc_rate !== undefined) m.cmc = parseFloat(r.cmc_rate);
+              if (r.tmr_rate !== undefined) m.tmr = parseFloat(r.tmr_rate);
+            }
+          });
+          renderApp();
+          updateMarketTrendUI();
+        }
+      } catch (e) {}
+    }
+
+    async function fetchYardStatusesFromDb() {
+      try {
+        const res = await fetch(`${SB_REST_URL}/yards?select=*`, {
+          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
+        });
+        if (res.ok) {
+          const rows = await res.json();
+          let changed = false;
+          rows.forEach(r => {
+            if (scrapyards[r.id] && r.status && scrapyards[r.id].status !== r.status) {
+              scrapyards[r.id].status = r.status;
+              changed = true;
+            }
+          });
+          if (changed) renderApp();
+        }
+      } catch (e) {}
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       populateMetalDropdowns();
       renderApp();
-      initSupabase();
-      updatePushStatusUI();
+      startMarketTrendRotation();
+      fetchLiveRatesFromDb();
+      fetchYardStatusesFromDb();
+      setInterval(pollLiveDatabase, 2000);
+      setInterval(fetchYardStatusesFromDb, 5000);
       if (window.lucide) window.lucide.createIcons();
     });
   </script>
