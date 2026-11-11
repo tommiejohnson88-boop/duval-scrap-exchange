@@ -1,228 +1,188 @@
-<!-- Header Actions -->
-<div class="flex items-center space-x-1.5 sm:space-x-2">
+<!-- Header Right Buttons -->
+<div class="header-actions">
   <!-- Haul Manifest Button (Task 2) -->
-  <button onclick="openManifestModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
-    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+  <button onclick="openManifestModal()" class="btn-gold">
+    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
+    </svg>
     <span>Haul Manifest</span>
-    <span id="manifestBadgeCount" class="w-4 h-4 rounded-full bg-black text-amber-400 text-[10px] flex items-center justify-center font-bold">2</span>
+    <span id="manifestBadgeCount" class="badge-counter">2</span>
   </button>
 
-  <!-- Alert Bell -->
-  <button onclick="toggleAlertDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition relative">
-    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-    <span id="headerBellDot" class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-[#0d121a]"></span>
-  </button>
-
-  <!-- Yard Directory / Calling Drawer -->
-  <button onclick="toggleYardsDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition" title="Yards & Directions">
-    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+  <!-- Yards & Directions Drawer Button -->
+  <button onclick="toggleYardsDrawer()" class="btn-icon" title="Yards Directory & Directions">
+    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
   </button>
 </div>
 
 
-<!-- UNIT & QUICK SINGLE CALCULATOR BAR -->
-<div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-3.5 shadow-sm space-y-3">
-  <div class="flex items-center justify-between flex-wrap gap-2">
-    <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-      <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+<!-- SINGLE COMMODITY CALCULATOR CARD -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">
+      <svg class="icon-sm" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
+      </svg>
       Single Commodity Calculator
     </span>
-    <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-xl">
-      <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black">$/lb</button>
-      <button id="btnUnitCwt" onclick="switchRateUnit('cwt')" class="px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white">$/cwt (100 lbs)</button>
+    <div class="pill-switcher">
+      <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="pill-btn active">$/lb</button>
+      <button id="btnUnitCwt" onclick="switchRateUnit('cwt')" class="pill-btn">$/cwt (100 lbs)</button>
     </div>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-    <div class="sm:col-span-7">
-      <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Select Metal:</label>
-      <select id="calcMetalSelect" onchange="recalculatePayouts()" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-amber-500">
-      </select>
+  <div class="calc-row">
+    <div class="form-group">
+      <label>Select Metal Grade:</label>
+      <select id="calcMetalSelect" onchange="recalculatePayouts()"></select>
     </div>
-    <div class="sm:col-span-5">
-      <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Weight (<span id="calcWeightLabel">lbs</span>):</label>
-      <div class="relative">
-        <input type="number" id="calcWeightInput" value="100" min="1" oninput="recalculatePayouts()"
-          class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono font-black text-amber-400 focus:outline-none focus:border-amber-500">
-      </div>
+    <div class="form-group">
+      <label>Weight (<span id="calcWeightLabel">lbs</span>):</label>
+      <input type="number" id="calcWeightInput" value="100" min="1" oninput="recalculatePayouts()">
     </div>
   </div>
 
-  <!-- Quick Single Payout Cards (5 Yards) -->
-  <div id="singlePayoutGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
-  </div>
+  <!-- Quick 5-Yard Payout Grid -->
+  <div id="singlePayoutGrid" class="payout-grid"></div>
 </div>
 
-<!-- DAILY SCRAP BOARD (Cards vs Table) -->
-<div class="bg-[#0d121a] border border-gray-800 rounded-2xl overflow-hidden shadow-sm">
-  <div class="p-3.5 border-b border-gray-800 bg-[#080b10] flex items-center justify-between flex-wrap gap-2">
+<!-- SCRAP BOARD COMPARISON (Cards vs Table) -->
+<div class="card" style="padding:0; overflow:hidden;">
+  <div class="card-header" style="padding:12px 14px; background:var(--card-inner); border-bottom:1px solid var(--border); margin:0;">
     <div>
-      <h2 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
-        <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
-        Duval County Scrap Board
+      <h2 style="font-size:13px; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:6px;">
+        <svg class="icon-sm" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+          <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>
+        </svg>
+        Duval County Daily Board
       </h2>
-      <p class="text-[10px] text-gray-400">Live comparison across all 5 major Jacksonville yards</p>
+      <p style="font-size:10px; color:var(--text-muted); margin-top:2px;">Compare all 5 commercial yards in Jacksonville</p>
     </div>
-    <div class="inline-flex p-0.5 bg-[#07090e] border border-gray-800 rounded-xl text-xs">
-      <button id="viewBtnCards" onclick="setBoardMode('cards')" class="px-3 py-1 rounded-lg font-black bg-amber-500 text-black">Cards</button>
-      <button id="viewBtnTable" onclick="setBoardMode('table')" class="px-3 py-1 rounded-lg font-bold text-gray-400 hover:text-white">Table</button>
+    <div class="pill-switcher">
+      <button id="viewBtnCards" onclick="setBoardMode('cards')" class="pill-btn active">Cards</button>
+      <button id="viewBtnTable" onclick="setBoardMode('table')" class="pill-btn">Table</button>
     </div>
   </div>
 
-  <!-- CARDS VIEW CONTAINER -->
-  <div id="boardCardsContainer" class="p-3 space-y-2.5">
-  </div>
+  <!-- Cards Container -->
+  <div id="boardCardsContainer" style="padding:12px;"></div>
 
-  <!-- TABLE VIEW CONTAINER -->
-  <div id="boardTableContainer" class="hidden-modal overflow-x-auto">
-    <table class="w-full text-left text-xs">
-      <thead class="bg-[#07090e] text-gray-400 uppercase font-black border-b border-gray-800 text-[10px]">
+  <!-- Table Container -->
+  <div id="boardTableContainer" style="display:none;" class="table-wrap">
+    <table>
+      <thead>
         <tr>
-          <th class="py-2.5 px-3">Grade</th>
-          <th class="py-2.5 px-2 text-right">Quick Stop</th>
-          <th class="py-2.5 px-2 text-right">Berman</th>
-          <th class="py-2.5 px-2 text-right">JMR</th>
-          <th class="py-2.5 px-2 text-right">CMC</th>
-          <th class="py-2.5 px-2 text-right">TMR</th>
-          <th class="py-2.5 px-3 text-right text-amber-400">Top Pay</th>
+          <th>Grade</th>
+          <th class="text-right">Quick Stop</th>
+          <th class="text-right">Berman</th>
+          <th class="text-right">JMR</th>
+          <th class="text-right">CMC</th>
+          <th class="text-right">TMR</th>
+          <th class="text-right" style="color:var(--gold);">Top Pay</th>
         </tr>
       </thead>
-      <tbody id="boardTableBody" class="divide-y divide-gray-800/60 font-mono">
-      </tbody>
+      <tbody id="boardTableBody" class="font-mono"></tbody>
     </table>
   </div>
 </div>
 
 
-  <!-- Modal Header -->
-  <div class="px-4 py-3.5 bg-[#080b10] border-b border-gray-800 flex items-center justify-between flex-shrink-0">
-    <div class="flex items-center space-x-2.5">
-      <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
-      </div>
+  <div class="modal-header">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <svg class="icon-md" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
+      </svg>
       <div>
-        <h3 class="text-sm font-black text-white uppercase tracking-wider">Truck Haul Manifest</h3>
-        <p class="text-[11px] text-gray-400">Combine mixed metals to find the highest-paying yard for your entire load</p>
+        <h3 style="font-size:13px; font-weight:900; color:#fff; text-transform:uppercase;">Truck Haul Manifest</h3>
+        <p style="font-size:10px; color:var(--text-muted);">Combine mixed metals to see which yard pays top dollar for your entire truckload</p>
       </div>
     </div>
-    <button onclick="closeManifestModal()" class="p-1.5 rounded-xl bg-gray-800 text-gray-400 hover:text-white transition">✕</button>
+    <button onclick="closeManifestModal()" class="close-btn">✕</button>
   </div>
 
-  <!-- Scrollable Manifest Metal Rows -->
-  <div class="flex-1 overflow-y-auto p-4 space-y-3">
-    
-    <div class="flex items-center justify-between text-xs">
-      <span class="font-black uppercase text-gray-400">Truck Bed Commodities:</span>
-      <button onclick="clearManifest()" class="text-[11px] text-red-400 hover:underline font-bold">Clear All</button>
+  <div class="modal-body">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Truck Bed Commodities:</span>
+      <button onclick="clearManifest()" style="background:none; border:none; color:var(--red); font-size:11px; font-weight:700; cursor:pointer;">Clear All</button>
     </div>
 
-    <div id="manifestRowsList" class="space-y-2">
-      <!-- Dynamic Metal Rows injected here -->
-    </div>
+    <div id="manifestRowsList" style="display:flex; flex-direction:column; gap:8px;"></div>
 
-    <!-- Add Metal Row Button -->
-    <button onclick="addManifestRow()" class="w-full py-2.5 rounded-xl bg-[#080b10] hover:bg-gray-800/80 border border-dashed border-gray-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 active:scale-95">
-      <span>+ Add Another Metal to Truck</span>
+    <button onclick="addManifestRow()" class="btn-add-metal">
+      + Add Another Metal to Truck
     </button>
 
-    <!-- Manifest Total Comparison Board across 5 Yards -->
-    <div class="pt-3 border-t border-gray-800 space-y-2">
-      <span class="text-xs font-black uppercase text-gray-400 block">Total Truckload Payout by Yard:</span>
-      
-      <div id="manifestYardPayouts" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <!-- Dynamic Yard Totals injected here -->
-      </div>
+    <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:4px;">
+      <span style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px;">Total Truckload Payout by Yard:</span>
+      <div id="manifestYardPayouts" class="manifest-payouts-grid"></div>
     </div>
-
   </div>
 
-  <!-- Modal Footer -->
-  <div class="px-4 py-3 bg-[#080b10] border-t border-gray-800 flex items-center justify-between flex-shrink-0">
-    <div class="text-[11px] text-gray-400">
-      Winning Yard: <span id="manifestBestYardLabel" class="font-mono font-bold text-emerald-400">Calculating...</span>
+  <div class="modal-footer">
+    <div style="font-size:11px; color:var(--text-muted);">
+      Winning Yard: <span id="manifestBestYardLabel" class="font-mono" style="font-weight:900; color:var(--green);">Calculating...</span>
     </div>
-    <button onclick="closeManifestModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs transition">
-      Done
-    </button>
+    <button onclick="closeManifestModal()" class="btn-gold" style="padding:6px 16px;">Done</button>
   </div>
 
 </div>
 
 
-  <div class="space-y-3">
-    <!-- Quick Stop -->
-    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
-      <div class="flex justify-between items-start">
-        <div>
-          <h4 class="text-xs font-bold text-white">Quick Stop Recycling</h4>
-          <p class="text-[10px] text-gray-400">603 E 8th St, Jacksonville</p>
-        </div>
-        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043582460" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
-        <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
-      </div>
+  <div class="yard-contact-card">
+    <div style="display:flex; justify-content:space-between;">
+      <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Quick Stop Recycling</h4><p style="font-size:10px; color:var(--text-muted);">603 E 8th St, Jacksonville</p></div>
+      <span class="live-pill">Open</span>
     </div>
-
-    <!-- Berman Bros -->
-    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
-      <div class="flex justify-between items-start">
-        <div>
-          <h4 class="text-xs font-bold text-white">Berman Bros, Inc.</h4>
-          <p class="text-[10px] text-gray-400">2500 Evergreen Ave, Jacksonville</p>
-        </div>
-        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043559694" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
-        <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
-      </div>
+    <div class="contact-actions">
+      <a href="tel:9043582460" class="contact-btn btn-call">Call Desk</a>
+      <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="contact-btn btn-dir">Directions</a>
     </div>
+  </div>
 
-    <!-- Jacksonville Metal Recycling -->
-    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
-      <div class="flex justify-between items-start">
-        <div>
-          <h4 class="text-xs font-bold text-white">Jacksonville Metal Recycling</h4>
-          <p class="text-[10px] text-gray-400">7101 Philips Hwy, Jacksonville</p>
-        </div>
-        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9047319273" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
-        <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
-      </div>
+  <div class="yard-contact-card">
+    <div style="display:flex; justify-content:space-between;">
+      <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Berman Bros, Inc.</h4><p style="font-size:10px; color:var(--text-muted);">2500 Evergreen Ave, Jacksonville</p></div>
+      <span class="live-pill">Open</span>
     </div>
-
-    <!-- CMC Recycling -->
-    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
-      <div class="flex justify-between items-start">
-        <div>
-          <h4 class="text-xs font-bold text-white">CMC Recycling Jacksonville</h4>
-          <p class="text-[10px] text-gray-400">4840 N Lane Ave, Jacksonville</p>
-        </div>
-        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9047862244" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
-        <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
-      </div>
+    <div class="contact-actions">
+      <a href="tel:9043559694" class="contact-btn btn-call">Call Desk</a>
+      <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="contact-btn btn-dir">Directions</a>
     </div>
+  </div>
 
-    <!-- Trademark Metals (TMR) -->
-    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
-      <div class="flex justify-between items-start">
-        <div>
-          <h4 class="text-xs font-bold text-white">Trademark Metals (TMR)</h4>
-          <p class="text-[10px] text-gray-400">3540 W Beaver St, Jacksonville</p>
-        </div>
-        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
-      </div>
-      <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043879511" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
-        <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
-      </div>
+  <div class="yard-contact-card">
+    <div style="display:flex; justify-content:space-between;">
+      <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Jacksonville Metal Recycling</h4><p style="font-size:10px; color:var(--text-muted);">7101 Philips Hwy, Jacksonville</p></div>
+      <span class="live-pill">Open</span>
+    </div>
+    <div class="contact-actions">
+      <a href="tel:9047319273" class="contact-btn btn-call">Call Desk</a>
+      <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="contact-btn btn-dir">Directions</a>
+    </div>
+  </div>
+
+  <div class="yard-contact-card">
+    <div style="display:flex; justify-content:space-between;">
+      <div><h4 style="font-size:12px; font-weight:800; color:#fff;">CMC Recycling Jacksonville</h4><p style="font-size:10px; color:var(--text-muted);">4840 N Lane Ave, Jacksonville</p></div>
+      <span class="live-pill">Open</span>
+    </div>
+    <div class="contact-actions">
+      <a href="tel:9047862244" class="contact-btn btn-call">Call Desk</a>
+      <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="contact-btn btn-dir">Directions</a>
+    </div>
+  </div>
+
+  <div class="yard-contact-card">
+    <div style="display:flex; justify-content:space-between;">
+      <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Trademark Metals (TMR)</h4><p style="font-size:10px; color:var(--text-muted);">3540 W Beaver St, Jacksonville</p></div>
+      <span class="live-pill">Open</span>
+    </div>
+    <div class="contact-actions">
+      <a href="tel:9043879511" class="contact-btn btn-call">Call Desk</a>
+      <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="contact-btn btn-dir">Directions</a>
     </div>
   </div>
 </div>
