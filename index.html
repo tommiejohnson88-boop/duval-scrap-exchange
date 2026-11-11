@@ -1,1017 +1,249 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Duval Scrap &amp; Metals Exchange | Jacksonville, FL</title>
-  
-  <!-- Classic Gold Balance Scale Favicon & Mobile Touch Icons -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cg fill='none' stroke='%23f59e0b' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' transform='translate(16, 16)'%3E%3Cpath d='m128 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='m16 128 24-64 24 64c-7 5.2-15.3 8-24 8s-17-2.8-24-8Z' fill='%23f59e0b' fill-opacity='0.25'/%3E%3Cpath d='M56 168h48' stroke-width='12'/%3E%3Cpath d='M80 24v144' stroke-width='12'/%3E%3Cpath d='M24 56h112' stroke-width='12'/%3E%3Ccircle cx='80' cy='24' r='6' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E?v=scale_gold_v2">
+<!-- Header Actions -->
+<div class="flex items-center space-x-1.5 sm:space-x-2">
+  <!-- Haul Manifest Button (Task 2) -->
+  <button onclick="openManifestModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+    <i data-lucide="truck" class="w-3.5 h-3.5"></i>
+    <span>Haul Manifest</span>
+    <span id="manifestBadgeCount" class="w-4 h-4 rounded-full bg-black text-amber-400 text-[10px] flex items-center justify-center font-bold">0</span>
+  </button>
 
-  <meta name="theme-color" content="#07090e">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Duval Scrap">
+  <!-- Alert Bell -->
+  <button onclick="toggleAlertDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition relative">
+    <i data-lucide="bell" class="w-4 h-4"></i>
+    <span id="headerBellDot" class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-[#0d121a]"></span>
+  </button>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Yard Directory / Calling Drawer -->
+  <button onclick="toggleYardsDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition" title="Yards & Directions">
+    <i data-lucide="map-pin" class="w-4 h-4"></i>
+  </button>
+</div>
 
-  <style>
-    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-    input, select, button { font-size: 16px; }
 
-    @keyframes liveCellPulse {
-      0% { background-color: rgba(245, 158, 11, 0.4); }
-      100% { background-color: transparent; }
-    }
-    .cell-live-update { animation: liveCellPulse 1.8s ease-out; }
+<!-- UNIT & QUICK SINGLE CALCULATOR BAR -->
+<div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-3.5 shadow-sm space-y-3">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+      <i data-lucide="calculator" class="w-4 h-4 text-amber-400"></i> Single Commodity Calculator
+    </span>
+    <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-xl">
+      <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black">$/lb</button>
+      <button id="btnUnitCwt" onclick="switchRateUnit('cwt')" class="px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white">$/cwt (100 lbs)</button>
+    </div>
+  </div>
 
-    @keyframes marqueeScroll {
-      0% { transform: translate3d(0, 0, 0); }
-      100% { transform: translate3d(-50%, 0, 0); }
-    }
-    .animate-marquee {
-      display: inline-flex;
-      white-space: nowrap;
-      will-change: transform;
-      animation: marqueeScroll 28s linear infinite;
-    }
-    .animate-marquee:hover { animation-play-state: paused; }
-
-    .table-scroll { -webkit-overflow-scrolling: touch; }
-    .table-scroll::-webkit-scrollbar { height: 6px; }
-    .table-scroll::-webkit-scrollbar-track { background: #0f141c; }
-    .table-scroll::-webkit-scrollbar-thumb { background: #374151; border-radius: 9999px; }
-
-    @media (max-width: 768px) {
-      .sticky-col {
-        position: sticky;
-        left: 0;
-        z-index: 10;
-        background-color: #0f141c;
-        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.5);
-        max-width: 125px;
-        min-width: 115px !important;
-        width: 120px;
-      }
-    }
-
-    @keyframes flashPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.85; transform: scale(1.02); }
-    }
-    .flash-pulse { animation: flashPulse 1.4s infinite; }
-  </style>
-</head>
-<body class="bg-[#07090e] text-gray-100 min-h-screen flex flex-col antialiased selection:bg-amber-500 selection:text-black">
-
-  <!-- FLASH SPECIAL ALERT BANNER -->
-  <div id="flashSpecialBanner" class="hidden bg-gradient-to-r from-red-600 via-amber-600 to-red-600 text-white px-4 py-2.5 shadow-lg border-b border-amber-400/30">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-sm">
-      <div class="flex items-center gap-2">
-        <span class="bg-black/50 text-amber-300 font-bold px-2.5 py-1 rounded-md uppercase tracking-wider text-xs flash-pulse flex items-center gap-1.5">
-          <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i> 1-Hour Flash Special
-        </span>
-        <span id="flashBannerText" class="font-medium text-sm sm:text-base">Quick Stop: Bare Bright Copper boosted to $5.40/lb!</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="text-amber-100 font-mono text-xs sm:text-sm flex items-center gap-1">
-          <i data-lucide="timer" class="w-4 h-4"></i> Ends in: <strong id="flashCountdown" class="text-white font-bold tracking-wider">58:40</strong>
-        </span>
-        <button onclick="dismissFlashBanner()" class="text-white hover:text-amber-200 text-xs sm:text-sm font-medium underline ml-2">Dismiss</button>
+  <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+    <div class="sm:col-span-7">
+      <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Select Metal:</label>
+      <select id="calcMetalSelect" onchange="recalculatePayouts()" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-bold text-white focus:outline-none focus:border-amber-500">
+      </select>
+    </div>
+    <div class="sm:col-span-5">
+      <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Weight (<span id="calcWeightLabel">lbs</span>):</label>
+      <div class="relative">
+        <input type="number" id="calcWeightInput" value="100" min="1" oninput="recalculatePayouts()"
+          class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs font-mono font-black text-amber-400 focus:outline-none focus:border-amber-500">
       </div>
     </div>
   </div>
 
-  <!-- TOP HEADER -->
-  <header class="w-full bg-[#0d121a] border-b border-gray-800/80 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+  <!-- Quick Single Payout Cards (5 Yards) -->
+  <div id="singlePayoutGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
+  </div>
+</div>
+
+<!-- DAILY SCRAP BOARD (Cards vs Table) -->
+<div class="bg-[#0d121a] border border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+  <div class="p-3.5 border-b border-gray-800 bg-[#080b10] flex items-center justify-between flex-wrap gap-2">
+    <div>
+      <h2 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
+        <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i> Duval County Scrap Board
+      </h2>
+      <p class="text-[10px] text-gray-400">Live comparison across all 5 major Jacksonville yards</p>
+    </div>
+    <div class="inline-flex p-0.5 bg-[#07090e] border border-gray-800 rounded-xl text-xs">
+      <button id="viewBtnCards" onclick="setBoardMode('cards')" class="px-3 py-1 rounded-lg font-black bg-amber-500 text-black">Cards</button>
+      <button id="viewBtnTable" onclick="setBoardMode('table')" class="px-3 py-1 rounded-lg font-bold text-gray-400 hover:text-white">Table</button>
+    </div>
+  </div>
+
+  <!-- CARDS VIEW CONTAINER -->
+  <div id="boardCardsContainer" class="p-3 space-y-2.5">
+  </div>
+
+  <!-- TABLE VIEW CONTAINER -->
+  <div id="boardTableContainer" class="hidden overflow-x-auto">
+    <table class="w-full text-left text-xs">
+      <thead class="bg-[#07090e] text-gray-400 uppercase font-black border-b border-gray-800 text-[10px]">
+        <tr>
+          <th class="py-2.5 px-3">Grade</th>
+          <th class="py-2.5 px-2 text-right">Quick Stop</th>
+          <th class="py-2.5 px-2 text-right">Berman</th>
+          <th class="py-2.5 px-2 text-right">JMR</th>
+          <th class="py-2.5 px-2 text-right">CMC</th>
+          <th class="py-2.5 px-2 text-right">TMR</th>
+          <th class="py-2.5 px-3 text-right text-amber-400">Top Pay</th>
+        </tr>
+      </thead>
+      <tbody id="boardTableBody" class="divide-y divide-gray-800/60 font-mono">
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+  <!-- Modal Header -->
+  <div class="px-4 py-3.5 bg-[#080b10] border-b border-gray-800 flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center space-x-2.5">
+      <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+        <i data-lucide="truck" class="w-4 h-4"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-white uppercase tracking-wider">Truck Haul Manifest</h3>
+        <p class="text-[11px] text-gray-400">Combine mixed metals to find the highest-paying yard for your entire load</p>
+      </div>
+    </div>
+    <button onclick="closeManifestModal()" class="p-1.5 rounded-xl bg-gray-800 text-gray-400 hover:text-white transition">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- Scrollable Manifest Metal Rows -->
+  <div class="flex-1 overflow-y-auto p-4 space-y-3">
+    
+    <div class="flex items-center justify-between text-xs">
+      <span class="font-black uppercase text-gray-400">Truck Bed Commodities:</span>
+      <button onclick="clearManifest()" class="text-[11px] text-red-400 hover:underline font-bold">Clear All</button>
+    </div>
+
+    <div id="manifestRowsList" class="space-y-2">
+      <!-- Dynamic Metal Rows injected here -->
+    </div>
+
+    <!-- Add Metal Row Button -->
+    <button onclick="addManifestRow()" class="w-full py-2.5 rounded-xl bg-[#080b10] hover:bg-gray-800/80 border border-dashed border-gray-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 active:scale-95">
+      <i data-lucide="plus-circle" class="w-4 h-4"></i>
+      <span>Add Another Metal to Truck</span>
+    </button>
+
+    <!-- Manifest Total Comparison Board across 5 Yards -->
+    <div class="pt-3 border-t border-gray-800 space-y-2">
+      <span class="text-xs font-black uppercase text-gray-400 block">Total Truckload Payout by Yard:</span>
       
-      <!-- Brand & Location -->
-      <div class="flex items-center space-x-3.5">
-        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 flex items-center justify-center text-amber-400 shadow-md flex-shrink-0">
-          <i data-lucide="scale" class="w-6 h-6"></i>
-        </div>
+      <div id="manifestYardPayouts" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <!-- Dynamic Yard Totals injected here -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Footer -->
+  <div class="px-4 py-3 bg-[#080b10] border-t border-gray-800 flex items-center justify-between flex-shrink-0">
+    <div class="text-[11px] text-gray-400">
+      Winning Yard: <span id="manifestBestYardLabel" class="font-mono font-bold text-emerald-400">Calculating...</span>
+    </div>
+    <button onclick="closeManifestModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs transition">
+      Done
+    </button>
+  </div>
+
+</div>
+
+
+  <div class="space-y-3">
+    <!-- Quick Stop -->
+    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
+      <div class="flex justify-between items-start">
         <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white leading-tight">Duval Scrap &amp; Metals Exchange</h1>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span> Duval Live
-            </span>
-          </div>
-          <p class="text-xs sm:text-sm text-gray-400 flex items-center gap-1.5 mt-0.5">
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-400/90 flex-shrink-0"></i> Jacksonville, FL • Quick Stop, Berman, JMR, CMC, TMR
-          </p>
+          <h4 class="text-xs font-bold text-white">Quick Stop Recycling</h4>
+          <p class="text-[10px] text-gray-400">603 E 8th St, Jacksonville</p>
         </div>
+        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
-
-      <!-- Action Buttons -->
-      <div class="w-full sm:w-auto flex flex-col sm:flex-row sm:items-center gap-2">
-        <div class="flex items-center gap-2 w-full sm:w-auto">
-          <button onclick="toggleHelpModal()" 
-                  class="p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-amber-400 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
-                  title="Help Info">
-            <i data-lucide="help-circle" class="w-5 h-5"></i>
-          </button>
-
-          <button id="notifBellBtn" onclick="toggleNotificationDrawer()" 
-                  class="relative p-2.5 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700/70 transition flex items-center justify-center w-[44px] h-[44px] flex-shrink-0" 
-                  title="Price Alerts &amp; Flash Specials">
-            <i data-lucide="bell" class="w-5 h-5 text-amber-400"></i>
-            <span id="notifBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow">
-              0
-            </span>
-          </button>
-        </div>
-
-        <!-- Reordered Action Buttons: 1. IT Console | 2. Text Partner | 3. Dead Locked Yard Dash Button -->
-        <div class="grid grid-cols-3 sm:flex sm:items-center gap-2 w-full sm:w-auto">
-          <!-- 1. IT Console -->
-          <button onclick="openDevModal()" 
-                  class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gray-800/90 hover:bg-gray-700 text-gray-300 hover:text-white border border-gray-700 transition h-[44px]" 
-                  title="IT &amp; App Developer Console">
-            <i data-lucide="terminal" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
-            <span class="text-xs font-bold font-mono truncate">IT Console</span>
-          </button>
-
-          <!-- 2. Text Partner -->
-          <a id="smsShareBtn" href="sms:?body=Check%20out%20the%20Jacksonville%20Scrap%20%26%20Metal%20Exchange%20Tracker%20for%20Duval%20County%20yards%20(Berman%2C%20Quick%20Stop%2C%20JMR%2C%20CMC%2C%20TMR)%3A%20" 
-             class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-sm transition h-[44px]">
-            <i data-lucide="message-square" class="w-4 h-4 flex-shrink-0"></i>
-            <span class="truncate">Text Partner</span>
-          </a>
-
-          <!-- 3. Dead Locked Yard Dash Button (Future Upgrade Feature) -->
-          <button type="button" 
-                  disabled
-                  title="Yard Dash (Coming in Future Upgrade)"
-                  class="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-2.5 rounded-xl bg-gray-900/90 text-gray-500 border border-gray-800/80 cursor-not-allowed opacity-60 h-[44px] select-none">
-            <i data-lucide="lock" class="w-3.5 h-3.5 flex-shrink-0 text-gray-500"></i>
-            <span class="text-xs font-bold truncate">Yard Dash</span>
-            <span class="hidden sm:inline-block text-[9px] font-mono uppercase bg-gray-800 text-gray-400 px-1 py-0.2 rounded">Soon</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Live Cloud Sync Status Banner -->
-    <div id="liveSyncStatusPill" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center justify-between text-[11px] font-mono text-emerald-400 border-t border-gray-800/40">
-      <span class="flex items-center gap-1.5">
-        <span id="liveSyncPillDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span id="liveSyncStatusMsg">Live Cloud Sync Active (&lt;180ms)</span>
-      </span>
-      <span id="liveSyncLatencyLabel" class="text-gray-500 text-[10px]">Latency: 42ms</span>
-    </div>
-
-    <!-- Live Marquee Ticker -->
-    <div class="bg-[#080b10] border-t border-gray-800/80 overflow-hidden py-2 relative flex items-center">
-      <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#080b10] to-transparent z-10 pointer-events-none"></div>
-      <div class="animate-marquee flex items-center gap-10 text-xs sm:text-sm text-gray-300 font-medium">
-        <span class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5"></i> Duval Spot Averages:</span>
-        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.20 - $5.25/lb</strong></span>
-        <span>#1 Copper: <strong class="text-emerald-400 font-bold">$4.95 - $5.05/lb</strong></span>
-        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.80 - $2.85/lb</strong></span>
-        <span>Alum Cans (UBC): <strong class="text-gray-100 font-bold">$0.80 - $0.82/lb</strong></span>
-        <span>6063 Extrusions: <strong class="text-gray-100 font-bold">$1.10 - $1.15/lb</strong></span>
-        <span>HMS #1 Steel: <strong class="text-sky-300 font-bold">$185/GT</strong></span>
-        <span class="text-gray-500 font-semibold">Updated: Live Intake Sheets •</span>
-
-        <span class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="activity" class="w-3.5 h-3.5"></i> Duval Spot Averages:</span>
-        <span>Bare Bright: <strong class="text-emerald-400 font-bold">$5.20 - $5.25/lb</strong></span>
-        <span>#1 Copper: <strong class="text-emerald-400 font-bold">$4.95 - $5.05/lb</strong></span>
-        <span>Clean Yellow Brass: <strong class="text-amber-300 font-bold">$2.80 - $2.85/lb</strong></span>
-        <span>Alum Cans (UBC): <strong class="text-gray-100 font-bold">$0.80 - $0.82/lb</strong></span>
-        <span>6063 Extrusions: <strong class="text-gray-100 font-bold">$1.10 - $1.15/lb</strong></span>
-        <span>HMS #1 Steel: <strong class="text-sky-300 font-bold">$185/GT</strong></span>
-        <span class="text-gray-500 font-semibold">Updated: Live Intake Sheets •</span>
-      </div>
-      <div class="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#080b10] to-transparent z-10 pointer-events-none"></div>
-    </div>
-  </header>
-
-  <!-- NOTIFICATIONS DRAWER -->
-  <div id="notifDrawer" class="hidden fixed inset-y-0 right-0 z-50 w-full max-w-sm sm:max-w-md bg-[#0d121a] border-l border-gray-800 shadow-2xl flex flex-col">
-    <div class="p-4 sm:p-5 border-b border-gray-800 flex items-center justify-between bg-[#080b10]">
-      <div class="flex items-center gap-2.5">
-        <i data-lucide="bell" class="w-5 h-5 text-amber-400"></i>
-        <h3 class="text-sm sm:text-base font-bold text-white">Live Scrap Alerts &amp; Specials</h3>
-      </div>
-      <button onclick="toggleNotificationDrawer()" class="text-gray-400 hover:text-white p-1">
-        <i data-lucide="x" class="w-6 h-6"></i>
-      </button>
-    </div>
-
-    <div class="p-3.5 bg-black/60 border-b border-gray-800 flex items-center justify-between text-xs sm:text-sm">
-      <div class="flex flex-col">
-        <span class="text-gray-300 font-medium">Device System Alerts</span>
-        <span id="pushStatusText" class="text-[11px] text-emerald-400 font-mono">Status: Connected ✓</span>
-      </div>
-      <button onclick="sendDiagnosticTestNotification()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition">
-        Send Test Alert
-      </button>
-    </div>
-
-    <div id="notifFeedList" class="flex-1 overflow-y-auto p-4 space-y-3">
-      <div class="p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm">
-        <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-amber-400 flex items-center gap-1.5">
-            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i> Daily Morning Intake
-          </span>
-          <span class="text-gray-500 text-[11px] font-mono">Just Now</span>
-        </div>
-        <p class="text-xs text-gray-200">Scale masters have posted updated rates across all 5 Duval County recycling yards.</p>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043582460" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
+        </a>
+        <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
+        </a>
       </div>
     </div>
 
-    <div class="p-4 border-t border-gray-800 bg-[#080b10] flex items-center justify-between">
-      <button onclick="sendDiagnosticTestNotification()" class="text-xs text-amber-400 hover:underline font-bold">
-        Send Test Alert
-      </button>
-      <button onclick="clearAllNotifications()" class="text-xs sm:text-sm text-gray-400 hover:text-gray-200 underline">
-        Clear Alert History
-      </button>
-    </div>
-  </div>
-
-  <!-- MAIN VIEWPORT -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-7">
-
-    <!-- 30-DAY MARKET TRENDS SECTION -->
-    <div class="bg-gradient-to-br from-[#0d121a] to-[#0a0e14] border border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-stretch md:items-center gap-6">
-      <div class="absolute -right-20 -top-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none transition-colors duration-1000" id="trendGlow"></div>
-      
-      <div class="w-full md:w-1/3 space-y-2 z-10 flex flex-col justify-center">
-        <div class="flex items-center justify-between">
-          <h3 class="text-xs font-black text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400" id="trendIcon"></i> 30-Day Market Trend
-          </h3>
-          <span id="trendDeltaBadge" class="px-2 py-0.5 rounded text-[11px] font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">+$0.20/lb</span>
-        </div>
+    <!-- Berman Bros -->
+    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
+      <div class="flex justify-between items-start">
         <div>
-          <h4 id="trendMetalName" class="text-xl font-bold text-white tracking-tight">Bare Bright Copper</h4>
-          <p class="text-xs text-gray-400 font-mono mt-1">COMEX Index vs Duval Median</p>
+          <h4 class="text-xs font-bold text-white">Berman Bros, Inc.</h4>
+          <p class="text-[10px] text-gray-400">2500 Evergreen Ave, Jacksonville</p>
         </div>
-        <div class="flex items-center gap-4 pt-2">
-          <div class="flex items-center gap-1.5 text-[11px] font-bold text-gray-500">
-            <div class="w-2 h-2 rounded-full border border-gray-500 border-dashed"></div> COMEX Base
-          </div>
-          <div class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400" id="trendLegendLocal">
-            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div> Duval Median
-          </div>
-        </div>
+        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
-
-      <div class="w-full md:w-2/3 relative z-10 flex flex-col h-32 sm:h-40">
-        <div class="relative flex-grow min-h-0 overflow-visible">
-          <span id="trendStartVal" class="absolute bottom-1 left-1 text-[10px] text-gray-400 font-mono font-bold z-20 bg-[#0d121a]/80 px-1 rounded">$4.90</span>
-          <span id="trendEndVal" class="absolute top-0 right-0 text-[10px] text-white font-mono font-bold bg-[#0d121a] px-1.5 py-0.5 rounded border border-gray-700 shadow-sm z-20">$5.05/lb</span>
-          
-          <svg class="w-full h-full overflow-visible" viewBox="0 0 400 100" preserveAspectRatio="none">
-            <path d="M0,0 L0,100 M100,0 L100,100 M200,0 L200,100 M300,0 L300,100 M400,0 L400,100" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 4" />
-            <path id="trendComexPath" d="M0,80 Q50,75 100,70 T200,65 T300,55 T400,50" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4 4" style="transition: all 1s ease-in-out;" />
-            <path id="trendLocalPath" d="M0,70 Q50,60 100,55 T200,40 T300,30 T400,20" fill="none" stroke="#34d399" stroke-width="3" style="filter: drop-shadow(0px 4px 6px rgba(52,211,153,0.3)); transition: all 1s ease-in-out;" />
-          </svg>
-        </div>
-        
-        <div class="w-full flex justify-between text-[9px] sm:text-[10px] text-gray-500 font-mono pt-1 border-t border-gray-800/80 mt-2 flex-shrink-0">
-          <span>-30d</span>
-          <span>-22d</span>
-          <span>-15d</span>
-          <span>-7d</span>
-          <span class="text-amber-400 font-bold">Today</span>
-        </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043559694" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
+        </a>
+        <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
+        </a>
       </div>
     </div>
 
-    <!-- CONTROLS & WEIGHT CALCULATOR BAR -->
-    <div class="bg-[#0d121a] border border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full box-border overflow-hidden">
-      
-      <div class="flex items-center gap-3 w-full md:w-auto">
-        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-400 whitespace-nowrap">View Pricing:</span>
-        <div class="grid grid-cols-2 p-1 bg-[#080b10] border border-gray-800 rounded-xl w-full sm:w-auto">
-          <button id="unitLbBtn" onclick="setUnit('lb')" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition bg-amber-500 text-black shadow-sm text-center">
-            Per Pound ($/lb)
-          </button>
-          <button id="unitCwtBtn" onclick="setUnit('cwt')" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-400 hover:text-white transition text-center">
-            Per 100 lbs ($/cwt)
-          </button>
-        </div>
-      </div>
-
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto justify-end">
-        <div class="flex items-center gap-2.5">
-          <label for="calcWeight" class="text-xs sm:text-sm font-bold text-gray-300 whitespace-nowrap">Drop Weight:</label>
-          <div class="relative w-32 sm:w-28 flex-1 sm:flex-initial">
-            <input type="number" id="calcWeight" value="100" min="1" step="1" oninput="renderApp()"
-              class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-sm sm:text-base text-white font-mono font-bold focus:border-amber-500 focus:outline-none">
-            <span class="absolute right-3 top-2 text-xs sm:text-sm font-bold text-gray-500 pointer-events-none">lbs</span>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2.5 min-w-0">
-          <label for="calcMetal" class="text-xs sm:text-sm font-bold text-gray-300 whitespace-nowrap">Metal:</label>
-          <div class="relative flex-1 min-w-0">
-            <select id="calcMetal" onchange="renderApp()"
-              class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3 py-2 text-xs sm:text-sm font-bold text-white focus:border-amber-500 focus:outline-none truncate pr-8">
-            </select>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- CALCULATOR HIGHLIGHT RESULT BANNER -->
-    <div id="calculatorHighlight" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4"></div>
-
-    <!-- MAIN 5-YARD COMPARISON TABLE & MOBILE VIEWPORT MODE TOGGLE -->
-    <div class="bg-[#0d121a] border border-gray-800/80 rounded-2xl overflow-hidden shadow-sm">
-      <div class="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-gray-800/80 flex items-center justify-between flex-wrap gap-2">
+    <!-- Jacksonville Metal Recycling -->
+    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
+      <div class="flex justify-between items-start">
         <div>
-          <h2 class="text-xs sm:text-base font-extrabold text-white uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i> Duval County Daily Scrap Board
-          </h2>
-          <p class="text-[11px] sm:text-xs text-gray-400 mt-0.5">Rates updated directly from scale masters &amp; morning intake tickets</p>
+          <h4 class="text-xs font-bold text-white">Jacksonville Metal Recycling</h4>
+          <p class="text-[10px] text-gray-400">7101 Philips Hwy, Jacksonville</p>
         </div>
-        <div class="flex items-center gap-2">
-          <!-- Mobile Viewport Mode Toggle (Table vs Cards) -->
-          <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-lg text-xs">
-            <button id="viewTableBtn" onclick="toggleMobileBoardMode('table')" class="px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition">Table</button>
-            <button id="viewCardsBtn" onclick="toggleMobileBoardMode('cards')" class="px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition">Cards</button>
-          </div>
-          <div class="text-[11px] sm:text-sm text-gray-300">
-            Showing <span id="displayedUnitLabel" class="text-amber-400 font-extrabold">$/cwt (100 lbs)</span>
-          </div>
+        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9047319273" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
+        </a>
+        <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
+        </a>
+      </div>
+    </div>
+
+    <!-- CMC Recycling -->
+    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">CMC Recycling Jacksonville</h4>
+          <p class="text-[10px] text-gray-400">4840 N Lane Ave, Jacksonville</p>
         </div>
+        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
-
-      <!-- Standard Table (Compact Column Sizing to Prevent Mobile Sticky Overflow) -->
-      <div id="boardTableWrapper" class="hidden overflow-x-auto table-scroll">
-        <table class="w-full text-left text-xs sm:text-base">
-          <thead class="bg-[#080b10] text-gray-400 uppercase font-black border-b border-gray-800 tracking-wider text-[10px] sm:text-xs">
-            <tr>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2.5 sm:px-5 w-[120px] sm:w-auto sm:min-w-[220px] sticky-col">Metal Grade</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-emerald-400">Berman</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-amber-300">Quick Stop</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-sky-400">JMR</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-blue-400">CMC</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-4 min-w-[70px] sm:min-w-[120px] text-right text-indigo-400">TMR</th>
-              <th scope="col" class="py-2.5 sm:py-3.5 px-2 sm:px-5 min-w-[80px] sm:min-w-[120px] text-center text-amber-400">Top Pay</th>
-            </tr>
-          </thead>
-          <tbody id="metalsTableBody" class="divide-y divide-gray-800/60 font-mono text-xs sm:text-base"></tbody>
-        </table>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9047862244" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
+        </a>
+        <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
+        </a>
       </div>
-
-      <!-- MOBILE-FIRST CARDS VIEW (Clean, No-Cram Layout with Generous Box Widths) -->
-      <div id="boardCardsWrapper" class="p-3 sm:p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
     </div>
 
-    <!-- JACKSONVILLE RECYCLING YARD PROFILES -->
-    <div class="space-y-3.5">
-      <h3 class="text-xs sm:text-sm font-extrabold text-gray-400 uppercase tracking-wider">Duval County Registered Yards &amp; Scales</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="yardsCardsGrid"></div>
-    </div>
-
-    <!-- FLORIDA STATUTE § 538 COMPLIANCE NOTICE -->
-    <div class="bg-[#0d121a]/90 border border-gray-800/80 rounded-2xl p-5 text-xs sm:text-sm text-gray-400 space-y-2">
-      <div class="flex items-center gap-2 font-black text-amber-400 text-sm">
-        <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0"></i> Florida Statute § 538 - Duval County Scrap Law Requirements
+    <!-- Trademark Metals (TMR) -->
+    <div class="bg-[#080b10] border border-gray-800 rounded-xl p-3 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">Trademark Metals (TMR)</h4>
+          <p class="text-[10px] text-gray-400">3540 W Beaver St, Jacksonville</p>
+        </div>
+        <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
-      <p class="leading-relaxed">
-        All Duval County scrapyards require a valid government-issued photo ID, vehicle license plate log, and digital thumbprint before payout. Restricted secondary metals (AC copper condensing coils, burnt insulated copper wire, catalytic converters, manhole covers, bronze cemetery markers) require proof of commercial HVAC/contractor licensing or payout will be held via check.
-      </p>
-    </div>
-
-  </main>
-
-  <!-- HELP & INFO MODAL -->
-  <div id="helpModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-[#0d121a] border border-gray-800 rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl relative">
-      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-        <h3 class="text-base font-black text-white flex items-center gap-2">
-          <i data-lucide="help-circle" class="w-5 h-5 text-amber-400"></i> Duval Scrap Exchange Guide
-        </h3>
-        <button onclick="toggleHelpModal()" class="text-gray-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="space-y-3 text-xs sm:text-sm text-gray-300 leading-relaxed">
-        <p><strong>• Live County Comparison:</strong> Real-time scrap metal buy sheets compared across Berman Bros, Quick Stop, JMR, CMC, and TMR.</p>
-        <p><strong>• Payout Calculator:</strong> Enter your estimated weight to see the total haul cash value at every Jacksonville facility.</p>
-        <p><strong>• Realtime Sync:</strong> Rates and scale wait times sync automatically when weighmasters post updates from their scale house terminals.</p>
-      </div>
-      <div class="pt-3 border-t border-gray-800 text-right">
-        <button onclick="toggleHelpModal()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-xl">Got It</button>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043879511" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
+        </a>
+        <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
+          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
+        </a>
       </div>
     </div>
   </div>
-
-  <!-- IT ADMIN & DEVELOPER CONSOLE MODAL -->
-  <div id="devModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="bg-[#0d121a] border border-gray-700 rounded-3xl w-full max-w-xl p-6 sm:p-7 space-y-5 shadow-2xl overflow-hidden relative">
-      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
-        <div class="flex items-center gap-2.5 text-white font-bold text-base">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <i data-lucide="terminal" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-black text-white">IT &amp; Developer Console</h3>
-            <p class="text-xs text-gray-400 font-mono">Backend Database &amp; System Telemetry</p>
-          </div>
-        </div>
-        <button onclick="closeModal('devModal')" class="text-gray-400 hover:text-white p-1">
-          <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-      </div>
-
-      <div class="space-y-3">
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 flex items-center justify-between">
-          <div>
-            <div class="text-xs font-bold text-white">Live Data Synchronization</div>
-            <div class="text-[11px] text-emerald-400 font-mono">Polling direct REST API every 2,000ms</div>
-          </div>
-          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
-        </div>
-        <div class="p-3.5 rounded-xl bg-[#080b10] border border-gray-800 flex items-center justify-between">
-          <div>
-            <div class="text-xs font-bold text-white">Audio Engine (Web Audio API)</div>
-            <div class="text-[11px] text-gray-400 font-mono">Synthesizer Active (587Hz &rarr; 880Hz)</div>
-          </div>
-          <button onclick="playNotificationAudio()" class="px-3 py-1 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-lg text-amber-400">Test Chime</button>
-        </div>
-      </div>
-
-      <div class="pt-3 border-t border-gray-800 text-right">
-        <button onclick="closeModal('devModal')" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-xs font-bold rounded-xl text-white">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- APPLICATION SCRIPT LOGIC -->
-  <script>
-    let activeUnit = 'cwt'; 
-    let authenticatedYardId = null;
-    let mobileBoardMode = 'cards';
-    let lastProcessedAlertTimestamp = 0;
-
-    const SB_REST_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co/rest/v1';
-    const SB_API_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
-
-    const scrapyards = {
-      quickstop: { id: 'quickstop', name: 'Quick Stop Recycling', shortName: 'Q-Stop', address: '603 E 8th St, Jacksonville, FL 32206', phone: '(904) 358-2460', hours: 'Mon-Fri 8:00 AM - 4:00 PM', status: 'Scales Open', pin: '1234' },
-      berman: { id: 'berman', name: 'Berman Bros, Inc.', shortName: 'Berman', address: '2500 Evergreen Ave, Jacksonville, FL 32206', phone: '(904) 355-9694', hours: 'Mon-Fri 7:30 AM - 4:30 PM', status: 'Scales Open', pin: '2500' },
-      jmr: { id: 'jmr', name: 'Jacksonville Metal Recycling', shortName: 'JMR', address: '7101 Philips Hwy, Jacksonville, FL 32256', phone: '(904) 731-9273', hours: 'Mon-Fri 8:00 AM - 4:30 PM', status: 'Scales Open', pin: '7101' },
-      cmc: { id: 'cmc', name: 'CMC Recycling', shortName: 'CMC', address: '4840 N Lane Ave, Jacksonville, FL 32254', phone: '(904) 786-2244', hours: 'Mon-Fri 7:30 AM - 4:00 PM', status: 'Scales Open', pin: '4840' },
-      tmr: { id: 'tmr', name: 'Trademark Metals (TMR)', shortName: 'TMR', address: '3540 W Beaver St, Jacksonville, FL 32254', phone: '(904) 387-9511', hours: 'Mon-Fri 7:30 AM - 4:00 PM', status: 'Scales Open', pin: '3540' }
-    };
-
-    let metalsCatalog = [
-      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean Wire)', category: 'Copper', berman: 5.50, quickstop: 5.20, jmr: 5.05, cmc: 5.30, tmr: 4.90 },
-      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', berman: 5.10, quickstop: 5.00, jmr: 4.90, cmc: 5.10, tmr: 4.75 },
-      { id: 'copper_2', name: '#2 Copper (Burnt / Solder / Painted)', category: 'Copper', berman: 4.95, quickstop: 4.85, jmr: 4.70, cmc: 4.95, tmr: 4.55 },
-      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', berman: 4.55, quickstop: 4.45, jmr: 4.35, cmc: 4.55, tmr: 4.20 },
-      { id: 'romex', name: 'Insulated Romex (House Wire)', category: 'Copper', berman: 2.25, quickstop: 2.20, jmr: 2.10, cmc: 2.05, tmr: 2.00 },
-      { id: 'yellow_brass', name: 'Clean Yellow Brass', category: 'Brass', berman: 2.85, quickstop: 2.80, jmr: 2.75, cmc: 2.70, tmr: 2.65 },
-      { id: 'red_brass', name: 'Red Brass / Composition', category: 'Brass', berman: 3.25, quickstop: 3.20, jmr: 3.15, cmc: 3.10, tmr: 3.05 },
-      { id: 'alum_cans', name: 'Aluminum UBC Cans (Clean)', category: 'Aluminum', berman: 0.82, quickstop: 0.80, jmr: 0.78, cmc: 0.75, tmr: 0.74 },
-      { id: 'alum_ext', name: '6063 Aluminum Extrusions', category: 'Aluminum', berman: 1.15, quickstop: 1.10, jmr: 1.05, cmc: 1.00, tmr: 0.98 },
-      { id: 'alum_sheet', name: 'Sheet Aluminum', category: 'Aluminum', berman: 0.65, quickstop: 0.62, jmr: 0.60, cmc: 0.58, tmr: 0.56 },
-      { id: 'alum_wheels', name: 'Aluminum Car Wheels / Rims', category: 'Aluminum', berman: 0.95, quickstop: 0.92, jmr: 0.90, cmc: 0.88, tmr: 0.85 },
-      { id: 'stainless_304', name: '304 Stainless Steel (Clean Non-Mag)', category: 'Specialty', berman: 0.55, quickstop: 0.52, jmr: 0.50, cmc: 0.48, tmr: 0.46 },
-      { id: 'auto_batteries', name: 'Lead-Acid Car Batteries', category: 'Specialty', berman: 0.22, quickstop: 0.20, jmr: 0.19, cmc: 0.18, tmr: 0.18 },
-      { id: 'clean_lead', name: 'Clean Soft Lead', category: 'Specialty', berman: 0.65, quickstop: 0.60, jmr: 0.58, cmc: 0.55, tmr: 0.54 },
-      { id: 'electric_motors', name: 'Electric Motors & Alternators', category: 'Ferrous & Core', berman: 0.38, quickstop: 0.35, jmr: 0.34, cmc: 0.32, tmr: 0.30 },
-      { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', berman: 0.10, quickstop: 0.095, jmr: 0.09, cmc: 0.088, tmr: 0.085 },
-      { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', berman: 0.075, quickstop: 0.07, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
-    ];
-
-    const marketTrends = [
-      { id: 'bare_bright', name: "Bare Bright Copper (#1 Clean Wire)", delta: "+$0.20/lb", isUp: true, start: "$4.90", end: "$5.05", comexPath: "M0,80 Q50,75 100,70 T200,65 T300,55 T400,50", localPath: "M0,70 Q50,60 100,55 T200,40 T300,30 T400,20", colorClass: "text-emerald-400", bgClass: "bg-emerald-500/15", borderClass: "border-emerald-500/30", hexColor: "#34d399", icon: "trending-up" },
-      { id: 'yellow_brass', name: "Clean Yellow Brass", delta: "+$0.05/lb", isUp: true, start: "$2.65", end: "$2.75", comexPath: "M0,60 Q50,55 100,55 T200,50 T300,48 T400,45", localPath: "M0,70 Q50,65 100,60 T200,50 T300,40 T400,30", colorClass: "text-amber-400", bgClass: "bg-amber-500/15", borderClass: "border-amber-500/30", hexColor: "#fbbf24", icon: "trending-up" },
-      { id: 'steel_hms', name: "HMS #1 Prepared Steel (1/4\")", delta: "-$10/GT", isUp: false, start: "$195", end: "$185", comexPath: "M0,20 Q50,25 100,30 T200,40 T300,50 T400,60", localPath: "M0,30 Q50,35 100,45 T200,60 T300,70 T400,80", colorClass: "text-red-400", bgClass: "bg-red-500/15", borderClass: "border-red-500/30", hexColor: "#f87171", icon: "trending-down" },
-      { id: 'alum_cans', name: "Aluminum UBC Cans (Clean)", delta: "+$0.04/lb", isUp: true, start: "$0.74", end: "$0.78", comexPath: "M0,70 Q50,68 100,65 T200,60 T300,58 T400,55", localPath: "M0,60 Q50,55 100,50 T200,40 T300,35 T400,30", colorClass: "text-sky-400", bgClass: "bg-sky-500/15", borderClass: "border-sky-500/30", hexColor: "#38bdf8", icon: "trending-up" }
-    ];
-
-    let currentTrendIdx = 0;
-
-    function getDuvalMedian(metalId) {
-      const metal = metalsCatalog.find(m => m.id === metalId);
-      if (!metal) return 0;
-      const rates = [metal.berman, metal.quickstop, metal.jmr, metal.cmc, metal.tmr].sort((a, b) => a - b);
-      return rates[2];
-    }
-
-    function updateMarketTrendUI() {
-      const t = marketTrends[currentTrendIdx];
-      const nameEl = document.getElementById('trendMetalName');
-      const deltaEl = document.getElementById('trendDeltaBadge');
-      const iconEl = document.getElementById('trendIcon');
-      const startEl = document.getElementById('trendStartVal');
-      const endEl = document.getElementById('trendEndVal');
-      const comexP = document.getElementById('trendComexPath');
-      const localP = document.getElementById('trendLocalPath');
-      const legendL = document.getElementById('trendLegendLocal');
-      const glow = document.getElementById('trendGlow');
-
-      if (!nameEl) return;
-
-      const shortName = t.name.split(" (")[0];
-      nameEl.textContent = shortName;
-
-      const medianRate = getDuvalMedian(t.id);
-      const mult = activeUnit === 'cwt' ? 100 : 1;
-      const unitSuffix = activeUnit === 'cwt' ? '/cwt' : '/lb';
-
-      deltaEl.textContent = t.delta;
-      deltaEl.className = "px-2 py-0.5 rounded text-[11px] font-black border transition-colors " + t.bgClass + " " + t.colorClass + " " + t.borderClass;
-
-      if (iconEl) {
-        iconEl.setAttribute('data-lucide', t.icon);
-        iconEl.className = "w-4 h-4 transition-colors " + t.colorClass;
-      }
-
-      if (startEl) startEl.textContent = t.start;
-      if (endEl) {
-        endEl.textContent = medianRate > 0 ? `$${(medianRate * mult).toFixed(2)}${unitSuffix}` : t.end;
-      }
-
-      if (comexP) comexP.setAttribute('d', t.comexPath);
-      if (localP) {
-        localP.setAttribute('d', t.localPath);
-        localP.setAttribute('stroke', t.hexColor);
-        localP.style.filter = "drop-shadow(0px 4px 6px " + t.hexColor + "40)";
-      }
-
-      if (legendL) {
-        legendL.className = "flex items-center gap-1.5 text-[11px] font-bold transition-colors " + t.colorClass;
-        legendL.innerHTML = '<div class="w-2 h-2 rounded-full shadow-[0_0_8px_' + t.hexColor + '80]" style="background-color: ' + t.hexColor + ';"></div> Duval Median';
-      }
-
-      if (glow) {
-        glow.className = t.isUp
-          ? "absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-1000 bg-emerald-500/5"
-          : "absolute -right-20 -top-20 w-64 h-64 rounded-full blur-3xl pointer-events-none transition-colors duration-1000 bg-red-500/5";
-      }
-
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function startMarketTrendRotation() {
-      updateMarketTrendUI();
-      setInterval(() => {
-        currentTrendIdx = (currentTrendIdx + 1) % marketTrends.length;
-        updateMarketTrendUI();
-      }, 10000);
-    }
-
-    function toggleMobileBoardMode(mode) {
-      mobileBoardMode = mode;
-      const tWrap = document.getElementById('boardTableWrapper');
-      const cWrap = document.getElementById('boardCardsWrapper');
-      const tBtn = document.getElementById('viewTableBtn');
-      const cBtn = document.getElementById('viewCardsBtn');
-
-      if (mode === 'cards') {
-        if (tWrap) tWrap.classList.add('hidden');
-        if (cWrap) cWrap.classList.remove('hidden');
-        if (cBtn) cBtn.className = "px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition";
-        if (tBtn) tBtn.className = "px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition";
-        renderMobileCards();
-      } else {
-        if (tWrap) tWrap.classList.remove('hidden');
-        if (cWrap) cWrap.classList.add('hidden');
-        if (tBtn) tBtn.className = "px-3 py-1.5 rounded-md font-extrabold bg-amber-500 text-black shadow-sm transition";
-        if (cBtn) cBtn.className = "px-3 py-1.5 rounded-md font-bold text-gray-400 hover:text-white transition";
-      }
-    }
-
-    function renderMobileCards() {
-      const cWrap = document.getElementById('boardCardsWrapper');
-      if (!cWrap) return;
-      cWrap.innerHTML = '';
-
-      const mult = activeUnit === 'cwt' ? 100 : 1;
-      const unitSuffix = activeUnit === 'cwt' ? '/cwt' : '/lb';
-
-      metalsCatalog.forEach(metal => {
-        const yards = [
-          { key: 'berman', label: 'Berman', rate: metal.berman, color: 'text-emerald-400' },
-          { key: 'quickstop', label: 'Quick Stop', shortLabel: 'Q-Stop', rate: metal.quickstop, color: 'text-amber-300' },
-          { key: 'jmr', label: 'JMR', shortLabel: 'JMR', rate: metal.jmr, color: 'text-sky-400' },
-          { key: 'cmc', label: 'CMC', shortLabel: 'CMC', rate: metal.cmc, color: 'text-blue-400' },
-          { key: 'tmr', label: 'TMR', shortLabel: 'TMR', rate: metal.tmr, color: 'text-indigo-400' }
-        ];
-
-        const maxRate = Math.max(...yards.map(y => y.rate));
-        const topYards = yards.filter(y => y.rate === maxRate);
-        const topNames = topYards.map(y => y.shortLabel || y.label).join(' / ');
-
-        const card = document.createElement('div');
-        card.className = "bg-[#080b10] border border-gray-800 hover:border-gray-700 rounded-2xl p-3.5 space-y-3 transition shadow-sm flex flex-col justify-between";
-        card.innerHTML = `
-          <div>
-            <div class="flex items-start justify-between gap-2 border-b border-gray-800/80 pb-2.5">
-              <div class="min-w-0 flex-1">
-                <h4 class="text-sm font-black text-white leading-snug break-words">${metal.name}</h4>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded text-[10px] uppercase font-bold tracking-wider bg-gray-900 text-gray-400 border border-gray-800">${metal.category}</span>
-              </div>
-              <div class="text-right flex-shrink-0 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1.5 rounded-xl ml-2">
-                <span class="text-[9px] uppercase tracking-wider text-amber-400 font-extrabold block">Top Pay (${topNames})</span>
-                <span class="text-sm sm:text-base font-black font-mono text-amber-300">$${(maxRate * mult).toFixed(2)}${unitSuffix}</span>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 pt-2.5 font-mono">
-              ${yards.map(y => {
-                const isTop = y.rate === maxRate;
-                const formattedPrice = `$${(y.rate * mult).toFixed(2)}`;
-                return `
-                  <div class="p-2 rounded-xl flex flex-col items-center justify-center transition min-w-0 ${
-                    isTop 
-                      ? 'bg-amber-500/15 border border-amber-500/50 shadow-sm ring-1 ring-amber-500/30' 
-                      : 'bg-[#0d121a] border border-gray-800/80'
-                  }">
-                    <span class="text-[11px] font-sans font-bold block ${y.color} truncate w-full text-center">
-                      ${y.shortLabel || y.label}
-                    </span>
-                    <span class="text-xs sm:text-sm font-black block mt-0.5 tracking-tight ${isTop ? 'text-amber-300 font-extrabold' : 'text-gray-200'}">
-                      ${formattedPrice}
-                    </span>
-                    ${isTop ? '<span class="inline-block mt-1 text-[8px] uppercase tracking-wider bg-amber-500 text-black font-black px-1.5 py-0.2 rounded-full">Top</span>' : '<span class="inline-block mt-1 text-[8px] text-transparent select-none">-</span>'}
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
-        `;
-        cWrap.appendChild(card);
-      });
-    }
-
-    function setUnit(unit) {
-      activeUnit = unit;
-      const lbBtn = document.getElementById('unitLbBtn');
-      const cwtBtn = document.getElementById('unitCwtBtn');
-      const label = document.getElementById('displayedUnitLabel');
-
-      if (unit === 'lb') {
-        lbBtn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition bg-amber-500 text-black shadow-sm text-center";
-        cwtBtn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-400 hover:text-white transition text-center";
-        label.textContent = "$/lb (Pound)";
-      } else {
-        cwtBtn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition bg-amber-500 text-black shadow-sm text-center";
-        lbBtn.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-gray-400 hover:text-white transition text-center";
-        label.textContent = "$/cwt (100 lbs)";
-      }
-      renderApp();
-      updateMarketTrendUI();
-    }
-
-    function populateMetalDropdowns() {
-      const calcSelect = document.getElementById('calcMetal');
-      if (!calcSelect) return;
-      calcSelect.innerHTML = '';
-
-      const categories = [...new Set(metalsCatalog.map(m => m.category))];
-      categories.forEach(cat => {
-        const group = document.createElement('optgroup');
-        group.label = cat;
-        metalsCatalog.filter(m => m.category === cat).forEach(metal => {
-          const opt = document.createElement('option');
-          opt.value = metal.id;
-          opt.textContent = metal.name;
-          group.appendChild(opt);
-        });
-        calcSelect.appendChild(group);
-      });
-    }
-
-    function renderApp() {
-      const tbody = document.getElementById('metalsTableBody');
-      const highlight = document.getElementById('calculatorHighlight');
-      const cardsGrid = document.getElementById('yardsCardsGrid');
-      
-      const weightVal = parseFloat(document.getElementById('calcWeight')?.value) || 100;
-      const selectedMetalId = document.getElementById('calcMetal')?.value || 'bare_bright';
-      const selectedMetal = metalsCatalog.find(m => m.id === selectedMetalId) || metalsCatalog[0];
-
-      if (highlight) {
-        highlight.innerHTML = '';
-        const yardsList = [
-          { key: 'berman', name: 'Berman Bros', rate: selectedMetal.berman },
-          { key: 'quickstop', name: 'Quick Stop', rate: selectedMetal.quickstop },
-          { key: 'jmr', name: 'Jacksonville Metal', rate: selectedMetal.jmr },
-          { key: 'cmc', name: 'CMC Recycling', rate: selectedMetal.cmc },
-          { key: 'tmr', name: 'Trademark (TMR)', rate: selectedMetal.tmr }
-        ];
-
-        const maxTotal = Math.max(...yardsList.map(y => y.rate * weightVal));
-
-        yardsList.forEach(yard => {
-          const total = (yard.rate * weightVal).toFixed(2);
-          const isTop = (yard.rate * weightVal) === maxTotal;
-          const displayRate = activeUnit === 'cwt' ? (yard.rate * 100).toFixed(2) : yard.rate.toFixed(2);
-          const unitSuffix = activeUnit === 'cwt' ? '/cwt' : '/lb';
-
-          const card = document.createElement('div');
-          card.className = `p-4 rounded-2xl border transition ${
-            isTop 
-              ? 'bg-amber-500/10 border-amber-500/60 shadow-lg shadow-amber-500/5' 
-              : 'bg-[#0d121a] border-gray-800'
-          }`;
-          card.innerHTML = `
-            <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
-              <span class="font-bold uppercase tracking-wider">${yard.name}</span>
-              ${isTop ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500 text-black">Top Payout</span>' : ''}
-            </div>
-            <div class="text-2xl font-black text-white font-mono">$${total}</div>
-            <div class="text-xs text-gray-400 mt-1 font-mono">@ $${displayRate}${unitSuffix}</div>
-          `;
-          highlight.appendChild(card);
-        });
-      }
-
-      if (tbody) {
-        tbody.innerHTML = '';
-        metalsCatalog.forEach(metal => {
-          const rates = [metal.berman, metal.quickstop, metal.jmr, metal.cmc, metal.tmr];
-          const maxRate = Math.max(...rates);
-
-          const formatVal = (rate) => {
-            const v = activeUnit === 'cwt' ? (rate * 100).toFixed(2) : rate.toFixed(2);
-            return `$${v}`;
-          };
-
-          const row = document.createElement('tr');
-          row.className = "hover:bg-gray-800/40 transition border-b border-gray-800/50";
-          row.innerHTML = `
-            <td class="py-2.5 sm:py-3 px-2 sm:px-4 font-semibold text-white sticky-col truncate">
-              <div class="truncate text-xs sm:text-sm font-bold">${metal.name}</div>
-              <div class="text-[9px] sm:text-[11px] text-gray-400 font-normal uppercase">${metal.category}</div>
-            </td>
-            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.berman === maxRate ? 'text-emerald-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.berman)}</td>
-            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.quickstop === maxRate ? 'text-amber-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.quickstop)}</td>
-            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.jmr === maxRate ? 'text-sky-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.jmr)}</td>
-            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.cmc === maxRate ? 'text-blue-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.cmc)}</td>
-            <td class="py-2 sm:py-3 px-1.5 sm:px-3 text-right text-xs sm:text-sm ${metal.tmr === maxRate ? 'text-indigo-400 font-black bg-amber-500/5' : 'text-gray-300'}">${formatVal(metal.tmr)}</td>
-            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center font-black text-amber-400 text-xs sm:text-sm bg-[#080b10]">${formatVal(maxRate)}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      }
-
-      renderMobileCards();
-
-      if (cardsGrid) {
-        cardsGrid.innerHTML = '';
-        Object.entries(scrapyards).forEach(([key, yard]) => {
-          const card = document.createElement('div');
-          card.className = "bg-[#0d121a] border border-gray-800/80 rounded-2xl p-4 sm:p-5 space-y-3.5 flex flex-col justify-between";
-          card.innerHTML = `
-            <div>
-              <div class="flex items-start justify-between gap-2">
-                <h4 class="font-extrabold text-white text-base">${yard.name}</h4>
-                <span class="px-2 py-0.5 rounded text-[11px] font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">${yard.status}</span>
-              </div>
-              <p class="text-xs text-gray-400 mt-1 flex items-center gap-1.5">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-400"></i> ${yard.address}
-              </p>
-              <p class="text-xs text-gray-400 mt-1 flex items-center gap-1.5">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-gray-400"></i> ${yard.hours}
-              </p>
-            </div>
-            <div class="flex items-center gap-2 pt-2 border-t border-gray-800/80">
-              <a href="tel:${yard.phone.replace(/[^0-9]/g, '')}" class="flex-1 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-xs text-center transition flex items-center justify-center gap-1.5">
-                <i data-lucide="phone" class="w-3.5 h-3.5 text-amber-400"></i> Call Desk
-              </a>
-              <a href="https://maps.google.com/?q=${encodeURIComponent(yard.name + ' ' + yard.address)}" target="_blank" class="flex-1 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs text-center transition flex items-center justify-center gap-1.5">
-                <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Directions
-              </a>
-            </div>
-          `;
-          cardsGrid.appendChild(card);
-        });
-      }
-
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function playNotificationAudio() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const audioCtx = new AudioCtx();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.35);
-      } catch (e) {}
-    }
-
-    function sendDiagnosticTestNotification() {
-      playNotificationAudio();
-      const feed = document.getElementById('notifFeedList');
-      const badge = document.getElementById('notifBadge');
-      if (feed) {
-        const alertEl = document.createElement('div');
-        alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
-        alertEl.innerHTML = `
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="zap" class="w-3.5 h-3.5"></i> Scale House Test Ping
-            </span>
-            <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-          <p class="text-xs text-gray-200">Terminal link confirmed! Rates and special alerts are syncing actively.</p>
-        `;
-        feed.prepend(alertEl);
-      }
-      if (badge) {
-        badge.classList.remove('hidden');
-        badge.textContent = parseInt(badge.textContent || '0', 10) + 1;
-      }
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function addCustomNotification(title, message, iconName = 'bell') {
-      playNotificationAudio();
-      const feed = document.getElementById('notifFeedList');
-      const badge = document.getElementById('notifBadge');
-      if (feed) {
-        const alertEl = document.createElement('div');
-        alertEl.className = "p-3.5 rounded-xl bg-[#080b10] border border-amber-500/30 space-y-1 shadow-sm";
-        alertEl.innerHTML = `
-          <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-amber-400 flex items-center gap-1.5">
-              <i data-lucide="${iconName}" class="w-3.5 h-3.5"></i> ${title}
-            </span>
-            <span class="text-gray-500 text-[11px] font-mono">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-          </div>
-          <p class="text-xs text-gray-200">${message}</p>
-        `;
-        feed.prepend(alertEl);
-      }
-      if (badge) {
-        badge.classList.remove('hidden');
-        badge.textContent = parseInt(badge.textContent || '0', 10) + 1;
-      }
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function clearAllNotifications() {
-      const list = document.getElementById('notifFeedList');
-      if (list) list.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No new alerts.</p>';
-      const badge = document.getElementById('notifBadge');
-      if (badge) {
-        badge.textContent = '0';
-        badge.classList.add('hidden');
-      }
-    }
-
-    function toggleNotificationDrawer() {
-      const drawer = document.getElementById('notifDrawer');
-      if (drawer) drawer.classList.toggle('hidden');
-    }
-
-    function toggleHelpModal() {
-      const modal = document.getElementById('helpModal');
-      if (modal) modal.classList.toggle('hidden');
-    }
-
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    }
-
-    function openDevModal() { openModal('devModal'); }
-
-    function dismissFlashBanner() {
-      const banner = document.getElementById('flashSpecialBanner');
-      if (banner) banner.classList.add('hidden');
-    }
-
-    // Direct Database REST Polling
-    async function pollLiveDatabase() {
-      try {
-        const resAlerts = await fetch(`${SB_REST_URL}/flash_specials?select=*&order=created_at.desc&limit=1`, {
-          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
-        });
-        if (resAlerts.ok) {
-          const rows = await resAlerts.json();
-          if (rows && rows.length > 0) {
-            const latest = rows[0];
-            const alertTime = new Date(latest.created_at).getTime();
-            if (alertTime > lastProcessedAlertTimestamp) {
-              if (lastProcessedAlertTimestamp !== 0) {
-                if (latest.metal_id === 'ping') {
-                  sendDiagnosticTestNotification();
-                } else if (latest.metal_id === 'spot_shift') {
-                  const iconType = parseFloat(latest.price) >= 0 ? 'trending-up' : 'trending-down';
-                  addCustomNotification(`${latest.yard_name}: Spot Shift`, latest.metal_name, iconType);
-                  fetchLiveRatesFromDb();
-                } else if (latest.metal_id === 'price_batch') {
-                  addCustomNotification(`${latest.yard_name}`, 'New intake price sheet posted. Scale rates refreshed.', 'check-circle');
-                  fetchLiveRatesFromDb();
-                } else if (latest.metal_id === 'status_update') {
-                  const yardKey = latest.yard_id;
-                  if (scrapyards[yardKey]) {
-                    scrapyards[yardKey].status = latest.metal_name;
-                    renderApp();
-                  }
-                  addCustomNotification(`${latest.yard_name}`, `Scale status updated to: ${latest.metal_name}`, 'clock');
-                } else {
-                  playNotificationAudio();
-                  const banner = document.getElementById('flashSpecialBanner');
-                  const text = document.getElementById('flashBannerText');
-                  if (banner && text) {
-                    text.textContent = `${latest.yard_name}: ${latest.metal_name} boosted to $${parseFloat(latest.price).toFixed(2)}/lb!`;
-                    banner.classList.remove('hidden');
-                  }
-                  addCustomNotification(`🔥 Flash Special: ${latest.yard_name}`, `${latest.metal_name} boosted to $${parseFloat(latest.price).toFixed(2)}/lb for the next 60 minutes!`, 'flame');
-                }
-              }
-              lastProcessedAlertTimestamp = alertTime;
-            }
-          }
-        }
-      } catch (e) {}
-    }
-
-    async function fetchLiveRatesFromDb() {
-      try {
-        const res = await fetch(`${SB_REST_URL}/metals?select=*`, {
-          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
-        });
-        if (res.ok) {
-          const rows = await res.json();
-          rows.forEach(r => {
-            const m = metalsCatalog.find(item => item.id === r.id);
-            if (m) {
-              if (r.berman_rate !== undefined) m.berman = parseFloat(r.berman_rate);
-              if (r.quickstop_rate !== undefined) m.quickstop = parseFloat(r.quickstop_rate);
-              if (r.jmr_rate !== undefined) m.jmr = parseFloat(r.jmr_rate);
-              if (r.cmc_rate !== undefined) m.cmc = parseFloat(r.cmc_rate);
-              if (r.tmr_rate !== undefined) m.tmr = parseFloat(r.tmr_rate);
-            }
-          });
-          renderApp();
-          updateMarketTrendUI();
-        }
-      } catch (e) {}
-    }
-
-    async function fetchYardStatusesFromDb() {
-      try {
-        const res = await fetch(`${SB_REST_URL}/yards?select=*`, {
-          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
-        });
-        if (res.ok) {
-          const rows = await res.json();
-          let changed = false;
-          rows.forEach(r => {
-            if (scrapyards[r.id] && r.status && scrapyards[r.id].status !== r.status) {
-              scrapyards[r.id].status = r.status;
-              changed = true;
-            }
-          });
-          if (changed) renderApp();
-        }
-      } catch (e) {}
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      populateMetalDropdowns();
-      renderApp();
-      startMarketTrendRotation();
-      fetchLiveRatesFromDb();
-      fetchYardStatusesFromDb();
-      setInterval(pollLiveDatabase, 2000);
-      setInterval(fetchYardStatusesFromDb, 5000);
-      if (window.lucide) window.lucide.createIcons();
-    });
-  </script>
-</body>
-</html>
+</div>
