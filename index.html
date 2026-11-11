@@ -2,20 +2,20 @@
 <div class="flex items-center space-x-1.5 sm:space-x-2">
   <!-- Haul Manifest Button (Task 2) -->
   <button onclick="openManifestModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
-    <i data-lucide="truck" class="w-3.5 h-3.5"></i>
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
     <span>Haul Manifest</span>
-    <span id="manifestBadgeCount" class="w-4 h-4 rounded-full bg-black text-amber-400 text-[10px] flex items-center justify-center font-bold">0</span>
+    <span id="manifestBadgeCount" class="w-4 h-4 rounded-full bg-black text-amber-400 text-[10px] flex items-center justify-center font-bold">2</span>
   </button>
 
   <!-- Alert Bell -->
   <button onclick="toggleAlertDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition relative">
-    <i data-lucide="bell" class="w-4 h-4"></i>
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
     <span id="headerBellDot" class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-[#0d121a]"></span>
   </button>
 
   <!-- Yard Directory / Calling Drawer -->
   <button onclick="toggleYardsDrawer()" class="p-2 rounded-xl bg-gray-800/80 hover:bg-gray-700 text-gray-300 hover:text-white transition" title="Yards & Directions">
-    <i data-lucide="map-pin" class="w-4 h-4"></i>
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
   </button>
 </div>
 
@@ -24,7 +24,8 @@
 <div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-3.5 shadow-sm space-y-3">
   <div class="flex items-center justify-between flex-wrap gap-2">
     <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-      <i data-lucide="calculator" class="w-4 h-4 text-amber-400"></i> Single Commodity Calculator
+      <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+      Single Commodity Calculator
     </span>
     <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-xl">
       <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black">$/lb</button>
@@ -57,7 +58,8 @@
   <div class="p-3.5 border-b border-gray-800 bg-[#080b10] flex items-center justify-between flex-wrap gap-2">
     <div>
       <h2 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
-        <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i> Duval County Scrap Board
+        <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
+        Duval County Scrap Board
       </h2>
       <p class="text-[10px] text-gray-400">Live comparison across all 5 major Jacksonville yards</p>
     </div>
@@ -72,7 +74,7 @@
   </div>
 
   <!-- TABLE VIEW CONTAINER -->
-  <div id="boardTableContainer" class="hidden overflow-x-auto">
+  <div id="boardTableContainer" class="hidden-modal overflow-x-auto">
     <table class="w-full text-left text-xs">
       <thead class="bg-[#07090e] text-gray-400 uppercase font-black border-b border-gray-800 text-[10px]">
         <tr>
@@ -96,16 +98,14 @@
   <div class="px-4 py-3.5 bg-[#080b10] border-b border-gray-800 flex items-center justify-between flex-shrink-0">
     <div class="flex items-center space-x-2.5">
       <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-        <i data-lucide="truck" class="w-4 h-4"></i>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
       </div>
       <div>
         <h3 class="text-sm font-black text-white uppercase tracking-wider">Truck Haul Manifest</h3>
         <p class="text-[11px] text-gray-400">Combine mixed metals to find the highest-paying yard for your entire load</p>
       </div>
     </div>
-    <button onclick="closeManifestModal()" class="p-1.5 rounded-xl bg-gray-800 text-gray-400 hover:text-white transition">
-      <i data-lucide="x" class="w-4 h-4"></i>
-    </button>
+    <button onclick="closeManifestModal()" class="p-1.5 rounded-xl bg-gray-800 text-gray-400 hover:text-white transition">✕</button>
   </div>
 
   <!-- Scrollable Manifest Metal Rows -->
@@ -122,8 +122,7 @@
 
     <!-- Add Metal Row Button -->
     <button onclick="addManifestRow()" class="w-full py-2.5 rounded-xl bg-[#080b10] hover:bg-gray-800/80 border border-dashed border-gray-700 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 active:scale-95">
-      <i data-lucide="plus-circle" class="w-4 h-4"></i>
-      <span>Add Another Metal to Truck</span>
+      <span>+ Add Another Metal to Truck</span>
     </button>
 
     <!-- Manifest Total Comparison Board across 5 Yards -->
@@ -161,12 +160,8 @@
         <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043582460" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
-        </a>
-        <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
-        </a>
+        <a href="tel:9043582460" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
       </div>
     </div>
 
@@ -180,12 +175,8 @@
         <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043559694" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
-        </a>
-        <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
-        </a>
+        <a href="tel:9043559694" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
       </div>
     </div>
 
@@ -199,12 +190,8 @@
         <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9047319273" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
-        </a>
-        <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
-        </a>
+        <a href="tel:9047319273" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
       </div>
     </div>
 
@@ -218,12 +205,8 @@
         <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9047862244" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
-        </a>
-        <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
-        </a>
+        <a href="tel:9047862244" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
       </div>
     </div>
 
@@ -237,12 +220,8 @@
         <span class="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
       </div>
       <div class="grid grid-cols-2 gap-2 pt-1">
-        <a href="tel:9043879511" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="phone" class="w-3 h-3"></i> Call Desk
-        </a>
-        <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center flex items-center justify-center gap-1">
-          <i data-lucide="navigation" class="w-3 h-3"></i> Directions
-        </a>
+        <a href="tel:9043879511" class="py-1.5 px-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 text-[11px] font-bold text-center block">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 px-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-200 text-[11px] font-bold text-center block">Directions</a>
       </div>
     </div>
   </div>
