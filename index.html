@@ -1,1218 +1,297 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Duval Scrap • Daily Live Metal Exchange</title>
-
-  <meta name="theme-color" content="#07090e">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="application-name" content="Duval Scrap">
-
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%2307090e'/%3E%3Cpath d='M96 24v144M32 64h128' stroke='%23f59e0b' stroke-width='16' stroke-linecap='round'/%3E%3C/svg%3E">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #07090e;
-      --card: #0d121a;
-      --card-inner: #080b10;
-      --border: #1f2937;
-      --border-light: #374151;
-      --gold: #f59e0b;
-      --gold-hover: #d97706;
-      --gold-bg: rgba(245, 158, 11, 0.12);
-      --green: #10b981;
-      --green-bg: rgba(16, 185, 129, 0.15);
-      --red: #ef4444;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-      padding-bottom: 40px;
-    }
-
-    svg {
-      display: inline-block;
-      vertical-align: middle;
-      flex-shrink: 0;
-      max-width: 100%;
-      max-height: 100%;
-    }
-
-    .icon-sm { width: 16px !important; height: 16px !important; }
-    .icon-md { width: 20px !important; height: 20px !important; }
-    .icon-lg { width: 24px !important; height: 24px !important; }
-
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-    .top-header {
-      background-color: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-logo-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: var(--gold-bg);
-      border: 1.5px solid rgba(245, 158, 11, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .brand-logo-box img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 2px;
-      border-radius: 12px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .brand-logo-box img.loaded { opacity: 1; }
-
-    .brand-title-wrap h1 {
-      font-size: 14px;
-      font-weight: 900;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .brand-title-wrap p {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .live-pill {
-      font-size: 10px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 9999px;
-      background: var(--green-bg);
-      color: var(--green);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      text-transform: uppercase;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-hover));
-      color: #000;
-      font-weight: 900;
-      font-size: 12px;
-      padding: 7px 12px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
-      transition: transform 0.1s ease, filter 0.2s ease;
-    }
-
-    .btn-gold:active { transform: scale(0.96); }
-
-    .btn-icon {
-      background: #151c28;
-      border: 1px solid var(--border);
-      color: #d1d5db;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .badge-counter {
-      background: #000;
-      color: var(--gold);
-      font-size: 10px;
-      font-weight: 800;
-      width: 18px;
-      height: 18px;
-      border-radius: 9999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .main-wrap {
-      width: 100%;
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 12px;
-      font-weight: 900;
-      color: #9ca3af;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pill-switcher {
-      display: inline-flex;
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 2px;
-      gap: 2px;
-    }
-
-    .pill-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .pill-btn.active {
-      background: var(--gold);
-      color: #000;
-      font-weight: 900;
-    }
-
-    .calc-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    @media (min-width: 640px) {
-      .calc-row { grid-template-columns: 7fr 5fr; }
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    select, input[type="number"] {
-      width: 100%;
-      background: var(--card-inner);
-      border: 1px solid var(--border-light);
-      border-radius: 10px;
-      padding: 9px 12px;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    select:focus, input[type="number"]:focus { border-color: var(--gold); }
-
-    .payout-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    @media (min-width: 640px) {
-      .payout-grid { grid-template-columns: repeat(5, 1fr); }
-    }
-
-    .payout-card {
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 8px;
-      text-align: center;
-      transition: all 0.2s;
-    }
-
-    .payout-card.winner {
-      background: var(--gold-bg);
-      border-color: rgba(245, 158, 11, 0.6);
-      color: #fef3c7;
-    }
-
-    .payout-yard-name {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .payout-total {
-      font-size: 14px;
-      font-weight: 900;
-      color: #fff;
-      margin: 4px 0 2px 0;
-    }
-
-    .payout-card.winner .payout-total { color: var(--gold); }
-
-    .payout-rate-sub {
-      font-size: 9px;
-      color: var(--text-muted);
-    }
-
-    .winner-badge {
-      display: inline-block;
-      margin-top: 4px;
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-size: 8px;
-      font-weight: 900;
-      background: var(--gold);
-      color: #000;
-      text-transform: uppercase;
-    }
-
-    .board-card {
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 8px;
-    }
-
-    .board-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .board-card-title {
-      font-size: 13px;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .board-card-cat {
-      font-size: 9px;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .board-card-top-tag {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: var(--gold-bg);
-      color: var(--gold);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-    }
-
-    .board-card-rates {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 4px;
-      text-align: center;
-      padding-top: 6px;
-    }
-
-    .board-yard-col {
-      padding: 6px 2px;
-      border-radius: 6px;
-      font-size: 11px;
-    }
-
-    .board-yard-col.winner {
-      background: rgba(245, 158, 11, 0.2);
-      color: #fef08a;
-      font-weight: 900;
-    }
-
-    .board-yard-col .col-label {
-      font-size: 9px;
-      color: var(--text-muted);
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border-radius: 12px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      text-align: left;
-    }
-
-    th {
-      background: var(--card-inner);
-      color: var(--text-muted);
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      padding: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(31, 41, 55, 0.6);
-    }
-
-    tr:hover td { background: rgba(31, 41, 55, 0.2); }
-
-    .text-right { text-align: right; }
-    .text-gold { color: var(--gold) !important; font-weight: 900; }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(7, 9, 14, 0.92);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-    }
-
-    .modal-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 580px;
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-    }
-
-    .modal-header {
-      background: var(--card-inner);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .modal-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .modal-footer {
-      background: var(--card-inner);
-      border-top: 1px solid var(--border);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-
-    .close-btn {
-      background: #1f2937;
-      border: none;
-      color: #9ca3af;
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .close-btn:hover { color: #fff; }
-
-    .manifest-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 10px;
-    }
-
-    .manifest-row select {
-      flex: 1;
-      padding: 6px 8px;
-      font-size: 12px;
-    }
-
-    .manifest-weight-box {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      width: 110px;
-      flex-shrink: 0;
-    }
-
-    .manifest-weight-box input {
-      padding: 6px 8px;
-      font-size: 12px;
-      text-align: right;
-    }
-
-    .del-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px;
-      font-size: 14px;
-    }
-
-    .del-btn:hover { color: var(--red); }
-
-    .btn-add-metal {
-      width: 100%;
-      padding: 10px;
-      background: var(--card-inner);
-      border: 1px dashed var(--border-light);
-      border-radius: 10px;
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 800;
-      cursor: pointer;
-      text-align: center;
-      transition: background 0.2s;
-    }
-
-    .btn-add-metal:hover { background: rgba(31, 41, 55, 0.4); }
-
-    .manifest-payouts-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    @media (min-width: 500px) {
-      .manifest-payouts-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    .manifest-yard-result {
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .manifest-yard-result.winning {
-      background: var(--gold-bg);
-      border-color: rgba(245, 158, 11, 0.6);
-    }
-
-    .drawer-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: rgba(7, 9, 14, 0.85);
-      backdrop-filter: blur(4px);
-      justify-content: flex-end;
-    }
-
-    .drawer-content {
-      background: var(--card);
-      border-left: 1px solid var(--border);
-      width: 100%;
-      max-width: 360px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      overflow-y: auto;
-      gap: 12px;
-    }
-
-    .yard-contact-card {
-      background: var(--card-inner);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .contact-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .contact-btn {
-      padding: 8px;
-      border-radius: 8px;
-      font-size: 11px;
-      font-weight: 800;
-      text-align: center;
-      text-decoration: none;
-      display: block;
-    }
-
-    .btn-call {
-      background: var(--green-bg);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: var(--green);
-    }
-
-    .btn-dir {
-      background: #1f2937;
-      border: 1px solid var(--border-light);
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-
-  <header class="top-header">
-    <div class="brand-group">
-      <div class="brand-logo-box">
-        <svg class="icon-lg" style="width:22px; height:22px; color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-          <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/>
-          <path d="M7 21h10"/>
-          <path d="M12 3v18"/>
-          <path d="M3 7h18"/>
-        </svg>
-        <img id="driverAppLogo" src="./logo.png" alt="Logo" onload="this.classList.add('loaded')" onerror="this.remove()">
-      </div>
-      <div class="brand-title-wrap">
-        <h1>Duval Scrap <span class="live-pill">Live</span></h1>
-        <p>Jacksonville, FL • Live Scale Intake Rates</p>
-      </div>
-    </div>
-
-    <div class="header-actions">
-      <button onclick="openManifestModal()" class="btn-gold">
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
-        </svg>
-        <span>Haul Manifest</span>
-        <span id="manifestBadgeCount" class="badge-counter">2</span>
-      </button>
-
-      <button onclick="toggleYardsDrawer()" class="btn-icon" title="Yards Directory & Directions">
-        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <main class="main-wrap">
-
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">
-          <svg class="icon-sm" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
-          </svg>
-          Single Commodity Calculator
-        </span>
-        <div class="pill-switcher">
-          <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="pill-btn active">$/lb</button>
-          <button id="btnUnitCwt" onclick="switchRateUnit('cwt')" class="pill-btn">$/cwt (100 lbs)</button>
-        </div>
-      </div>
-
-      <div class="calc-row">
-        <div class="form-group">
-          <label>Select Metal Grade:</label>
-          <select id="calcMetalSelect" onchange="recalculatePayouts()"></select>
-        </div>
-        <div class="form-group">
-          <label>Weight (<span id="calcWeightLabel">lbs</span>):</label>
-          <input type="number" id="calcWeightInput" value="100" min="1" oninput="recalculatePayouts()">
-        </div>
-      </div>
-
-      <div id="singlePayoutGrid" class="payout-grid"></div>
-    </div>
-
-    <div class="card" style="padding:0; overflow:hidden;">
-      <div class="card-header" style="padding:12px 14px; background:var(--card-inner); border-bottom:1px solid var(--border); margin:0;">
-        <div>
-          <h2 style="font-size:13px; font-weight:900; color:#fff; text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:6px;">
-            <svg class="icon-sm" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
-              <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>
-            </svg>
-            Duval County Daily Board
-          </h2>
-          <p style="font-size:10px; color:var(--text-muted); margin-top:2px;">Compare all 5 commercial yards in Jacksonville</p>
-        </div>
-        <div class="pill-switcher">
-          <button id="viewBtnCards" onclick="setBoardMode('cards')" class="pill-btn active">Cards</button>
-          <button id="viewBtnTable" onclick="setBoardMode('table')" class="pill-btn">Table</button>
-        </div>
-      </div>
-
-      <div id="boardCardsContainer" style="padding:12px;"></div>
-
-      <div id="boardTableContainer" style="display:none;" class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Grade</th>
-              <th class="text-right">Quick Stop</th>
-              <th class="text-right">Berman</th>
-              <th class="text-right">JMR</th>
-              <th class="text-right">CMC</th>
-              <th class="text-right">TMR</th>
-              <th class="text-right" style="color:var(--gold);">Top Pay</th>
-            </tr>
-          </thead>
-          <tbody id="boardTableBody" class="font-mono"></tbody>
-        </table>
-      </div>
-    </div>
-
-  </main>
-
-  <div id="manifestModal" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-header">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <svg class="icon-md" style="color:var(--gold);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
-          </svg>
-          <div>
-            <h3 style="font-size:13px; font-weight:900; color:#fff; text-transform:uppercase;">Truck Haul Manifest</h3>
-            <p style="font-size:10px; color:var(--text-muted);">Combine mixed metals to see which yard pays top dollar for your entire truckload</p>
-          </div>
-        </div>
-        <button onclick="closeManifestModal()" class="close-btn">✕</button>
-      </div>
-
-      <div class="modal-body">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Truck Bed Commodities:</span>
-          <button onclick="clearManifest()" style="background:none; border:none; color:var(--red); font-size:11px; font-weight:700; cursor:pointer;">Clear All</button>
-        </div>
-
-        <div id="manifestRowsList" style="display:flex; flex-direction:column; gap:8px;"></div>
-
-        <button onclick="addManifestRow()" class="btn-add-metal">
-          + Add Another Metal to Truck
-        </button>
-
-        <div style="border-top:1px solid var(--border); padding-top:12px; margin-top:4px;">
-          <span style="font-size:11px; font-weight:800; color:var(--text-muted); text-transform:uppercase; display:block; margin-bottom:8px;">Total Truckload Payout by Yard:</span>
-          <div id="manifestYardPayouts" class="manifest-payouts-grid"></div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <div style="font-size:11px; color:var(--text-muted);">
-          Winning Yard: <span id="manifestBestYardLabel" class="font-mono" style="font-weight:900; color:var(--green);">Calculating...</span>
-        </div>
-        <button onclick="closeManifestModal()" class="btn-gold" style="padding:6px 16px;">Done</button>
-      </div>
-    </div>
+<div class="flex items-center space-x-2.5">
+  <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0 relative overflow-hidden">
+    <i data-lucide="scale" class="w-5 h-5 text-amber-400"></i>
+    <img id="driverAppLogo" src="./logo.png" alt="Logo" class="absolute inset-0 w-full h-full object-contain p-0.5 rounded-xl opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0')" onerror="this.remove()">
   </div>
+  <div>
+    <div class="flex items-center gap-1.5">
+      <h1 class="text-sm font-black text-white uppercase tracking-tight">Duval Scrap</h1>
+      <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 animate-pulse">
+        Live
+      </span>
+    </div>
+    <p class="text-[10px] sm:text-xs text-gray-400 font-medium">Jacksonville, FL • Live Scale Intake Rates</p>
+  </div>
+</div>
 
-  <div id="yardsDrawer" class="drawer-overlay">
-    <div class="drawer-content">
-      <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); padding-bottom:10px;">
-        <h3 style="font-size:14px; font-weight:900; color:#fff; display:flex; align-items:center; gap:6px;">
-          <svg class="icon-sm" style="color:var(--green);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Jacksonville Yard Scales
+<!-- Quick Action Tool Buttons -->
+<div class="flex items-center gap-1.5 sm:gap-2">
+  <!-- Task 2: Multi-Metal Truck Haul Manifest Button -->
+  <button onclick="openManifestModal()" class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-black transition flex items-center gap-1.5 shadow active:scale-95">
+    <i data-lucide="truck" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+    <span class="hidden sm:inline">Haul Manifest</span>
+    <span id="manifestBadgeCount" class="w-4 h-4 rounded-full bg-black text-amber-400 text-[10px] font-black flex items-center justify-center">2</span>
+  </button>
+
+  <!-- Notification Bell -->
+  <button onclick="toggleAlertsDrawer()" class="relative p-2 rounded-xl bg-[#080b10] border border-gray-800 text-gray-300 hover:text-white transition">
+    <i data-lucide="bell" class="w-4 h-4"></i>
+    <span id="alertBellDot" class="hidden absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+  </button>
+
+  <!-- Yards Directory & Directions Drawer -->
+  <button onclick="toggleYardsDrawer()" class="p-2 rounded-xl bg-[#080b10] border border-gray-800 text-gray-300 hover:text-white transition" title="Yards & Directions">
+    <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i>
+  </button>
+
+  <!-- Help / Guide Modal -->
+  <button onclick="toggleHelpModal()" class="p-2 rounded-xl bg-[#080b10] border border-gray-800 text-gray-400 hover:text-white transition" title="Help Guide">
+    <i data-lucide="help-circle" class="w-4 h-4"></i>
+  </button>
+</div>
+
+
+<div class="flex items-center gap-2">
+  <!-- SMS Share to Partner -->
+  <button onclick="shareViaSms()" class="px-2.5 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 text-[11px] font-bold flex items-center gap-1 transition">
+    <i data-lucide="message-square" class="w-3 h-3 text-amber-400"></i>
+    <span>Text Partner</span>
+  </button>
+
+  <!-- Yard Dash Future Subscription Launcher -->
+  <button onclick="openYardDashPrompt()" class="px-2.5 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 text-[11px] font-bold flex items-center gap-1 transition" title="Yard Dash (Upcoming)">
+    <i data-lucide="navigation" class="w-3 h-3 text-sky-400"></i>
+    <span>Yard Dash</span>
+  </button>
+
+  <!-- IT Kiosk Terminal Link -->
+  <a href="./yard_terminal.html" class="px-2 py-1 rounded-lg bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-400 hover:text-white text-[11px] font-bold flex items-center gap-1 transition" title="Weighmaster Terminal">
+    <i data-lucide="monitor" class="w-3 h-3"></i>
+    <span class="hidden sm:inline">Kiosk</span>
+  </a>
+</div>
+
+
+<!-- A. 30-DAY MARKET TREND CHART -->
+<div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <div>
+      <div class="flex items-center gap-2">
+        <h3 class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
+          30-Day Market Trend
         </h3>
-        <button onclick="toggleYardsDrawer()" class="close-btn">✕</button>
+        <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+          +$0.20/lb Bullish
+        </span>
       </div>
-
-      <div class="yard-contact-card">
-        <div style="display:flex; justify-content:space-between;">
-          <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Quick Stop Recycling</h4><p style="font-size:10px; color:var(--text-muted);">603 E 8th St, Jacksonville</p></div>
-          <span class="live-pill">Open</span>
-        </div>
-        <div class="contact-actions">
-          <a href="tel:9043582460" class="contact-btn btn-call">Call Desk</a>
-          <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="contact-btn btn-dir">Directions</a>
-        </div>
-      </div>
-
-      <div class="yard-contact-card">
-        <div style="display:flex; justify-content:space-between;">
-          <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Berman Bros, Inc.</h4><p style="font-size:10px; color:var(--text-muted);">2500 Evergreen Ave, Jacksonville</p></div>
-          <span class="live-pill">Open</span>
-        </div>
-        <div class="contact-actions">
-          <a href="tel:9043559694" class="contact-btn btn-call">Call Desk</a>
-          <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="contact-btn btn-dir">Directions</a>
-        </div>
-      </div>
-
-      <div class="yard-contact-card">
-        <div style="display:flex; justify-content:space-between;">
-          <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Jacksonville Metal Recycling</h4><p style="font-size:10px; color:var(--text-muted);">7101 Philips Hwy, Jacksonville</p></div>
-          <span class="live-pill">Open</span>
-        </div>
-        <div class="contact-actions">
-          <a href="tel:9047319273" class="contact-btn btn-call">Call Desk</a>
-          <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="contact-btn btn-dir">Directions</a>
-        </div>
-      </div>
-
-      <div class="yard-contact-card">
-        <div style="display:flex; justify-content:space-between;">
-          <div><h4 style="font-size:12px; font-weight:800; color:#fff;">CMC Recycling Jacksonville</h4><p style="font-size:10px; color:var(--text-muted);">4840 N Lane Ave, Jacksonville</p></div>
-          <span class="live-pill">Open</span>
-        </div>
-        <div class="contact-actions">
-          <a href="tel:9047862244" class="contact-btn btn-call">Call Desk</a>
-          <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="contact-btn btn-dir">Directions</a>
-        </div>
-      </div>
-
-      <div class="yard-contact-card">
-        <div style="display:flex; justify-content:space-between;">
-          <div><h4 style="font-size:12px; font-weight:800; color:#fff;">Trademark Metals (TMR)</h4><p style="font-size:10px; color:var(--text-muted);">3540 W Beaver St, Jacksonville</p></div>
-          <span class="live-pill">Open</span>
-        </div>
-        <div class="contact-actions">
-          <a href="tel:9043879511" class="contact-btn btn-call">Call Desk</a>
-          <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="contact-btn btn-dir">Directions</a>
-        </div>
-      </div>
+      <p class="text-xs font-bold text-white mt-0.5">Bare Bright Copper (#1 Clean) • COMEX Spot vs Duval 5-Yard Median</p>
+    </div>
+    <div class="text-right font-mono">
+      <div class="text-xs text-gray-400">Duval Median</div>
+      <div id="duvalMedianRate" class="text-sm font-black text-amber-400">$5.05/lb</div>
     </div>
   </div>
 
-  <script>
-    const yardsMeta = [
-      { id: 'quickstop', key: 'quickstop', name: 'Quick Stop' },
-      { id: 'berman', key: 'berman', name: 'Berman Bros' },
-      { id: 'jmr', key: 'jmr', name: 'JMR' },
-      { id: 'cmc', key: 'cmc', name: 'CMC' },
-      { id: 'tmr', key: 'tmr', name: 'TMR' }
-    ];
+  <!-- High-Resolution Inline SVG Trend Chart -->
+  <div class="w-full h-32 bg-[#080b10] border border-gray-800/80 rounded-xl p-2 relative overflow-hidden flex flex-col justify-between">
+    <div class="flex justify-between text-[10px] font-mono text-gray-500">
+      <span>COMEX Benchmark: $5.10/lb</span>
+      <span class="text-emerald-400 font-bold">Duval Median: $5.05/lb</span>
+    </div>
 
-    let metalsCatalog = [
-      { id: 'bare_bright', name: 'Bare Bright Copper (#1 Clean)', category: 'Copper', quickstop: 5.20, berman: 5.25, jmr: 5.05, cmc: 4.95, tmr: 4.90 },
-      { id: 'copper_1', name: '#1 Copper Tubing & Busbar', category: 'Copper', quickstop: 5.00, berman: 5.05, jmr: 4.90, cmc: 4.80, tmr: 4.75 },
-      { id: 'copper_2', name: '#2 Copper (Burnt / Solder)', category: 'Copper', quickstop: 4.85, berman: 4.95, jmr: 4.70, cmc: 4.60, tmr: 4.55 },
-      { id: 'light_copper', name: 'Light / Roofing Copper', category: 'Copper', quickstop: 4.45, berman: 4.55, jmr: 4.35, cmc: 4.25, tmr: 4.20 },
-      { id: 'romex', name: 'Insulated Romex (House Wire)', category: 'Copper', quickstop: 2.20, berman: 2.25, jmr: 2.10, cmc: 2.05, tmr: 2.00 },
-      { id: 'yellow_brass', name: 'Clean Yellow Brass', category: 'Brass', quickstop: 2.80, berman: 2.85, jmr: 2.75, cmc: 2.70, tmr: 2.65 },
-      { id: 'red_brass', name: 'Red Brass / Composition', category: 'Brass', quickstop: 3.20, berman: 3.25, jmr: 3.15, cmc: 3.10, tmr: 3.05 },
-      { id: 'alum_cans', name: 'Aluminum UBC Cans (Clean)', category: 'Aluminum', quickstop: 0.80, berman: 0.82, jmr: 0.78, cmc: 0.75, tmr: 0.74 },
-      { id: 'alum_ext', name: '6063 Aluminum Extrusions', category: 'Aluminum', quickstop: 1.10, berman: 1.15, jmr: 1.05, cmc: 1.00, tmr: 0.98 },
-      { id: 'alum_sheet', name: 'Sheet Aluminum', category: 'Aluminum', quickstop: 0.62, berman: 0.65, jmr: 0.60, cmc: 0.58, tmr: 0.56 },
-      { id: 'alum_wheels', name: 'Aluminum Car Wheels / Rims', category: 'Aluminum', quickstop: 0.92, berman: 0.95, jmr: 0.90, cmc: 0.88, tmr: 0.85 },
-      { id: 'stainless_304', name: '304 Stainless Steel (Clean)', category: 'Specialty', quickstop: 0.52, berman: 0.55, jmr: 0.50, cmc: 0.48, tmr: 0.46 },
-      { id: 'auto_batteries', name: 'Lead-Acid Car Batteries', category: 'Specialty', quickstop: 0.20, berman: 0.22, jmr: 0.19, cmc: 0.18, tmr: 0.18 },
-      { id: 'clean_lead', name: 'Clean Soft Lead', category: 'Specialty', quickstop: 0.60, berman: 0.65, jmr: 0.58, cmc: 0.55, tmr: 0.54 },
-      { id: 'electric_motors', name: 'Electric Motors & Alternators', category: 'Ferrous & Core', quickstop: 0.35, berman: 0.38, jmr: 0.34, cmc: 0.32, tmr: 0.30 },
-      { id: 'steel_hms', name: 'HMS #1 Prepared Steel (1/4")', category: 'Ferrous & Core', quickstop: 0.095, berman: 0.10, jmr: 0.09, cmc: 0.088, tmr: 0.085 },
-      { id: 'light_iron', name: 'Light Iron / Tin / Shredder Feed', category: 'Ferrous & Core', quickstop: 0.070, berman: 0.075, jmr: 0.068, cmc: 0.065, tmr: 0.065 }
-    ];
+    <svg class="w-full h-20" viewBox="0 0 600 80" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0"/>
+        </linearGradient>
+      </defs>
+      <!-- COMEX Spot (Dashed Line) -->
+      <path d="M 0 55 Q 150 50, 300 35 T 600 20" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 4"/>
+      <!-- Duval Median Curve Fill -->
+      <path d="M 0 60 Q 150 58, 300 45 T 600 25 L 600 80 L 0 80 Z" fill="url(#trendGradient)"/>
+      <!-- Duval Median Curve Line -->
+      <path d="M 0 60 Q 150 58, 300 45 T 600 25" fill="none" stroke="#f59e0b" stroke-width="3"/>
+      <circle cx="600" cy="25" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5"/>
+    </svg>
 
-    let manifestItems = [
-      { id: 'bare_bright', weight: 200 },
-      { id: 'alum_sheet', weight: 500 }
-    ];
+    <div class="flex justify-between text-[9px] font-mono text-gray-500 border-t border-gray-800/60 pt-1">
+      <span>-30 Days</span>
+      <span>-20 Days</span>
+      <span>-10 Days</span>
+      <span class="text-amber-400 font-bold">Today</span>
+    </div>
+  </div>
+</div>
 
-    let currentRateUnit = 'lb';
-    let currentBoardMode = 'cards';
-    const SB_REST_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co/rest/v1';
-    const SB_API_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
+<!-- B. SINGLE COMMODITY DROP-HAUL CALCULATOR -->
+<div class="bg-[#0d121a] border border-gray-800 rounded-2xl p-4 shadow-sm space-y-3">
+  <div class="flex items-center justify-between flex-wrap gap-2">
+    <span class="text-xs font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+      <i data-lucide="calculator" class="w-3.5 h-3.5 text-amber-400"></i>
+      Single Commodity Drop Calculator
+    </span>
+    <div class="inline-flex p-0.5 bg-[#080b10] border border-gray-800 rounded-xl">
+      <button id="btnUnitLb" onclick="switchRateUnit('lb')" class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500 text-black transition">$/lb</button>
+      <button id="btnUnitCwt" onclick="switchRateUnit('cwt')" class="px-3 py-1 rounded-lg text-xs font-bold text-gray-400 hover:text-white transition">$/cwt (100 lbs)</button>
+    </div>
+  </div>
 
-    function populateMetalDropdowns() {
-      const select = document.getElementById('calcMetalSelect');
-      if (!select) return;
-      select.innerHTML = '';
-      metalsCatalog.forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m.id;
-        opt.textContent = `${m.name} (${m.category})`;
-        select.appendChild(opt);
-      });
-    }
+  <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+    <div class="sm:col-span-8">
+      <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Select Metal Grade:</label>
+      <select id="calcMetalSelect" onchange="recalculatePayouts()" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-white focus:outline-none focus:border-amber-500"></select>
+    </div>
+    <div class="sm:col-span-4">
+      <label class="block text-[10px] font-black uppercase text-gray-400 mb-1">Weight (<span id="calcWeightLabel">lbs</span>):</label>
+      <input type="number" id="calcWeightInput" value="100" min="1" oninput="recalculatePayouts()" class="w-full bg-[#080b10] border border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-amber-400 focus:outline-none focus:border-amber-500 text-right">
+    </div>
+  </div>
 
-    function switchRateUnit(u) {
-      currentRateUnit = u;
-      const bLb = document.getElementById('btnUnitLb');
-      const bCwt = document.getElementById('btnUnitCwt');
-      const wLbl = document.getElementById('calcWeightLabel');
-      if (u === 'lb') {
-        if (bLb) bLb.className = 'pill-btn active';
-        if (bCwt) bCwt.className = 'pill-btn';
-        if (wLbl) wLbl.textContent = 'lbs';
-      } else {
-        if (bCwt) bCwt.className = 'pill-btn active';
-        if (bLb) bLb.className = 'pill-btn';
-        if (wLbl) wLbl.textContent = 'cwt (100 lbs)';
-      }
-      recalculatePayouts();
-      renderScrapBoard();
-    }
+  <!-- 5-Yard Comparative Payout Grid -->
+  <div id="singlePayoutGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1"></div>
+</div>
 
-    function recalculatePayouts() {
-      const select = document.getElementById('calcMetalSelect');
-      const weightInput = document.getElementById('calcWeightInput');
-      const grid = document.getElementById('singlePayoutGrid');
-      if (!select || !weightInput || !grid) return;
+<!-- C. DUVAL COUNTY DAILY SCRAP BOARD (CARDS VS TABLE VIEW) -->
+<div class="bg-[#0d121a] border border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+  <div class="px-4 py-3 bg-[#080b10] border-b border-gray-800 flex items-center justify-between flex-wrap gap-2">
+    <div>
+      <h2 class="text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-1.5">
+        <i data-lucide="layers" class="w-4 h-4 text-amber-400"></i>
+        Duval County Daily Board
+      </h2>
+      <p class="text-[10px] text-gray-400">Live rates across all 5 commercial intake scales in Jacksonville</p>
+    </div>
+    <div class="inline-flex p-0.5 bg-[#07090e] border border-gray-800 rounded-xl text-xs">
+      <button id="viewBtnCards" onclick="setBoardMode('cards')" class="px-3 py-1 rounded-lg font-black bg-amber-500 text-black transition">Cards</button>
+      <button id="viewBtnTable" onclick="setBoardMode('table')" class="px-3 py-1 rounded-lg font-bold text-gray-400 hover:text-white transition">Table</button>
+    </div>
+  </div>
 
-      const metal = metalsCatalog.find(m => m.id === select.value) || metalsCatalog[0];
-      const weight = parseFloat(weightInput.value) || 0;
-      const rates = [metal.quickstop, metal.berman, metal.jmr, metal.cmc, metal.tmr];
-      const maxRate = Math.max(...rates);
+  <!-- Cards Mode -->
+  <div id="boardCardsContainer" class="p-3 space-y-2.5"></div>
 
-      grid.innerHTML = '';
-      yardsMeta.forEach(yard => {
-        const ratePerLb = metal[yard.key];
-        const displayRate = currentRateUnit === 'cwt' ? (ratePerLb * 100).toFixed(2) : ratePerLb.toFixed(2);
-        const payout = (ratePerLb * weight).toFixed(2);
-        const isTop = ratePerLb === maxRate;
+  <!-- Table Mode -->
+  <div id="boardTableContainer" class="hidden overflow-x-auto">
+    <table class="w-full text-left text-xs sm:text-sm">
+      <thead class="bg-[#07090e] text-gray-400 uppercase font-black border-b border-gray-800 text-[10px]">
+        <tr>
+          <th class="py-2.5 px-3">Grade</th>
+          <th class="py-2.5 px-2 text-right">Quick Stop</th>
+          <th class="py-2.5 px-2 text-right">Berman</th>
+          <th class="py-2.5 px-2 text-right">JMR</th>
+          <th class="py-2.5 px-2 text-right">CMC</th>
+          <th class="py-2.5 px-2 text-right">TMR</th>
+          <th class="py-2.5 px-3 text-right text-amber-400">Top Pay</th>
+        </tr>
+      </thead>
+      <tbody id="boardTableBody" class="divide-y divide-gray-800/80 font-mono text-xs"></tbody>
+    </table>
+  </div>
+</div>
 
-        const card = document.createElement('div');
-        card.className = `payout-card ${isTop ? 'winner' : ''}`;
-        card.innerHTML = `
-          <div class="payout-yard-name">${yard.name}</div>
-          <div class="payout-total font-mono">$${payout}</div>
-          <div class="payout-rate-sub font-mono">$${displayRate}/${currentRateUnit}</div>
-          ${isTop ? '<span class="winner-badge">Top Pay</span>' : ''}
-        `;
-        grid.appendChild(card);
-      });
-    }
 
-    function setBoardMode(mode) {
-      currentBoardMode = mode;
-      const bCards = document.getElementById('viewBtnCards');
-      const bTable = document.getElementById('viewBtnTable');
-      const cCards = document.getElementById('boardCardsContainer');
-      const cTable = document.getElementById('boardTableContainer');
+  <div class="p-4 bg-[#080b10] border-b border-gray-800 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+        <i data-lucide="truck" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-white uppercase tracking-tight">Truck Haul Manifest</h3>
+        <p class="text-[11px] text-gray-400">Combine mixed metals to find the winning yard for your full load</p>
+      </div>
+    </div>
+    <button onclick="closeManifestModal()" class="w-8 h-8 rounded-xl bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+  </div>
 
-      if (mode === 'cards') {
-        if (bCards) bCards.className = 'pill-btn active';
-        if (bTable) bTable.className = 'pill-btn';
-        if (cCards) cCards.style.display = 'block';
-        if (cTable) cTable.style.display = 'none';
-      } else {
-        if (bTable) bTable.className = 'pill-btn active';
-        if (bCards) bCards.className = 'pill-btn';
-        if (cCards) cCards.style.display = 'none';
-        if (cTable) cTable.style.display = 'block';
-      }
-      renderScrapBoard();
-    }
+  <div class="p-4 flex-1 overflow-y-auto space-y-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs font-black uppercase tracking-wider text-gray-400">Bedload Commodities:</span>
+      <button onclick="clearManifest()" class="text-xs font-bold text-red-400 hover:underline">Clear Bed</button>
+    </div>
 
-    function renderScrapBoard() {
-      const cardsBox = document.getElementById('boardCardsContainer');
-      const tableBody = document.getElementById('boardTableBody');
-      if (cardsBox) cardsBox.innerHTML = '';
-      if (tableBody) tableBody.innerHTML = '';
+    <div id="manifestRowsList" class="space-y-2"></div>
 
-      metalsCatalog.forEach(m => {
-        const rates = [m.quickstop, m.berman, m.jmr, m.cmc, m.tmr];
-        const maxRate = Math.max(...rates);
-        const formatRate = r => currentRateUnit === 'cwt' ? (r * 100).toFixed(2) : r.toFixed(2);
+    <button onclick="addManifestRow()" class="w-full py-2.5 rounded-xl border border-dashed border-gray-700 hover:border-amber-500 text-amber-400 text-xs font-black transition flex items-center justify-center gap-1.5 bg-[#080b10]">
+      <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Another Commodity
+    </button>
 
-        if (cardsBox) {
-          const card = document.createElement('div');
-          card.className = 'board-card';
-          card.innerHTML = `
-            <div class="board-card-header">
-              <div>
-                <div class="board-card-title">${m.name}</div>
-                <div class="board-card-cat">${m.category}</div>
-              </div>
-              <div class="board-card-top-tag font-mono">Top: $${formatRate(maxRate)}/${currentRateUnit}</div>
-            </div>
-            <div class="board-card-rates font-mono">
-              ${yardsMeta.map(y => {
-                const isWinner = m[y.key] === maxRate;
-                return `
-                  <div class="board-yard-col ${isWinner ? 'winner' : ''}">
-                    <div class="col-label">${y.name.split(' ')[0]}</div>
-                    <div>$${formatRate(m[y.key])}</div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          `;
-          cardsBox.appendChild(card);
-        }
+    <div class="border-t border-gray-800 pt-3">
+      <span class="text-xs font-black uppercase tracking-wider text-gray-400 block mb-2">Total Truckload Payout by Yard:</span>
+      <div id="manifestYardPayouts" class="grid grid-cols-1 sm:grid-cols-2 gap-2"></div>
+    </div>
+  </div>
 
-        if (tableBody) {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td style="font-weight:700; color:#fff;">${m.name}</td>
-            <td class="text-right ${m.quickstop === maxRate ? 'text-gold' : ''}">$${formatRate(m.quickstop)}</td>
-            <td class="text-right ${m.berman === maxRate ? 'text-gold' : ''}">$${formatRate(m.berman)}</td>
-            <td class="text-right ${m.jmr === maxRate ? 'text-gold' : ''}">$${formatRate(m.jmr)}</td>
-            <td class="text-right ${m.cmc === maxRate ? 'text-gold' : ''}">$${formatRate(m.cmc)}</td>
-            <td class="text-right ${m.tmr === maxRate ? 'text-gold' : ''}">$${formatRate(m.tmr)}</td>
-            <td class="text-right text-gold">$${formatRate(maxRate)}</td>
-          `;
-          tableBody.appendChild(tr);
-        }
-      });
-    }
+  <div class="p-4 bg-[#080b10] border-t border-gray-800 flex items-center justify-between">
+    <div class="text-xs text-gray-400">
+      Winning Yard: <span id="manifestBestYardLabel" class="font-mono font-black text-emerald-400 text-sm">Calculating...</span>
+    </div>
+    <button onclick="closeManifestModal()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs transition shadow">Done</button>
+  </div>
 
-    function openManifestModal() {
-      const modal = document.getElementById('manifestModal');
-      if (modal) modal.style.display = 'flex';
-      renderManifestRows();
-      calculateManifestTotals();
-    }
+</div>
 
-    function closeManifestModal() {
-      const modal = document.getElementById('manifestModal');
-      if (modal) modal.style.display = 'none';
-    }
 
-    function addManifestRow() {
-      const unused = metalsCatalog.find(m => !manifestItems.some(i => i.id === m.id)) || metalsCatalog[0];
-      manifestItems.push({ id: unused.id, weight: 100 });
-      renderManifestRows();
-      calculateManifestTotals();
-      updateManifestBadge();
-    }
+  <div class="space-y-2.5">
+    <div class="p-3 rounded-xl bg-[#080b10] border border-gray-800 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">Quick Stop Recycling</h4>
+          <p class="text-[10px] text-gray-400">603 E 8th St, Jacksonville, FL 32206</p>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043582460" class="py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-center text-xs font-black">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=603+E+8th+St,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 rounded-lg bg-gray-800 text-gray-200 text-center text-xs font-black">Directions</a>
+      </div>
+    </div>
 
-    function removeManifestRow(idx) {
-      manifestItems.splice(idx, 1);
-      renderManifestRows();
-      calculateManifestTotals();
-      updateManifestBadge();
-    }
+    <div class="p-3 rounded-xl bg-[#080b10] border border-gray-800 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">Berman Bros, Inc.</h4>
+          <p class="text-[10px] text-gray-400">2500 Evergreen Ave, Jacksonville, FL 32206</p>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043559694" class="py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-center text-xs font-black">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=2500+Evergreen+Ave,+Jacksonville,+FL+32206" target="_blank" class="py-1.5 rounded-lg bg-gray-800 text-gray-200 text-center text-xs font-black">Directions</a>
+      </div>
+    </div>
 
-    function clearManifest() {
-      manifestItems = [];
-      renderManifestRows();
-      calculateManifestTotals();
-      updateManifestBadge();
-    }
+    <div class="p-3 rounded-xl bg-[#080b10] border border-gray-800 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">Jacksonville Metal Recycling</h4>
+          <p class="text-[10px] text-gray-400">7101 Philips Hwy, Jacksonville, FL 32256</p>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9047319273" class="py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-center text-xs font-black">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=7101+Philips+Hwy,+Jacksonville,+FL+32256" target="_blank" class="py-1.5 rounded-lg bg-gray-800 text-gray-200 text-center text-xs font-black">Directions</a>
+      </div>
+    </div>
 
-    function updateManifestBadge() {
-      const b = document.getElementById('manifestBadgeCount');
-      if (b) b.textContent = manifestItems.length;
-    }
+    <div class="p-3 rounded-xl bg-[#080b10] border border-gray-800 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">CMC Recycling Jacksonville</h4>
+          <p class="text-[10px] text-gray-400">4840 N Lane Ave, Jacksonville, FL 32254</p>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9047862244" class="py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-center text-xs font-black">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=4840+N+Lane+Ave,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 rounded-lg bg-gray-800 text-gray-200 text-center text-xs font-black">Directions</a>
+      </div>
+    </div>
 
-    function renderManifestRows() {
-      const list = document.getElementById('manifestRowsList');
-      if (!list) return;
-      list.innerHTML = '';
-
-      if (manifestItems.length === 0) {
-        list.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">Manifest is empty. Tap "+ Add Another Metal" below.</div>';
-        return;
-      }
-
-      manifestItems.forEach((item, idx) => {
-        const row = document.createElement('div');
-        row.className = 'manifest-row';
-        row.innerHTML = `
-          <select onchange="manifestItems[${idx}].id = this.value; calculateManifestTotals();">
-            ${metalsCatalog.map(m => `<option value="${m.id}" ${m.id === item.id ? 'selected' : ''}>${m.name}</option>`).join('')}
-          </select>
-          <div class="manifest-weight-box">
-            <input type="number" min="0" value="${item.weight}" oninput="manifestItems[${idx}].weight = Math.max(0, parseFloat(this.value)||0); calculateManifestTotals();">
-            <span style="font-size:10px; font-weight:800; color:var(--text-muted);">lbs</span>
-          </div>
-          <button onclick="removeManifestRow(${idx})" class="del-btn">✕</button>
-        `;
-        list.appendChild(row);
-      });
-    }
-
-    function calculateManifestTotals() {
-      const box = document.getElementById('manifestYardPayouts');
-      const winLabel = document.getElementById('manifestBestYardLabel');
-      if (!box) return;
-      box.innerHTML = '';
-
-      if (manifestItems.length === 0) {
-        if (winLabel) winLabel.textContent = '$0.00';
-        return;
-      }
-
-      const totals = { quickstop: 0, berman: 0, jmr: 0, cmc: 0, tmr: 0 };
-      manifestItems.forEach(item => {
-        const metal = metalsCatalog.find(m => m.id === item.id);
-        if (metal && item.weight > 0) {
-          totals.quickstop += metal.quickstop * item.weight;
-          totals.berman += metal.berman * item.weight;
-          totals.jmr += metal.jmr * item.weight;
-          totals.cmc += metal.cmc * item.weight;
-          totals.tmr += metal.tmr * item.weight;
-        }
-      });
-
-      const maxTotal = Math.max(...Object.values(totals));
-      let winningYard = '';
-
-      yardsMeta.forEach(y => {
-        const total = totals[y.key];
-        const isWinner = total === maxTotal && total > 0;
-        if (isWinner) winningYard = y.name;
-
-        const card = document.createElement('div');
-        card.className = `manifest-yard-result ${isWinner ? 'winning' : ''}`;
-        card.innerHTML = `
-          <div>
-            <div style="font-size:12px; font-weight:800; color:${isWinner ? 'var(--gold)' : '#fff'};">${y.name}</div>
-            <div style="font-size:9px; color:var(--text-muted);">${isWinner ? '★ TOP PAYOUT' : 'Combined Total'}</div>
-          </div>
-          <div style="text-align:right;">
-            <div class="font-mono" style="font-size:13px; font-weight:900; color:${isWinner ? 'var(--green)' : '#fff'};">$${total.toFixed(2)}</div>
-            ${isWinner ? '<span style="font-size:9px; font-weight:800; color:var(--green);">Best Choice</span>' : `<span style="font-size:9px; color:var(--text-muted);">-$${(maxTotal - total).toFixed(2)}</span>`}
-          </div>
-        `;
-        box.appendChild(card);
-      });
-
-      if (winLabel) {
-        winLabel.textContent = maxTotal > 0 ? `${winningYard} ($${maxTotal.toFixed(2)})` : '$0.00';
-      }
-    }
-
-    function toggleYardsDrawer() {
-      const d = document.getElementById('yardsDrawer');
-      if (d) {
-        d.style.display = (d.style.display === 'flex') ? 'none' : 'flex';
-      }
-    }
-
-    async function fetchLiveRatesFromDb() {
-      try {
-        const res = await fetch(`${SB_REST_URL}/metals?select=*`, {
-          headers: { 'apikey': SB_API_KEY, 'Authorization': `Bearer ${SB_API_KEY}` }
-        });
-        if (!res.ok) return;
-        const rows = await res.json();
-        if (rows && rows.length > 0) {
-          rows.forEach(row => {
-            const m = metalsCatalog.find(item => item.id === row.id);
-            if (m) {
-              if (row.quickstop_rate !== undefined) m.quickstop = parseFloat(row.quickstop_rate);
-              if (row.berman_rate !== undefined) m.berman = parseFloat(row.berman_rate);
-              if (row.jmr_rate !== undefined) m.jmr = parseFloat(row.jmr_rate);
-              if (row.cmc_rate !== undefined) m.cmc = parseFloat(row.cmc_rate);
-              if (row.tmr_rate !== undefined) m.tmr = parseFloat(row.tmr_rate);
-            }
-          });
-          recalculatePayouts();
-          renderScrapBoard();
-          calculateManifestTotals();
-        }
-      } catch (e) {}
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      populateMetalDropdowns();
-      recalculatePayouts();
-      renderScrapBoard();
-      updateManifestBadge();
-      fetchLiveRatesFromDb();
-    });
-  </script>
-</body>
-</html>
+    <div class="p-3 rounded-xl bg-[#080b10] border border-gray-800 space-y-2">
+      <div class="flex justify-between items-start">
+        <div>
+          <h4 class="text-xs font-bold text-white">Trademark Metals (TMR)</h4>
+          <p class="text-[10px] text-gray-400">3540 W Beaver St, Jacksonville, FL 32254</p>
+        </div>
+        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Open</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <a href="tel:9043879511" class="py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-center text-xs font-black">Call Desk</a>
+        <a href="https://maps.apple.com/?daddr=3540+W+Beaver+St,+Jacksonville,+FL+32254" target="_blank" class="py-1.5 rounded-lg bg-gray-800 text-gray-200 text-center text-xs font-black">Directions</a>
+      </div>
+    </div>
+  </div>
+</div>
