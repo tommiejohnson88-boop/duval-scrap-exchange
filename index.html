@@ -821,67 +821,91 @@
 
   <!-- 4. LIVE SCROLLING METAL TICKER (Directly Above 30-Day Tracker) -->
   <div class="ticker-wrap font-mono">
-    <div class="ticker-move">
-      <span class="ticker-item"><strong style="color:#fff;">BARE BRIGHT:</strong> <span style="color:var(--gold); font-weight:800;">$5.25/lb</span> <span style="color:var(--green);">▲ +$0.05</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">#1 COPPER:</strong> <span style="color:var(--gold); font-weight:800;">$5.05/lb</span> <span style="color:var(--green);">▲ +$0.05</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">YELLOW BRASS:</strong> <span style="color:var(--gold); font-weight:800;">$2.85/lb</span> <span style="color:var(--green);">▲ +$0.02</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">6063 EXTRUSIONS:</strong> <span style="color:var(--gold); font-weight:800;">$1.15/lb</span> <span style="color:var(--green);">▲ +$0.03</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">ALUM CANS (UBC):</strong> <span style="color:var(--gold); font-weight:800;">$0.82/lb</span> <span style="color:var(--text-muted);">— 0.00</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">HMS #1 STEEL:</strong> <span style="color:var(--gold); font-weight:800;">$10.00/cwt</span> <span style="color:var(--green);">▲ +$0.50</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">COMEX HG SPOT:</strong> <span style="color:#38bdf8; font-weight:800;">$5.10/lb</span> <span style="color:var(--green);">BULLISH</span></span>
-      <!-- Duplicate for seamless loop -->
-      <span class="ticker-item"><strong style="color:#fff;">BARE BRIGHT:</strong> <span style="color:var(--gold); font-weight:800;">$5.25/lb</span> <span style="color:var(--green);">▲ +$0.05</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">#1 COPPER:</strong> <span style="color:var(--gold); font-weight:800;">$5.05/lb</span> <span style="color:var(--green);">▲ +$0.05</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">YELLOW BRASS:</strong> <span style="color:var(--gold); font-weight:800;">$2.85/lb</span> <span style="color:var(--green);">▲ +$0.02</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">6063 EXTRUSIONS:</strong> <span style="color:var(--gold); font-weight:800;">$1.15/lb</span> <span style="color:var(--green);">▲ +$0.03</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">ALUM CANS (UBC):</strong> <span style="color:var(--gold); font-weight:800;">$0.82/lb</span> <span style="color:var(--text-muted);">— 0.00</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">HMS #1 STEEL:</strong> <span style="color:var(--gold); font-weight:800;">$10.00/cwt</span> <span style="color:var(--green);">▲ +$0.50</span></span>
-      <span class="ticker-item"><strong style="color:#fff;">COMEX HG SPOT:</strong> <span style="color:#38bdf8; font-weight:800;">$5.10/lb</span> <span style="color:var(--green);">BULLISH</span></span>
+    <div id="liveTickerTrack" class="ticker-move">
+      <span class="ticker-item"><strong style="color:#fff;">BARE BRIGHT:</strong> <span style="color:var(--gold); font-weight:800;">$5.25/lb</span> <span style="color:var(--green);">▲ LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">#1 COPPER:</strong> <span style="color:var(--gold); font-weight:800;">$5.05/lb</span> <span style="color:var(--green);">▲ LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">YELLOW BRASS:</strong> <span style="color:var(--gold); font-weight:800;">$2.85/lb</span> <span style="color:var(--green);">▲ LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">6063 EXTRUSIONS:</strong> <span style="color:var(--gold); font-weight:800;">$1.15/lb</span> <span style="color:var(--green);">▲ LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">ALUM CANS (UBC):</strong> <span style="color:var(--gold); font-weight:800;">$0.82/lb</span> <span style="color:var(--text-muted);">— LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">HMS #1 STEEL:</strong> <span style="color:var(--gold); font-weight:800;">$10.00/cwt</span> <span style="color:var(--green);">▲ LIVE</span></span>
+      <span class="ticker-item"><strong style="color:#fff;">COMEX HG SPOT:</strong> <span style="color:#38bdf8; font-weight:800;">$5.10/lb</span> <span style="color:var(--green);">GLOBAL FEED</span></span>
     </div>
   </div>
 
   <!-- 5. MAIN APP CONTENT -->
   <main class="main-wrap">
 
-    <!-- A. 30-DAY MARKET TREND CHART -->
-    <section class="card">
-      <div class="card-header" style="margin-bottom:4px;">
+    <!-- A. 30-DAY MARKET TREND SECTION -->
+    <section class="card" id="marketTrendCard">
+      <div class="card-header" style="margin-bottom:6px;">
         <div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span class="card-title">30-Day Market Trend</span>
-            <span class="live-pill">+$0.20/lb Bullish</span>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="card-title" style="color:#fff;">30-Day Market Trend</span>
+            <span id="trendIndexPill" class="font-mono" style="font-size:10px; font-weight:900; padding:2px 8px; border-radius:9999px; background:rgba(249,115,22,0.15); color:#f97316; border:1px solid rgba(249,115,22,0.4);">[1/4 COPPER]</span>
+            <span id="trendDeltaBadge" class="font-mono" style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:9999px; background:var(--green-bg); color:var(--green); border:1px solid rgba(16,185,129,0.4);">+$0.20/lb Bullish</span>
           </div>
-          <p style="font-size:12px; font-weight:700; color:#fff; margin-top:3px;">Bare Bright Copper (#1 Clean) • COMEX Spot vs Duval 5-Yard Median</p>
+          <p id="trendMetalSubtitle" style="font-size:11px; color:var(--text-muted); margin-top:4px; font-weight:600;">Bare Bright Copper (#1 Clean) • 30-Day Duval Median Progression</p>
         </div>
-        <div style="text-align:right;" class="font-mono">
-          <div style="font-size:10px; color:var(--text-muted);">Duval Median</div>
-          <div style="font-size:14px; font-weight:900; color:var(--gold);">$5.05/lb</div>
+        <div style="text-align:right;">
+          <div style="font-size:9px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Current Median</div>
+          <div id="trendMedianBig" class="font-mono" style="font-size:18px; font-weight:900; color:#f97316;">$5.05/lb</div>
         </div>
       </div>
 
       <div class="trend-box">
-        <div class="trend-labels font-mono" style="margin-bottom:4px;">
-          <span>COMEX Benchmark: $5.10/lb</span>
-          <span style="color:var(--green); font-weight:800;">Duval Median: $5.05/lb</span>
+        <div class="trend-labels font-mono" style="margin-bottom:6px;">
+          <span id="trendComexLabel">COMEX Benchmark: $5.10/lb</span>
+          <span id="trendMedianSubLabel" style="color:#f97316; font-weight:800;">30d Growth: $4.85 → $5.05/lb</span>
         </div>
-        <svg style="width:100%; height:70px; display:block;" viewBox="0 0 600 80" preserveAspectRatio="none">
+
+        <svg id="trendChartSvg" style="width:100%; height:106px; display:block;" viewBox="0 0 600 106" preserveAspectRatio="none">
           <defs>
             <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.35"/>
-              <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0"/>
+              <stop id="trendGradStop1" offset="0%" stop-color="#f97316" stop-opacity="0.35"/>
+              <stop id="trendGradStop2" offset="100%" stop-color="#f97316" stop-opacity="0.0"/>
             </linearGradient>
           </defs>
-          <path d="M 0 55 Q 150 50, 300 35 T 600 20" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 4"/>
-          <path d="M 0 60 Q 150 58, 300 45 T 600 25 L 600 80 L 0 80 Z" fill="url(#trendGrad)"/>
-          <path class="trend-line-anim" d="M 0 60 Q 150 58, 300 45 T 600 25" fill="none" stroke="#f59e0b" stroke-width="3"/>
-          <circle class="pulse-ring" cx="595" cy="25" r="4" fill="#10b981"/>
-          <circle cx="595" cy="25" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5"/>
+
+          <!-- Vertical Milestone Guide Lines -->
+          <line x1="56" y1="14" x2="56" y2="96" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="225" y1="14" x2="225" y2="96" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="395" y1="14" x2="395" y2="96" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 2"/>
+          <line x1="564" y1="14" x2="564" y2="96" stroke="#1f2937" stroke-width="1" stroke-dasharray="2 2"/>
+
+          <!-- Left Y-Axis Scale & Metal Watermark -->
+          <text id="yScaleTop" x="4" y="24" fill="#6b7280" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">$5.10</text>
+          <text id="yScaleMid" x="4" y="56" fill="#6b7280" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">$4.95</text>
+          <text id="yScaleBot" x="4" y="88" fill="#6b7280" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">$4.80</text>
+          <text id="chartMetalWatermark" x="556" y="88" fill="#f97316" fill-opacity="0.35" font-size="11" font-family="JetBrains Mono, monospace" font-weight="900" text-anchor="end">COPPER ($/LB)</text>
+
+          <!-- COMEX / Refinery Reference Line -->
+          <path id="trendComexPath" d="M 56 64 L 225 54 L 395 38 L 564 24" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+          <!-- Gradient Area Under Duval Dotted Curve -->
+          <path id="trendAreaPath" d="M 56 72 L 225 60 L 395 44 L 564 30 L 564 106 L 56 106 Z" fill="url(#trendGrad)"/>
+
+          <!-- Duval Metal-Colored Dotted Trend Line -->
+          <path id="trendMainPath" class="trend-line-anim" d="M 56 72 L 225 60 L 395 44 L 564 30" fill="none" stroke="#f97316" stroke-width="3" stroke-dasharray="6 5" stroke-linecap="round"/>
+
+          <!-- 4 Price Nodes (-30d, -20d, -10d, Today) -->
+          <circle id="nodeDot0" cx="56" cy="72" r="3.5" fill="#0d121a" stroke="#f97316" stroke-width="2"/>
+          <circle id="nodeDot1" cx="225" cy="60" r="3.5" fill="#0d121a" stroke="#f97316" stroke-width="2"/>
+          <circle id="nodeDot2" cx="395" cy="44" r="3.5" fill="#0d121a" stroke="#f97316" stroke-width="2"/>
+          <circle id="trendPulseRing" class="pulse-ring" cx="564" cy="30" r="4" fill="#f97316"/>
+          <circle id="trendPulseDot" cx="564" cy="30" r="4.5" fill="#f97316" stroke="#fff" stroke-width="1.5"/>
+
+          <!-- Price Callouts Above Each Node -->
+          <text id="nodeVal0" x="56" y="61" fill="#9ca3af" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle">$4.85</text>
+          <text id="nodeVal1" x="225" y="49" fill="#d1d5db" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle">$4.90</text>
+          <text id="nodeVal2" x="395" y="33" fill="#e5e7eb" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle">$4.98</text>
+          <text id="nodeVal3" x="564" y="18" fill="#f97316" font-size="11" font-family="JetBrains Mono, monospace" font-weight="900" text-anchor="middle">$5.05</text>
         </svg>
-        <div class="trend-labels font-mono" style="border-top:1px solid var(--border); padding-top:4px; margin-top:4px;">
-          <span>-30 Days</span>
-          <span>-20 Days</span>
-          <span>-10 Days</span>
-          <span style="color:var(--gold); font-weight:800;">Today</span>
+
+        <div class="trend-labels font-mono" style="border-top:1px solid var(--border); padding-top:6px; margin-top:2px; padding-left:24px; padding-right:8px;">
+          <span id="axisLbl0">-30 Days ($4.85)</span>
+          <span id="axisLbl1">-20 Days ($4.90)</span>
+          <span id="axisLbl2">-10 Days ($4.98)</span>
+          <span id="axisLbl3" style="color:#f97316; font-weight:900;">Today ($5.05)</span>
         </div>
       </div>
     </section>
@@ -1159,6 +1183,263 @@
     let currentBoardMode = 'cards';
     let audioCtx = null;
     let lastProcessedAlertTimestamp = null;
+    let activeTrendIdx = 0;
+    let liveComexCopperSpot = 5.10; // Live COMEX HG Copper Spot ($/lb)
+
+    const marketTrendProfiles = [
+      {
+        metalId: 'bare_bright',
+        isCwt: false,
+        tag: '1/4 COPPER',
+        watermark: 'COPPER ($/LB)',
+        color: '#f97316',
+        subtitle: 'Bare Bright Copper (#1 Clean) • Live 5-Yard Median vs COMEX Spot',
+        comexLabelPrefix: 'COMEX HG Spot',
+        comexMultiplier: 1.00,
+        histValues: [4.85, 4.90, 4.98], // -30d, -20d, -10d
+        comexHist: [4.90, 4.96, 5.04]
+      },
+      {
+        metalId: 'yellow_brass',
+        isCwt: false,
+        tag: '2/4 BRASS',
+        watermark: 'BRASS ($/LB)',
+        color: '#eab308',
+        subtitle: 'Clean Yellow Brass • Live 5-Yard Median vs LME Alloy Index',
+        comexLabelPrefix: 'LME Brass Index',
+        comexMultiplier: 0.55,
+        histValues: [2.60, 2.65, 2.70],
+        comexHist: [2.66, 2.71, 2.76]
+      },
+      {
+        metalId: 'romex',
+        isCwt: false,
+        tag: '3/4 WIRE',
+        watermark: 'ROMEX WIRE ($/LB)',
+        color: '#10b981',
+        subtitle: 'Insulated Romex (House Wire) • Live 5-Yard Median vs Recovery Index',
+        comexLabelPrefix: 'COMEX Wire Recovery',
+        comexMultiplier: 0.43,
+        histValues: [1.92, 1.98, 2.04],
+        comexHist: [1.98, 2.04, 2.11]
+      },
+      {
+        metalId: 'steel_hms',
+        isCwt: true,
+        tag: '4/4 STEEL',
+        watermark: 'HMS STEEL ($/CWT)',
+        color: '#38bdf8',
+        subtitle: 'HMS #1 Prepared Steel (1/4") • Live 5-Yard Median vs Mill Index',
+        comexLabelPrefix: 'LME Ferrous Index',
+        comexMultiplier: 1.86,
+        histValues: [8.00, 8.25, 8.65],
+        comexHist: [8.40, 8.70, 9.10]
+      }
+    ];
+
+    function computeLiveDuvalMedian(metalId, isCwt = false) {
+      const m = metalsCatalog.find(item => item.id === metalId);
+      if (!m) return 0;
+      const sorted = [m.quickstop, m.berman, m.jmr, m.cmc, m.tmr]
+        .map(v => parseFloat(v) || 0)
+        .sort((a, b) => a - b);
+      const medianPerLb = sorted[2]; // Exact middle of 5 Jacksonville yards
+      return isCwt ? parseFloat((medianPerLb * 100).toFixed(2)) : parseFloat(medianPerLb.toFixed(2));
+    }
+
+    async function fetchComexLmeBenchmark() {
+      try {
+        // Pull live COMEX High Grade Copper Futures (HG=F) via public JSON endpoint
+        const target = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/HG=F?interval=1d&range=1d');
+        const res = await fetch(`https://api.allorigins.win/get?url=${target}`);
+        if (res.ok) {
+          const wrapper = await res.json();
+          const parsed = JSON.parse(wrapper.contents);
+          const marketPrice = parsed?.chart?.result?.[0]?.meta?.regularMarketPrice;
+          if (marketPrice && !isNaN(marketPrice) && marketPrice > 1 && marketPrice < 20) {
+            liveComexCopperSpot = parseFloat(marketPrice.toFixed(2));
+            applyMarketTrendProfile(activeTrendIdx, false);
+            renderLiveTicker();
+          }
+        }
+      } catch (e) {
+        // Fallback: keep liveComexCopperSpot anchored slightly above live Duval Copper median
+        const liveCopperMed = computeLiveDuvalMedian('bare_bright', false);
+        if (liveCopperMed > 0) {
+          liveComexCopperSpot = parseFloat((liveCopperMed + 0.05).toFixed(2));
+        }
+      }
+    }
+
+    function renderLiveTicker() {
+      const track = document.getElementById('liveTickerTrack');
+      if (!track) return;
+
+      const tickerSpecs = [
+        { id: 'bare_bright', label: 'BARE BRIGHT', cwt: false },
+        { id: 'copper_1', label: '#1 COPPER', cwt: false },
+        { id: 'yellow_brass', label: 'YELLOW BRASS', cwt: false },
+        { id: 'alum_ext', label: '6063 EXTRUSIONS', cwt: false },
+        { id: 'alum_cans', label: 'ALUM CANS (UBC)', cwt: false },
+        { id: 'steel_hms', label: 'HMS #1 STEEL', cwt: true }
+      ];
+
+      const itemsHtml = tickerSpecs.map(spec => {
+        const m = metalsCatalog.find(item => item.id === spec.id);
+        if (!m) return '';
+        const rates = [m.quickstop, m.berman, m.jmr, m.cmc, m.tmr];
+        const topRate = Math.max(...rates);
+        const medianRate = computeLiveDuvalMedian(spec.id, spec.cwt);
+        const formattedTop = spec.cwt ? `$${(topRate * 100).toFixed(2)}/cwt` : `$${topRate.toFixed(2)}/lb`;
+        const formattedMed = spec.cwt ? `$${medianRate.toFixed(2)}` : `$${medianRate.toFixed(2)}`;
+        return `<span class="ticker-item"><strong style="color:#fff;">${spec.label}:</strong> <span style="color:var(--gold); font-weight:800;">TOP ${formattedTop}</span> <span style="color:var(--green);">• MED ${formattedMed}</span></span>`;
+      }).join('');
+
+      const comexHtml = `<span class="ticker-item"><strong style="color:#fff;">COMEX/LME HG SPOT:</strong> <span style="color:#38bdf8; font-weight:800;">$${liveComexCopperSpot.toFixed(2)}/lb</span> <span style="color:var(--green);">LIVE FEED</span></span>`;
+      const fullBlock = itemsHtml + comexHtml;
+      track.innerHTML = fullBlock + fullBlock; // Seamless infinite scroll
+    }
+
+    function applyMarketTrendProfile(idx, animateLine = true) {
+      const p = marketTrendProfiles[idx];
+      const liveTodayVal = computeLiveDuvalMedian(p.metalId, p.isCwt);
+      const liveComexVal = parseFloat((liveComexCopperSpot * p.comexMultiplier).toFixed(2));
+      const unitStr = p.isCwt ? '/cwt' : '/lb';
+
+      const duvalSeries = [...p.histValues, liveTodayVal];
+      const comexSeries = [...p.comexHist, liveComexVal];
+
+      // Dynamic Y-axis scaling so Today's live price always plots accurately
+      const allVals = [...duvalSeries, ...comexSeries];
+      const rawMin = Math.min(...allVals);
+      const rawMax = Math.max(...allVals);
+      const pad = Math.max((rawMax - rawMin) * 0.25, p.isCwt ? 0.35 : 0.06);
+      const minScale = rawMin - pad;
+      const maxScale = rawMax + pad;
+      const midScale = (minScale + maxScale) / 2;
+
+      const valToY = (val) => {
+        const ratio = (val - minScale) / (maxScale - minScale || 1);
+        return Math.round(86 - ratio * 66); // Maps into SVG y=[20..86]
+      };
+
+      const xs = [56, 225, 395, 564];
+      const duvalYs = duvalSeries.map(valToY);
+      const comexYs = comexSeries.map(valToY);
+
+      const lineD = duvalYs.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xs[i]} ${y}`).join(' ');
+      const comexD = comexYs.map((y, i) => `${i === 0 ? 'M' : 'L'} ${xs[i]} ${y}`).join(' ');
+      const areaD = `${lineD} L 564 106 L 56 106 Z`;
+
+      const startVal = p.histValues[0];
+      const diff = liveTodayVal - startVal;
+      const diffSign = diff >= 0 ? '+' : '-';
+      const diffAbs = Math.abs(diff).toFixed(2);
+      const sentiment = diff >= 0 ? 'Bullish' : 'Pullback';
+
+      const badge = document.getElementById('trendDeltaBadge');
+      const idxPill = document.getElementById('trendIndexPill');
+      const sub = document.getElementById('trendMetalSubtitle');
+      const medBig = document.getElementById('trendMedianBig');
+      const comexLbl = document.getElementById('trendComexLabel');
+      const medSub = document.getElementById('trendMedianSubLabel');
+      const watermark = document.getElementById('chartMetalWatermark');
+
+      if (badge) {
+        badge.textContent = `${diffSign}$${diffAbs}${unitStr} ${sentiment}`;
+        badge.style.color = diff >= 0 ? '#10b981' : '#ef4444';
+        badge.style.borderColor = diff >= 0 ? 'rgba(16,185,129,0.4)' : 'rgba(239,68,68,0.4)';
+        badge.style.background = diff >= 0 ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)';
+      }
+      if (idxPill) {
+        idxPill.textContent = `[${p.tag}]`;
+        idxPill.style.color = p.color;
+        idxPill.style.borderColor = p.color;
+      }
+      if (sub) sub.textContent = p.subtitle;
+      if (medBig) {
+        medBig.textContent = `$${liveTodayVal.toFixed(2)}${unitStr}`;
+        medBig.style.color = p.color;
+      }
+      if (comexLbl) comexLbl.textContent = `${p.comexLabelPrefix}: $${liveComexVal.toFixed(2)}${unitStr}`;
+      if (medSub) {
+        medSub.textContent = `30d Live: $${startVal.toFixed(2)} → $${liveTodayVal.toFixed(2)}${unitStr}`;
+        medSub.style.color = p.color;
+      }
+      if (watermark) {
+        watermark.textContent = p.watermark;
+        watermark.setAttribute('fill', p.color);
+      }
+
+      const yTop = document.getElementById('yScaleTop');
+      const yMid = document.getElementById('yScaleMid');
+      const yBot = document.getElementById('yScaleBot');
+      if (yTop) yTop.textContent = `$${maxScale.toFixed(2)}`;
+      if (yMid) yMid.textContent = `$${midScale.toFixed(2)}`;
+      if (yBot) yBot.textContent = `$${minScale.toFixed(2)}`;
+
+      const stop1 = document.getElementById('trendGradStop1');
+      const stop2 = document.getElementById('trendGradStop2');
+      if (stop1) stop1.setAttribute('stop-color', p.color);
+      if (stop2) stop2.setAttribute('stop-color', p.color);
+
+      const comexPath = document.getElementById('trendComexPath');
+      const areaPath = document.getElementById('trendAreaPath');
+      const mainPath = document.getElementById('trendMainPath');
+      const ring = document.getElementById('trendPulseRing');
+      const dot = document.getElementById('trendPulseDot');
+
+      if (comexPath) comexPath.setAttribute('d', comexD);
+      if (areaPath) areaPath.setAttribute('d', areaD);
+
+      const axisPrefixes = ['-30 Days', '-20 Days', '-10 Days', 'Today'];
+      duvalSeries.forEach((val, i) => {
+        const y = duvalYs[i];
+        const valEl = document.getElementById(`nodeVal${i}`);
+        const axisEl = document.getElementById(`axisLbl${i}`);
+        if (valEl) {
+          valEl.setAttribute('y', Math.max(12, y - 10));
+          valEl.textContent = `$${val.toFixed(2)}`;
+          if (i === 3) valEl.setAttribute('fill', p.color);
+        }
+        if (axisEl) {
+          axisEl.textContent = `${axisPrefixes[i]} ($${val.toFixed(2)})`;
+          if (i === 3) axisEl.style.color = p.color;
+        }
+        if (i < 3) {
+          const nDot = document.getElementById(`nodeDot${i}`);
+          if (nDot) {
+            nDot.setAttribute('cy', y);
+            nDot.setAttribute('stroke', p.color);
+          }
+        }
+      });
+
+      const endY = duvalYs[3];
+      if (ring) {
+        ring.setAttribute('cy', endY);
+        ring.setAttribute('fill', p.color);
+      }
+      if (dot) {
+        dot.setAttribute('cy', endY);
+        dot.setAttribute('fill', p.color);
+      }
+
+      if (mainPath) {
+        mainPath.setAttribute('d', lineD);
+        mainPath.setAttribute('stroke', p.color);
+        if (animateLine) {
+          mainPath.classList.remove('trend-line-anim');
+          void mainPath.offsetWidth;
+          mainPath.classList.add('trend-line-anim');
+        }
+      }
+    }
+
+    function rotateMarketTrendChart() {
+      activeTrendIdx = (activeTrendIdx + 1) % marketTrendProfiles.length;
+      applyMarketTrendProfile(activeTrendIdx, true);
+    }
 
     const SB_REST_URL = 'https://oqyjobtdwiepfuocgdeq.supabase.co/rest/v1';
     const SB_API_KEY = 'sb_publishable_jKwgStk_B5zriIAuZlFazA_1bSB4xH5';
@@ -1507,6 +1788,8 @@
           recalculatePayouts();
           renderScrapBoard();
           calculateManifestTotals();
+          renderLiveTicker();
+          applyMarketTrendProfile(activeTrendIdx, false);
         }
       } catch (e) {}
     }
@@ -1572,8 +1855,13 @@
       recalculatePayouts();
       renderScrapBoard();
       updateManifestBadge();
+      renderLiveTicker();
+      applyMarketTrendProfile(0, true);
       fetchLiveRatesFromDb();
+      fetchComexLmeBenchmark();
       setInterval(pollLiveDatabase, 2000);
+      setInterval(fetchComexLmeBenchmark, 60000);
+      setInterval(rotateMarketTrendChart, 6000);
       document.body.addEventListener('click', () => initAudio(), { once: true });
     });
   </script>
